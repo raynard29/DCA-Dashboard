@@ -6,309 +6,618 @@
   <meta http-equiv="refresh" content="3600">
   <title>DCA Portfolio Dashboard</title>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#0a0d14; --surf:#111520; --surf2:#161c2e;
-      --bdr:#1e2535; --bdr2:#2a3550;
-      --tx:#e2e8f0; --tx2:#94a3b8; --tx3:#475569;
-      --green:#22c55e; --red:#ef4444; --yellow:#eab308;
+    :root {
+      --bg: #0a0d14;
+      --surface: #0e1220;
+      --card: #111520;
+      --card-hover: #161c2e;
+      --border: #1e2436;
+      --border-bright: #2a3454;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --green: #22c55e;
+      --red: #ef4444;
+      --green-dim: rgba(34,197,94,0.12);
+      --red-dim: rgba(239,68,68,0.12);
     }
-    body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;min-height:100vh}
-
-    /* ── HEADER ── */
-    .hdr{
-      background:linear-gradient(180deg,#0d1221 0%,var(--bg) 100%);
-      border-bottom:1px solid var(--bdr);
-      padding:1.4rem 2rem 1.2rem;
-      position:sticky;top:0;z-index:10;
-      backdrop-filter:blur(12px);
-    }
-    .hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
-    .brand{display:flex;align-items:center;gap:.75rem}
-    .brand-icon{
-      width:38px;height:38px;border-radius:9px;
-      background:linear-gradient(135deg,#3b82f6,#a855f7);
-      display:flex;align-items:center;justify-content:center;font-size:20px;
-    }
-    .brand h1{
-      font-size:1.2rem;font-weight:800;letter-spacing:-.02em;
-      background:linear-gradient(135deg,#e2e8f0,#94a3b8);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .ts{font-size:.7rem;color:var(--tx3);display:flex;align-items:center;gap:.35rem}
-    .live{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
-    .sc{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:.9rem 1.1rem}
-    .sc-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:.35rem}
-    .sc-val{font-size:1.45rem;font-weight:800;font-variant-numeric:tabular-nums}
-    .sc-sub{font-size:.72rem;color:var(--tx2);margin-top:.15rem}
-    .pos{color:var(--green)}.neg{color:var(--red)}
-
-    /* ── MAIN ── */
-    .main{padding:1.4rem 2rem}
-    .sec-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:.9rem}
-    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
-
-    /* ── CARD ── */
-    .card{
-      background:var(--surf);border:1px solid var(--bdr);border-radius:13px;
-      padding:.95rem;position:relative;overflow:hidden;
-      transition:border-color .2s,transform .18s;cursor:default;
-    }
-    .card::before{
-      content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
-      background:var(--ac,transparent);
-    }
-    .card:hover{border-color:var(--bdr2);transform:translateY(-2px)}
-    .card.no-pos{opacity:.55}
-
-    .ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.45rem}
-    .csym{font-size:1.1rem;font-weight:900;color:var(--tx);line-height:1}
-    .cname{font-size:.65rem;color:var(--tx3);margin-top:.18rem}
-    .sbadge{
-      font-size:.55rem;font-weight:700;padding:.18rem .45rem;
-      border-radius:20px;border:1px solid;opacity:.85;white-space:nowrap;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .prow{display:flex;align-items:baseline;gap:.4rem;margin:.35rem 0}
-    .cprice{font-size:1.05rem;font-weight:800;font-variant-numeric:tabular-nums}
-    .ytd{
-      font-size:.65rem;font-weight:700;padding:.12rem .35rem;border-radius:4px;
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(180deg, #0c1018 0%, #0a0d14 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
     }
-    .ytd.pos{background:rgba(34,197,94,.15);color:#22c55e}
-    .ytd.neg{background:rgba(239,68,68,.15);color:#ef4444}
-
-    .spark{width:100%;height:42px;margin:.35rem 0}
-    .spark svg{width:100%;height:42px;overflow:visible}
-
-    hr.div{border:none;border-top:1px solid var(--bdr);margin:.45rem 0}
-
-    .dg{display:grid;grid-template-columns:1fr 1fr;gap:.25rem .5rem}
-    .di{display:flex;flex-direction:column}
-    .dl{font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx3)}
-    .dv{font-size:.78rem;font-weight:700;color:var(--tx2);font-variant-numeric:tabular-nums}
-    .dv.pos{color:var(--green)}.dv.neg{color:var(--red)}
-
-    .cf{margin-top:.55rem}
-    .stbadge{
-      display:inline-flex;align-items:center;gap:.25rem;
-      font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
-      padding:.22rem .55rem;border-radius:20px;
+    .header-inner { max-width: 1440px; margin: 0 auto; }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
     }
-    .stbadge.trailing{background:rgba(34,197,94,.18);color:#22c55e}
-    .stbadge.in-profit{background:rgba(74,222,128,.1);color:#4ade80}
-    .stbadge.near-stop{background:rgba(239,68,68,.18);color:#ef4444}
-    .stbadge.watching{background:rgba(100,116,139,.13);color:#94a3b8}
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+    .logo-pill {
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(59,130,246,0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59,130,246,0.25);
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--green);
+    }
+    .live-dot::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity:1; } 50% { opacity:0.3; }
+    }
 
-    /* ── LOADING / ERROR ── */
-    .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:65vh;gap:1.5rem}
-    .spin{width:42px;height:42px;border:3px solid var(--bdr);border-top-color:#3b82f6;border-radius:50%;animation:spin .75s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .ltxt{color:var(--tx2);font-size:.9rem}
-    .errc{
-      background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);
-      border-radius:13px;padding:1.75rem 2rem;max-width:520px;text-align:center;
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
     }
-    .errc h3{color:#ef4444;margin-bottom:.6rem;font-size:1.05rem}
-    .errc p{color:var(--tx2);font-size:.83rem;line-height:1.65}
-    .errc .hint{margin-top:.9rem;font-size:.75rem;color:var(--tx3);font-family:monospace;background:var(--surf);border-radius:6px;padding:.5rem .75rem;text-align:left}
-    .retry-btn{
-      margin-top:1.1rem;padding:.55rem 1.25rem;background:#1e3a8a;color:#93c5fd;
-      border:1px solid #2563eb;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;
+    .stat {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
     }
-    .retry-btn:hover{background:#1d4ed8;color:#fff}
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .green { color: var(--green); }
+    .red   { color: var(--red);   }
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:1200px){.grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:640px){
-      .hdr{padding:1rem}.main{padding:1rem}
-      .stats{grid-template-columns:1fr 1fr;gap:.6rem}
-      .sc-val{font-size:1.2rem}
-      .grid{grid-template-columns:1fr 1fr;gap:.6rem}
+    /* ── Main ── */
+    .main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
     }
-    @media(max-width:380px){.grid{grid-template-columns:1fr}}
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .section-count {
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 860px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px)  {
+      .grid { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Stock Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.18s, border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card:hover {
+      background: var(--card-hover);
+      border-color: var(--border-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .card-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 14px 14px 0 0;
+    }
+
+    /* card top row */
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .symbol {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .badge-ytd {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 99px;
+      font-variant-numeric: tabular-nums;
+    }
+    .badge-ytd.pos { background: var(--green-dim); color: var(--green); }
+    .badge-ytd.neg { background: var(--red-dim);   color: var(--red);   }
+    .badge-ytd.neu { background: rgba(100,116,139,0.12); color: var(--muted); }
+
+    /* company name */
+    .company {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sector-chip {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* price */
+    .price { font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
+
+    /* sparkline */
+    .spark {
+      height: 52px;
+      margin: -2px -4px;
+    }
+    .spark svg { width: 100%; height: 100%; display: block; }
+
+    /* divider */
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* position grid */
+    .pos-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+    }
+    .pos-label { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+    .pos-val   { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* status badge */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+    .s-trailing { background: rgba(34,197,94,0.1);  color: #4ade80; border: 1px solid rgba(34,197,94,0.22); }
+    .s-trailing .status-dot { background: #4ade80; box-shadow: 0 0 6px #4ade80; animation: pulse 1.6s infinite; }
+
+    .s-profit { background: rgba(34,197,94,0.07);  color: #86efac; border: 1px solid rgba(34,197,94,0.15); }
+    .s-profit .status-dot { background: #86efac; }
+
+    .s-stop { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+    .s-stop .status-dot { background: #f87171; animation: pulse 0.9s infinite; }
+
+    .s-watching { background: rgba(100,116,139,0.1); color: var(--muted); border: 1px solid rgba(100,116,139,0.2); }
+    .s-watching .status-dot { background: var(--muted); }
+
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%       { opacity:0.4; transform:scale(1.5); }
+    }
+
+    /* no-position */
+    .no-pos {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      padding: 4px 0;
+    }
+
+    /* error banner */
+    .err-banner {
+      display: none;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #f87171;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    /* loading spinner */
+    .spinner {
+      width: 28px; height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 60px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* skeleton */
+    .skel {
+      background: linear-gradient(90deg, #151b2e 25%, #1c2540 50%, #151b2e 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* footer */
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      padding: 32px 24px;
+    }
   </style>
 </head>
 <body>
-<div id="root">
-  <div class="loading"><div class="spin"></div><p class="ltxt">Fetching live portfolio data…</p></div>
-</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-mark">📈</div>
+        <span class="logo-text">DCA Portfolio</span>
+        <span class="logo-pill">PAPER</span>
+      </div>
+      <div class="header-meta">
+        <span class="live-dot" id="liveIndicator">LIVE</span>
+        <span id="lastUpdated">Loading...</span>
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-label">Portfolio Value</div>
+        <div class="stat-value" id="sPortfolio">—</div>
+        <div class="stat-sub" id="sEquity"></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Cash Available</div>
+        <div class="stat-value" id="sCash">—</div>
+        <div class="stat-sub" id="sCashPct"></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Invested</div>
+        <div class="stat-value" id="sInvested">—</div>
+        <div class="stat-sub" id="sPositions"></div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Unrealized P&amp;L</div>
+        <div class="stat-value" id="sPL">—</div>
+        <div class="stat-sub" id="sPLPct"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="err-banner" id="errBanner"></div>
+  <div class="section-header">
+    <span class="section-label" id="secLabel">Positions &amp; Watchlist</span>
+    <span class="section-count" id="secCount">19 symbols</span>
+  </div>
+  <div class="grid" id="grid"><div class="spinner"></div></div>
+</main>
+
+<footer class="footer" id="footer"></footer>
+
 <script>
-const KEY    = 'PKVSKGUO3BBBBYYOX2TL5L7RPC';
-const SECRET = '7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X';
-const BROKER = 'https://paper-api.alpaca.markets/v2';
-const DATA   = 'https://data.alpaca.markets';
-const META   = {"STRC": {"symbol": "STRC", "name": "Strategy Inc", "sector": "Crypto Treasury", "color": "#f7931a"}, "MSTR": {"symbol": "MSTR", "name": "MicroStrategy", "sector": "Crypto Treasury", "color": "#f7931a"}, "GEV": {"symbol": "GEV", "name": "GE Vernova", "sector": "Energy", "color": "#22c55e"}, "BE": {"symbol": "BE", "name": "Bloom Energy", "sector": "Energy", "color": "#22c55e"}, "KGS": {"symbol": "KGS", "name": "Kodiak Gas", "sector": "Energy", "color": "#22c55e"}, "QBTS": {"symbol": "QBTS", "name": "D-Wave Quantum", "sector": "Quantum", "color": "#a855f7"}, "IONQ": {"symbol": "IONQ", "name": "IonQ", "sector": "Quantum", "color": "#a855f7"}, "QUBT": {"symbol": "QUBT", "name": "Quantum Computing", "sector": "Quantum", "color": "#a855f7"}, "SNDK": {"symbol": "SNDK", "name": "SanDisk", "sector": "Semiconductors", "color": "#3b82f6"}, "MU": {"symbol": "MU", "name": "Micron Technology", "sector": "Semiconductors", "color": "#3b82f6"}, "WDC": {"symbol": "WDC", "name": "Western Digital", "sector": "Semiconductors", "color": "#3b82f6"}, "MRVL": {"symbol": "MRVL", "name": "Marvell Technology", "sector": "Semiconductors", "color": "#3b82f6"}, "ALMU": {"symbol": "ALMU", "name": "Aeluma Inc", "sector": "Semiconductors", "color": "#3b82f6"}, "IPGP": {"symbol": "IPGP", "name": "IPG Photonics", "sector": "Photonics", "color": "#06b6d4"}, "POET": {"symbol": "POET", "name": "POET Technologies", "sector": "Photonics", "color": "#06b6d4"}, "TSLA": {"symbol": "TSLA", "name": "Tesla", "sector": "EV", "color": "#ef4444"}, "AAPL": {"symbol": "AAPL", "name": "Apple", "sector": "Consumer Tech", "color": "#64748b"}, "NFLX": {"symbol": "NFLX", "name": "Netflix", "sector": "Streaming", "color": "#ec4899"}, "CAT": {"symbol": "CAT", "name": "Caterpillar", "sector": "Industrial", "color": "#f59e0b"}};
-const SYMS   = 'STRC,MSTR,GEV,BE,KGS,QBTS,IONQ,QUBT,SNDK,MU,WDC,MRVL,ALMU,IPGP,POET,TSLA,AAPL,NFLX,CAT'.split(',');
+const K  = 'PKVSKGUO3BBBBYYOX2TL5L7RPC';
+const S  = '7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X';
+const BASE = 'https://paper-api.alpaca.markets/v2';
+const DATA = 'https://data.alpaca.markets/v2';
+const H  = { 'APCA-API-KEY-ID': K, 'APCA-API-SECRET-KEY': S };
 
-function aFetch(url) {
-  return fetch(url, {
-    headers: {'APCA-API-KEY-ID': KEY, 'APCA-API-SECRET-KEY': SECRET}
-  }).then(r => {
-    if (!r.ok) return r.text().then(t => { throw new Error(t || 'HTTP ' + r.status); });
-    return r.json();
+const STOCKS = {
+  STRC: { name:'Strategy Inc',       sector:'Crypto Treasury', color:'#f7931a' },
+  MSTR: { name:'MicroStrategy',      sector:'Crypto Treasury', color:'#f7931a' },
+  GEV:  { name:'GE Vernova',         sector:'Energy',          color:'#22c55e' },
+  BE:   { name:'Bloom Energy',       sector:'Energy',          color:'#22c55e' },
+  KGS:  { name:'Kodiak Gas',         sector:'Energy',          color:'#22c55e' },
+  QBTS: { name:'D-Wave Quantum',     sector:'Quantum',         color:'#a855f7' },
+  IONQ: { name:'IonQ',               sector:'Quantum',         color:'#a855f7' },
+  QUBT: { name:'Quantum Computing',  sector:'Quantum',         color:'#a855f7' },
+  SNDK: { name:'SanDisk',            sector:'Semiconductors',  color:'#3b82f6' },
+  MU:   { name:'Micron Technology',  sector:'Semiconductors',  color:'#3b82f6' },
+  WDC:  { name:'Western Digital',    sector:'Semiconductors',  color:'#3b82f6' },
+  MRVL: { name:'Marvell Technology', sector:'Semiconductors',  color:'#3b82f6' },
+  ALMU: { name:'Aeluma Inc',         sector:'Semiconductors',  color:'#3b82f6' },
+  IPGP: { name:'IPG Photonics',      sector:'Photonics',       color:'#06b6d4' },
+  POET: { name:'POET Technologies',  sector:'Photonics',       color:'#06b6d4' },
+  TSLA: { name:'Tesla',              sector:'EV',              color:'#ef4444' },
+  AAPL: { name:'Apple',              sector:'Consumer Tech',   color:'#64748b' },
+  NFLX: { name:'Netflix',            sector:'Streaming',       color:'#ec4899' },
+  CAT:  { name:'Caterpillar',        sector:'Industrial',      color:'#f59e0b' },
+};
+
+const SYMS = Object.keys(STOCKS);
+
+/* ── Formatters ── */
+const usd = (n, d=2) => {
+  if (n == null || isNaN(n)) return '—';
+  const v = Math.abs(n), s = n < 0 ? '-' : '';
+  return s + '$' + v.toLocaleString('en-US', { minimumFractionDigits:d, maximumFractionDigits:d });
+};
+const pct  = (n, d=2) => n == null || isNaN(n) ? '—' : (n >= 0 ? '+' : '') + Number(n).toFixed(d) + '%';
+const num  = (n, d=2) => n == null || isNaN(n) ? '—' : Number(n).toLocaleString('en-US', {minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ── Sparkline SVG ── */
+function sparkline(prices, positive) {
+  if (!prices || prices.length < 2)
+    return `<svg viewBox="0 0 200 52" preserveAspectRatio="none"><line x1="0" y1="26" x2="200" y2="26" stroke="#1e2436" stroke-width="1"/></svg>`;
+  const W=200, H=52, pad=4;
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const range = max - min || 1;
+  const points = prices.map((p,i) => {
+    const x = pad + (i/(prices.length-1))*(W-pad*2);
+    const y = pad + (H-pad*2) - ((p-min)/range)*(H-pad*2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
   });
+  const poly = points.join(' ');
+  const lastX = (pad + (W-pad*2)).toFixed(1);
+  const botY  = (pad + H-pad*2).toFixed(1);
+  const firstX = pad.toFixed(1);
+  const col = positive ? '#22c55e' : '#ef4444';
+  const gid = 'g_' + Math.random().toString(36).slice(2,8);
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${col}" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="${col}" stop-opacity="0.01"/>
+      </linearGradient>
+    </defs>
+    <polygon points="${poly} ${lastX},${botY} ${firstX},${botY}" fill="url(#${gid})"/>
+    <polyline points="${poly}" fill="none" stroke="${col}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
 }
 
-function $$(n, opts) {
-  if (n == null || isNaN(n)) return '—';
-  return new Intl.NumberFormat('en-US', Object.assign({style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}, opts||{})).format(n);
-}
-function pct(n, decimals) {
-  if (n == null || isNaN(n)) return '—';
-  return (n >= 0 ? '+' : '') + parseFloat(n).toFixed(decimals == null ? 2 : decimals) + '%';
-}
-function shares(n) {
-  if (n == null) return '—';
-  const f = parseFloat(n);
-  return f % 1 === 0 ? f.toFixed(0) : f.toFixed(4);
+/* ── Status logic ── */
+function statusInfo(plpc) {
+  if (plpc == null) return ['s-watching','WATCHING'];
+  const v = Number(plpc);
+  if (v >= 10) return ['s-trailing','TRAILING STOP'];
+  if (v <= -8)  return ['s-stop','NEAR STOP ⚠'];
+  if (v > 0)    return ['s-profit','IN PROFIT'];
+  return ['s-watching','WATCHING'];
 }
 
-function sparkline(prices, color) {
-  if (!prices || prices.length < 2) {
-    return '<svg width="100%" height="42" viewBox="0 0 120 42"><line x1="0" y1="21" x2="120" y2="21" stroke="' + color + '44" stroke-width="1.5" stroke-dasharray="5,5"/></svg>';
+/* ── Card renderer ── */
+function renderCard(sym, pos, bars) {
+  const info   = STOCKS[sym] || { name:sym, sector:'', color:'#64748b' };
+  const prices = (bars||[]).map(b=>b.c);
+  const ytdRaw = prices.length>=2 ? ((prices.at(-1)-prices[0])/prices[0])*100 : null;
+  const pos_   = ytdRaw === null ? 'neu' : ytdRaw>=0 ? 'pos' : 'neg';
+  const ytdStr = ytdRaw === null ? '—'   : pct(ytdRaw);
+
+  let priceHtml='<span class="price">—</span>';
+  let posHtml  ='<span class="no-pos">No open position</span>';
+  let statusHtml='';
+  let divider  ='';
+
+  if (pos) {
+    const cp     = parseFloat(pos.current_price);
+    const avg    = parseFloat(pos.avg_entry_price);
+    const qty    = parseFloat(pos.qty);
+    const plpc   = parseFloat(pos.unrealized_plpc)*100;
+    const pl     = parseFloat(pos.unrealized_pl);
+    const stop   = avg * 0.9;
+    const [sc,sl]= statusInfo(plpc);
+
+    priceHtml = `<span class="price">${usd(cp)}</span>`;
+    divider   = '<hr class="divider">';
+    posHtml   = `<div class="pos-grid">
+      <div><div class="pos-label">Shares</div><div class="pos-val">${num(qty, qty%1===0?0:4)}</div></div>
+      <div><div class="pos-label">Avg Cost</div><div class="pos-val">${usd(avg)}</div></div>
+      <div><div class="pos-label">Unrealized P&L</div><div class="pos-val ${plpc>=0?'green':'red'}">${pct(plpc)} (${usd(pl)})</div></div>
+      <div><div class="pos-label">Stop (−10%)</div><div class="pos-val">${usd(stop)}</div></div>
+    </div>`;
+    statusHtml= `<div class="status ${sc}"><div class="status-dot"></div>${sl}</div>`;
   }
-  const W = 120, H = 38;
-  const mn = Math.min.apply(null, prices), mx = Math.max.apply(null, prices);
-  const rng = mx - mn || 1;
-  const n = prices.length;
-  const pts = prices.map(function(p, i) {
-    return ((i / (n - 1)) * W).toFixed(1) + ',' + (H - ((p - mn) / rng) * H).toFixed(1);
-  });
-  const line = pts.join(' ');
-  const area = 'M' + pts[0] + ' L' + pts.join(' L') + ' L' + W + ',' + (H + 4) + ' L0,' + (H + 4) + ' Z';
-  const gid = 'g' + Math.random().toString(36).slice(2, 8);
-  return (
-    '<svg width="100%" height="42" viewBox="0 0 ' + W + ' ' + (H + 4) + '" preserveAspectRatio="none">' +
-    '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
-    '<stop offset="0%" stop-color="' + color + '" stop-opacity="0.28"/>' +
-    '<stop offset="100%" stop-color="' + color + '" stop-opacity="0.02"/>' +
-    '</linearGradient></defs>' +
-    '<path d="' + area + '" fill="url(#' + gid + ')"/>' +
-    '<polyline points="' + line + '" fill="none" stroke="' + color + '" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>' +
-    '</svg>'
-  );
+
+  return `<div class="card">
+    <div class="card-accent" style="background:linear-gradient(90deg,${info.color},${info.color}55)"></div>
+    <div class="card-top">
+      <span class="symbol" style="color:${info.color}">${sym}</span>
+      <span class="badge-ytd ${pos_}">YTD ${ytdStr}</span>
+    </div>
+    <div class="company">${info.name} <span class="sector-chip">${info.sector}</span></div>
+    ${priceHtml}
+    <div class="spark">${sparkline(prices, ytdRaw===null||ytdRaw>=0)}</div>
+    ${divider}
+    ${posHtml}
+    ${statusHtml}
+  </div>`;
 }
 
-function statusBadge(plpc) {
-  const v = parseFloat(plpc || 0);
-  if (v >= 10)  return {cls: 'trailing',  label: '▲ Trailing'};
-  if (v <= -8)  return {cls: 'near-stop', label: '⚠ Near Stop'};
-  if (v > 0)    return {cls: 'in-profit', label: '✓ In Profit'};
-  return           {cls: 'watching',  label: '◎ Watching'};
+/* ── Fetch with retries ── */
+async function apiFetch(url) {
+  for (let i=0; i<3; i++) {
+    try {
+      const r = await fetch(url, { headers: H });
+      if (r.ok) return r.json();
+      throw new Error(`HTTP ${r.status}`);
+    } catch(e) {
+      if (i===2) throw e;
+      await new Promise(r=>setTimeout(r,600*Math.pow(2,i)));
+    }
+  }
 }
 
-function card(sym, pos, bars) {
-  const m = META[sym] || {name: sym, sector: '—', color: '#64748b'};
-  const col = m.color;
-  const prices = (bars || []).map(function(b) { return b.c; });
-  const ytdPct = prices.length >= 2 ? ((prices[prices.length-1] - prices[0]) / prices[0]) * 100 : null;
-  const sparkCol = ytdPct == null ? col : (ytdPct >= 0 ? '#22c55e' : '#ef4444');
-
-  const curP  = pos ? parseFloat(pos.current_price) : (prices.length ? prices[prices.length-1] : null);
-  const avg   = pos ? parseFloat(pos.avg_entry_price) : null;
-  const qty   = pos ? parseFloat(pos.qty) : null;
-  const plp   = pos ? parseFloat(pos.unrealized_plpc) * 100 : null;
-  const stop  = avg ? avg * 0.9 : null;
-  const st    = statusBadge(plp);
-
-  return (
-    '<div class="card' + (pos ? '' : ' no-pos') + '" style="--ac:' + col + '">' +
-      '<div class="ch">' +
-        '<div><div class="csym">' + sym + '</div><div class="cname">' + m.name + '</div></div>' +
-        '<span class="sbadge" style="color:' + col + ';border-color:' + col + '44">' + m.sector + '</span>' +
-      '</div>' +
-      '<div class="prow">' +
-        '<span class="cprice">' + $$(curP) + '</span>' +
-        (ytdPct != null ? '<span class="ytd ' + (ytdPct >= 0 ? 'pos' : 'neg') + '">' + pct(ytdPct) + ' YTD</span>' : '') +
-      '</div>' +
-      '<div class="spark">' + sparkline(prices, sparkCol) + '</div>' +
-      '<hr class="div">' +
-      '<div class="dg">' +
-        '<div class="di"><span class="dl">Shares</span><span class="dv">' + (qty != null ? shares(qty) : '—') + '</span></div>' +
-        '<div class="di"><span class="dl">Avg Cost</span><span class="dv">' + $$(avg) + '</span></div>' +
-        '<div class="di"><span class="dl">P&amp;L %</span><span class="dv ' + (plp != null ? (plp >= 0 ? 'pos' : 'neg') : '') + '">' + (plp != null ? pct(plp) : '—') + '</span></div>' +
-        '<div class="di"><span class="dl">Stop (90%)</span><span class="dv">' + $$(stop) + '</span></div>' +
-      '</div>' +
-      '<div class="cf"><span class="stbadge ' + st.cls + '">' + st.label + '</span></div>' +
-    '</div>'
-  );
-}
-
-function render(acct, positions, barsMap) {
-  const posMap = {};
-  (positions || []).forEach(function(p) { posMap[p.symbol] = p; });
-
-  const equity    = parseFloat(acct.equity || 0);
-  const cash      = parseFloat(acct.cash || 0);
-  const portVal   = parseFloat(acct.portfolio_value || equity);
-  const invested  = portVal - cash;
-
-  let totalPL = 0, totalCost = 0;
-  (positions || []).forEach(function(p) {
-    totalPL   += parseFloat(p.unrealized_pl || 0);
-    totalCost += parseFloat(p.cost_basis || 0);
-  });
-  const plPct = totalCost > 0 ? (totalPL / totalCost) * 100 : 0;
-
-  const now = new Date().toLocaleString('en-US', {
-    month:'short', day:'numeric', year:'numeric',
-    hour:'numeric', minute:'2-digit', timeZoneName:'short'
-  });
-
-  const cards = SYMS.map(function(s) {
-    return card(s, posMap[s] || null, barsMap[s] || []);
-  }).join('');
-
-  document.getElementById('root').innerHTML =
-    '<div class="hdr">' +
-      '<div class="hdr-top">' +
-        '<div class="brand">' +
-          '<div class="brand-icon">📊</div>' +
-          '<h1>DCA Portfolio</h1>' +
-        '</div>' +
-        '<div class="ts"><span class="live"></span>Updated: ' + now + '</div>' +
-      '</div>' +
-      '<div class="stats">' +
-        '<div class="sc"><div class="sc-lbl">Portfolio Value</div><div class="sc-val">' + $$(portVal) + '</div><div class="sc-sub">Total equity</div></div>' +
-        '<div class="sc"><div class="sc-lbl">Cash</div><div class="sc-val">' + $$(cash) + '</div><div class="sc-sub">Available buying power</div></div>' +
-        '<div class="sc"><div class="sc-lbl">Invested</div><div class="sc-val">' + $$(invested) + '</div><div class="sc-sub">Market value</div></div>' +
-        '<div class="sc"><div class="sc-lbl">Unrealized P&amp;L</div><div class="sc-val ' + (totalPL >= 0 ? 'pos' : 'neg') + '">' + $$(totalPL) + '</div><div class="sc-sub">' + pct(plPct) + ' overall</div></div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="main">' +
-      '<div class="sec-title">' + SYMS.length + ' Holdings — DCA Watchlist</div>' +
-      '<div class="grid">' + cards + '</div>' +
-    '</div>';
-}
-
-function showError(msg) {
-  document.getElementById('root').innerHTML =
-    '<div class="loading"><div class="errc">' +
-      '<h3>Unable to load portfolio data</h3>' +
-      '<p>' + msg + '</p>' +
-      '<div class="hint">If you see a CORS error, Alpaca\'s paper API may require a server-side proxy.<br>Try opening this page from a local server or re-run the publisher script.</div>' +
-      '<button class="retry-btn" onclick="location.reload()">↺ Retry</button>' +
-    '</div></div>';
-}
-
+/* ── Main ── */
 async function main() {
+  const grid = document.getElementById('grid');
   try {
+    /* parallel: account + positions */
     const [acct, positions] = await Promise.all([
-      aFetch(BROKER + '/account'),
-      aFetch(BROKER + '/positions'),
+      apiFetch(`${BASE}/account`),
+      apiFetch(`${BASE}/positions`),
     ]);
-    const barsRes = await aFetch(
-      DATA + '/v2/stocks/bars?symbols=' + SYMS.join(',') +
-      '&timeframe=1Day&start=2026-01-02T00:00:00Z&limit=10000&feed=iex&adjustment=raw'
-    );
-    render(acct, positions, barsRes.bars || {});
-  } catch(e) {
-    showError(e.message || String(e));
+
+    /* YTD bars */
+    const yr    = new Date().getFullYear();
+    const start = `${yr}-01-02T00:00:00Z`;
+    const barsUrl = `${DATA}/stocks/bars?symbols=${SYMS.join(',')}&timeframe=1Day&start=${start}&limit=10000&feed=iex&adjustment=raw`;
+    const barsData= await apiFetch(barsUrl);
+    const barsMap = barsData.bars || {};
+
+    /* Header stats */
+    const equity    = parseFloat(acct.equity);
+    const cash      = parseFloat(acct.cash);
+    const invested  = positions.reduce((s,p)=>s+parseFloat(p.cost_basis||0),0);
+    const pl        = positions.reduce((s,p)=>s+parseFloat(p.unrealized_pl||0),0);
+    const plPct     = invested>0 ? (pl/invested)*100 : 0;
+
+    setText('sPortfolio', usd(equity));
+    setText('sCash',      usd(cash));
+    setText('sCashPct',   num((cash/equity)*100,1)+'% of portfolio');
+    setText('sInvested',  usd(invested));
+    setText('sPositions', positions.length + ' open positions');
+    const plEl = document.getElementById('sPL');
+    plEl.textContent = usd(pl);
+    plEl.className = 'stat-value ' + (pl>=0?'green':'red');
+    setText('sPLPct', pct(plPct));
+
+    /* Build maps */
+    const posMap = {};
+    positions.forEach(p => { posMap[p.symbol] = p; });
+
+    /* Order: positions first */
+    const withPos    = SYMS.filter(s=>posMap[s]);
+    const withoutPos = SYMS.filter(s=>!posMap[s]);
+
+    document.getElementById('secLabel').textContent  = `${withPos.length} Positions · ${withoutPos.length} Watchlist`;
+    document.getElementById('secCount').textContent  = `${SYMS.length} tracked`;
+
+    /* Render */
+    grid.innerHTML = [...withPos,...withoutPos].map(s=>renderCard(s,posMap[s],barsMap[s])).join('');
+
+    /* Timestamp */
+    const now = new Date();
+    setText('lastUpdated', 'Updated ' + now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+    setText('footer', `DCA Portfolio Dashboard · Last refreshed ${now.toLocaleString()} · Auto-refreshes every hour`);
+
+    document.getElementById('liveIndicator').style.display='inline-flex';
+
+  } catch(err) {
+    const banner = document.getElementById('errBanner');
+    banner.style.display = 'block';
+    banner.innerHTML = `<strong>Failed to load live data:</strong> ${err.message}. `
+      + `This dashboard fetches Alpaca API data from your browser. `
+      + `If you see a CORS error, the Alpaca API needs to allow requests from this origin.`;
+    document.getElementById('liveIndicator').textContent = 'OFFLINE';
+    document.getElementById('liveIndicator').style.color = '#ef4444';
+    document.getElementById('liveIndicator').className = '';
+    /* Render shells without data */
+    grid.innerHTML = SYMS.map(s=>renderCard(s,null,null)).join('');
+    setText('lastUpdated','Failed to update');
+    console.error('[DCA Dashboard]', err);
   }
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
 }
 
 main();
