@@ -6,621 +6,643 @@
 <meta http-equiv="refresh" content="3600">
 <title>DCA Portfolio Dashboard</title>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
     --bg: #0a0d14;
     --card: #111520;
-    --border: #1e2535;
+    --card2: #161b2e;
+    --border: #1e2740;
     --text: #e2e8f0;
     --muted: #64748b;
-    --pos: #22c55e;
-    --neg: #ef4444;
+    --green: #22c55e;
+    --red: #ef4444;
+    --accent: #3b82f6;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
-    padding-bottom: 3rem;
+    padding: 0 0 48px;
   }
-  /* ── Header ── */
-  .top-bar {
-    background: linear-gradient(135deg, #0d1117 0%, #111520 100%);
+
+  /* ─── HEADER ─── */
+  header {
+    background: linear-gradient(135deg, #0d1628 0%, #111520 100%);
     border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
+    padding: 24px 24px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
   }
-  .top-bar h1 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: #f8fafc;
-  }
-  .top-bar h1 span { color: var(--accent, #3b82f6); }
-  .stats-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-top: 1.2rem;
-  }
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  .stat-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-  }
-  .stat-val {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #f8fafc;
-  }
-  .stat-val.pos { color: var(--pos); }
-  .stat-val.neg { color: var(--neg); }
-  .divider { width: 1px; background: var(--border); align-self: stretch; }
-  .updated {
-    margin-top: 0.8rem;
-    font-size: 0.72rem;
-    color: var(--muted);
-  }
-  /* ── Grid ── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-    padding: 1.5rem 1.5rem;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-  @media (max-width: 520px) {
-    .grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; padding: 0.8rem; }
-    .top-bar { padding: 1rem; }
-    .stat-val { font-size: 1.1rem; }
-  }
-  @media (max-width: 360px) {
-    .grid { grid-template-columns: 1fr; }
-  }
-  /* ── Card ── */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-top: 2px solid var(--accent);
-    border-radius: 10px;
-    padding: 0.9rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
-  }
-  .card-header { display: flex; flex-direction: column; gap: 0.2rem; }
-  .sym-row {
+
+  .header-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.4rem;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  .symbol {
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-    color: #f8fafc;
-  }
-  .ytd-badge {
-    font-size: 0.68rem;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
     font-weight: 700;
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    white-space: nowrap;
+    letter-spacing: -0.5px;
   }
-  .ytd-pos { background: rgba(34,197,94,0.15); color: #22c55e; }
-  .ytd-neg { background: rgba(239,68,68,0.15); color: #ef4444; }
-  .company {
-    font-size: 0.75rem;
-    color: #94a3b8;
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .header-meta {
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .live-dot {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--green);
+    font-weight: 500;
+  }
+
+  .live-dot::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  #last-updated {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ─── PORTFOLIO STATS BAR ─── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  main {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 24px 20px 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── STOCK GRID ─── */
+  .stock-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* ─── STOCK CARD ─── */
+  .stock-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stock-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--sector-color, #3b82f6);
+    opacity: 0.8;
+  }
+
+  .stock-card:hover {
+    border-color: #2a3a5c;
+    transform: translateY(-2px);
+  }
+
+  /* Card top row */
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .card-left { flex: 1; }
+
+  .symbol {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .company-name {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 160px;
   }
-  .sector-tag {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+
+  .sector-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 3px 7px;
+    border-radius: 20px;
+    margin-top: 5px;
+    border: 1px solid currentColor;
+    opacity: 0.8;
   }
-  .price-row { display: flex; align-items: baseline; gap: 0.5rem; }
-  .cur-price {
-    font-size: 1.2rem;
+
+  .card-right {
+    text-align: right;
+  }
+
+  .current-price {
+    font-size: 18px;
     font-weight: 700;
-    color: #f8fafc;
+    letter-spacing: -0.5px;
   }
-  .spark { line-height: 0; overflow: hidden; border-radius: 4px; }
-  .spark svg { width: 100%; height: auto; display: block; }
-  /* ── Position table ── */
-  .pos-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0.3rem;
-  }
-  .pos-item { display: flex; flex-direction: column; gap: 0.1rem; }
-  .pos-label {
-    font-size: 0.58rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--muted);
-  }
-  .pos-val {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #cbd5e1;
-  }
-  .pl-pos { color: var(--pos) !important; }
-  .pl-neg { color: var(--neg) !important; }
-  .stop-val { color: #fb923c !important; }
-  /* ── Badges ── */
-  .badge-row { margin-top: 0.1rem; }
-  .badge {
+
+  .ytd-badge {
     display: inline-block;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 4px;
   }
-  .badge-trailing { background: rgba(168,85,247,0.18); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
-  .badge-stop     { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.3);  }
-  .badge-profit   { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3);  }
-  .badge-watch    { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
-  /* ── Section labels ── */
-  .section-label {
-    padding: 0.4rem 1.5rem 0;
-    font-size: 0.72rem;
+
+  .ytd-badge.pos { background: rgba(34,197,94,0.15); color: var(--green); }
+  .ytd-badge.neg { background: rgba(239,68,68,0.15); color: var(--red); }
+  .ytd-badge.neu { background: rgba(100,116,139,0.15); color: var(--muted); }
+
+  /* Sparkline */
+  .sparkline-wrap {
+    margin: 10px 0;
+    height: 48px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .sparkline-wrap svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Position row */
+  .position-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .pos-item {
+    background: var(--card2);
+    border-radius: 7px;
+    padding: 6px 8px;
+  }
+
+  .pos-label {
+    font-size: 9px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.6px;
     color: var(--muted);
-    max-width: 1600px;
-    margin: 0.8rem auto 0;
+    margin-bottom: 2px;
+  }
+
+  .pos-value {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .pos-value.green { color: var(--green); }
+  .pos-value.red { color: var(--red); }
+
+  /* Status badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .status-badge.trailing   { background: rgba(34,197,94,0.18);  color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .status-badge.near-stop  { background: rgba(239,68,68,0.18);  color: var(--red);   border: 1px solid rgba(239,68,68,0.3); }
+  .status-badge.in-profit  { background: rgba(59,130,246,0.18); color: #60a5fa;      border: 1px solid rgba(59,130,246,0.3); }
+  .status-badge.watching   { background: rgba(100,116,139,0.15); color: var(--muted); border: 1px solid var(--border); }
+
+  /* No position */
+  .no-position {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    padding: 8px 0 4px;
+    font-style: italic;
+  }
+
+  /* ─── LOADING / ERROR ─── */
+  .loading-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 16px;
+    color: var(--muted);
+  }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 32px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .stock-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stats-bar  { grid-template-columns: 1fr 1fr; }
+    header { padding: 14px; }
+    .stat-value { font-size: 15px; }
+    .symbol { font-size: 16px; }
+    .current-price { font-size: 15px; }
+    .stock-card { padding: 12px; }
+  }
+
+  @media (max-width: 360px) {
+    .stock-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (min-width: 1200px) {
+    .stock-grid { grid-template-columns: repeat(5, 1fr); }
   }
 </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <h1>DCA <span>Portfolio</span> Dashboard</h1>
-  <div class="stats-row">
-    <div class="stat">
-      <span class="stat-label">Portfolio Value</span>
-      <span class="stat-val">$147,823.40</span>
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <span class="logo-icon">📈</span>
+      DCA Portfolio
     </div>
-    <div class="divider"></div>
-    <div class="stat">
-      <span class="stat-label">Cash</span>
-      <span class="stat-val">$18,342.75</span>
-    </div>
-    <div class="divider"></div>
-    <div class="stat">
-      <span class="stat-label">Invested</span>
-      <span class="stat-val">$129,480.65</span>
-    </div>
-    <div class="divider"></div>
-    <div class="stat">
-      <span class="stat-label">Unrealized P&L</span>
-      <span class="stat-val pos">+14,358.00 (+11.09%)</span>
+    <div class="header-meta">
+      <span class="live-dot">LIVE</span>
+      <span id="last-updated">Loading…</span>
     </div>
   </div>
-  <div class="updated">Last updated: 2026-06-12 19:05 UTC [DEMO] · Auto-refreshes every 60 min</div>
-</div>
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-card"><div class="stat-label">Portfolio Value</div><div class="stat-value" id="s-value">—</div></div>
+    <div class="stat-card"><div class="stat-label">Cash</div><div class="stat-value" id="s-cash">—</div></div>
+    <div class="stat-card"><div class="stat-label">Invested</div><div class="stat-value" id="s-invested">—</div></div>
+    <div class="stat-card"><div class="stat-label">Unrealized P&amp;L</div><div class="stat-value" id="s-pnl">—</div></div>
+    <div class="stat-card"><div class="stat-label">Day P&amp;L</div><div class="stat-value" id="s-daypnl">—</div></div>
+    <div class="stat-card"><div class="stat-label">Open Positions</div><div class="stat-value" id="s-positions">—</div></div>
+  </div>
+</header>
 
-<div class="section-label">19 Positions · All Sectors</div>
-<div class="grid">
+<main>
+  <div id="loading-wrap" class="loading-overlay">
+    <div class="spinner"></div>
+    <span>Fetching live Alpaca data…</span>
+  </div>
+  <div id="content" style="display:none">
+    <!-- grids injected per sector -->
+  </div>
+</main>
 
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">STRC</span>
-          <span class="ytd-badge ytd-neg">-19.3% YTD</span>
-        </div>
-        <div class="company">₿ Strategy Inc</div>
-        <div class="sector-tag" style="color:#f7931a">Crypto Treasury</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$27.84</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,12.4 5.5,9.9 7.0,8.0 8.5,5.0 10.0,4.0 11.5,7.2 13.1,7.2 14.6,7.5 16.1,11.5 17.6,14.5 19.1,15.7 20.6,14.6 22.1,15.6 23.6,16.5 25.1,19.1 26.6,22.0 28.1,19.9 29.6,17.5 31.2,21.5 32.7,24.3 34.2,27.3 35.7,28.8 37.2,31.2 38.7,30.5 40.2,32.0 41.7,34.2 43.2,36.9 44.7,39.6 46.2,37.5 47.8,37.0 49.3,36.2 50.8,35.0 52.3,33.3 53.8,36.7 55.3,36.0 56.8,36.1 58.3,30.9 59.8,31.6 61.3,28.2 62.8,26.0 64.4,22.2 65.9,22.2 67.4,22.6 68.9,21.5 70.4,20.4 71.9,19.2 73.4,23.2 74.9,23.5 76.4,22.9 77.9,20.5 79.4,19.5 80.9,24.8 82.5,25.2 84.0,28.0 85.5,26.3 87.0,21.9 88.5,23.9 90.0,23.6 91.5,26.9 93.0,25.9 94.5,21.8 96.0,21.9 97.5,22.3 99.1,24.5 100.6,27.0 102.1,27.6 103.6,29.2 105.1,26.4 106.6,25.7 108.1,27.2 109.6,27.7 111.1,25.0 112.6,26.6 114.1,26.5 115.6,25.2 117.2,24.0 118.7,22.8 120.2,22.0 121.7,23.8 123.2,23.2 124.7,23.7 126.2,23.4 127.7,23.1 129.2,19.9 130.7,18.6 132.2,18.9 133.8,19.0 135.3,19.3 136.8,19.1 138.3,20.2 139.8,20.6 141.3,18.7 142.8,18.8 144.3,20.7 145.8,20.5 147.3,22.5 148.8,23.8 150.4,26.0 151.9,25.2 153.4,27.4 154.9,26.7 156.4,30.1 157.9,31.8 159.4,31.6 160.9,34.9 162.4,38.4 163.9,36.9 165.4,37.0 166.9,36.4 168.5,36.9 170.0,38.9 171.5,41.0 173.0,43.0 174.5,44.0 176.0,42.0 176,44" fill="url(#g2591)"/><polyline points="4.0,12.4 5.5,9.9 7.0,8.0 8.5,5.0 10.0,4.0 11.5,7.2 13.1,7.2 14.6,7.5 16.1,11.5 17.6,14.5 19.1,15.7 20.6,14.6 22.1,15.6 23.6,16.5 25.1,19.1 26.6,22.0 28.1,19.9 29.6,17.5 31.2,21.5 32.7,24.3 34.2,27.3 35.7,28.8 37.2,31.2 38.7,30.5 40.2,32.0 41.7,34.2 43.2,36.9 44.7,39.6 46.2,37.5 47.8,37.0 49.3,36.2 50.8,35.0 52.3,33.3 53.8,36.7 55.3,36.0 56.8,36.1 58.3,30.9 59.8,31.6 61.3,28.2 62.8,26.0 64.4,22.2 65.9,22.2 67.4,22.6 68.9,21.5 70.4,20.4 71.9,19.2 73.4,23.2 74.9,23.5 76.4,22.9 77.9,20.5 79.4,19.5 80.9,24.8 82.5,25.2 84.0,28.0 85.5,26.3 87.0,21.9 88.5,23.9 90.0,23.6 91.5,26.9 93.0,25.9 94.5,21.8 96.0,21.9 97.5,22.3 99.1,24.5 100.6,27.0 102.1,27.6 103.6,29.2 105.1,26.4 106.6,25.7 108.1,27.2 109.6,27.7 111.1,25.0 112.6,26.6 114.1,26.5 115.6,25.2 117.2,24.0 118.7,22.8 120.2,22.0 121.7,23.8 123.2,23.2 124.7,23.7 126.2,23.4 127.7,23.1 129.2,19.9 130.7,18.6 132.2,18.9 133.8,19.0 135.3,19.3 136.8,19.1 138.3,20.2 139.8,20.6 141.3,18.7 142.8,18.8 144.3,20.7 145.8,20.5 147.3,22.5 148.8,23.8 150.4,26.0 151.9,25.2 153.4,27.4 154.9,26.7 156.4,30.1 157.9,31.8 159.4,31.6 160.9,34.9 162.4,38.4 163.9,36.9 165.4,37.0 166.9,36.4 168.5,36.9 170.0,38.9 171.5,41.0 173.0,43.0 174.5,44.0 176.0,42.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">150</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$22.10</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+26.0%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$19.89</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">MSTR</span>
-          <span class="ytd-badge ytd-pos">+23.6% YTD</span>
-        </div>
-        <div class="company">₿ MicroStrategy</div>
-        <div class="sector-tag" style="color:#f7931a">Crypto Treasury</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$412.50</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,44.0 5.5,43.4 7.0,41.7 8.5,36.3 10.0,35.1 11.5,29.2 13.1,26.3 14.6,30.0 16.1,29.8 17.6,26.9 19.1,30.1 20.6,28.6 22.1,27.4 23.6,27.1 25.1,27.2 26.6,25.7 28.1,28.9 29.6,31.2 31.2,26.8 32.7,26.9 34.2,26.7 35.7,29.9 37.2,29.5 38.7,26.1 40.2,23.2 41.7,27.6 43.2,26.0 44.7,23.2 46.2,17.6 47.8,15.9 49.3,16.7 50.8,19.4 52.3,20.7 53.8,23.1 55.3,28.6 56.8,32.1 58.3,29.6 59.8,34.8 61.3,31.6 62.8,33.1 64.4,32.4 65.9,36.2 67.4,32.5 68.9,28.8 70.4,31.1 71.9,31.5 73.4,30.5 74.9,29.9 76.4,29.9 77.9,27.3 79.4,26.6 80.9,24.9 82.5,25.7 84.0,25.7 85.5,22.0 87.0,22.2 88.5,21.5 90.0,18.4 91.5,20.2 93.0,19.1 94.5,22.6 96.0,22.9 97.5,23.2 99.1,19.8 100.6,19.5 102.1,17.7 103.6,21.2 105.1,24.0 106.6,19.2 108.1,18.4 109.6,17.8 111.1,18.7 112.6,16.1 114.1,17.4 115.6,17.6 117.2,21.4 118.7,22.1 120.2,21.0 121.7,19.8 123.2,23.8 124.7,23.4 126.2,23.3 127.7,23.2 129.2,25.1 130.7,23.7 132.2,23.8 133.8,22.4 135.3,19.5 136.8,17.8 138.3,18.3 139.8,18.0 141.3,15.4 142.8,14.7 144.3,12.4 145.8,11.6 147.3,11.9 148.8,11.3 150.4,13.8 151.9,12.6 153.4,10.5 154.9,14.6 156.4,12.7 157.9,10.3 159.4,11.6 160.9,13.9 162.4,16.4 163.9,15.7 165.4,14.1 166.9,11.1 168.5,7.9 170.0,7.6 171.5,4.0 173.0,4.3 174.5,5.1 176.0,5.1 176,44" fill="url(#g7771)"/><polyline points="4.0,44.0 5.5,43.4 7.0,41.7 8.5,36.3 10.0,35.1 11.5,29.2 13.1,26.3 14.6,30.0 16.1,29.8 17.6,26.9 19.1,30.1 20.6,28.6 22.1,27.4 23.6,27.1 25.1,27.2 26.6,25.7 28.1,28.9 29.6,31.2 31.2,26.8 32.7,26.9 34.2,26.7 35.7,29.9 37.2,29.5 38.7,26.1 40.2,23.2 41.7,27.6 43.2,26.0 44.7,23.2 46.2,17.6 47.8,15.9 49.3,16.7 50.8,19.4 52.3,20.7 53.8,23.1 55.3,28.6 56.8,32.1 58.3,29.6 59.8,34.8 61.3,31.6 62.8,33.1 64.4,32.4 65.9,36.2 67.4,32.5 68.9,28.8 70.4,31.1 71.9,31.5 73.4,30.5 74.9,29.9 76.4,29.9 77.9,27.3 79.4,26.6 80.9,24.9 82.5,25.7 84.0,25.7 85.5,22.0 87.0,22.2 88.5,21.5 90.0,18.4 91.5,20.2 93.0,19.1 94.5,22.6 96.0,22.9 97.5,23.2 99.1,19.8 100.6,19.5 102.1,17.7 103.6,21.2 105.1,24.0 106.6,19.2 108.1,18.4 109.6,17.8 111.1,18.7 112.6,16.1 114.1,17.4 115.6,17.6 117.2,21.4 118.7,22.1 120.2,21.0 121.7,19.8 123.2,23.8 124.7,23.4 126.2,23.3 127.7,23.2 129.2,25.1 130.7,23.7 132.2,23.8 133.8,22.4 135.3,19.5 136.8,17.8 138.3,18.3 139.8,18.0 141.3,15.4 142.8,14.7 144.3,12.4 145.8,11.6 147.3,11.9 148.8,11.3 150.4,13.8 151.9,12.6 153.4,10.5 154.9,14.6 156.4,12.7 157.9,10.3 159.4,11.6 160.9,13.9 162.4,16.4 163.9,15.7 165.4,14.1 166.9,11.1 168.5,7.9 170.0,7.6 171.5,4.0 173.0,4.3 174.5,5.1 176.0,5.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">20</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$310.00</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+33.1%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$279.00</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">GEV</span>
-          <span class="ytd-badge ytd-pos">+0.5% YTD</span>
-        </div>
-        <div class="company">⚡ GE Vernova</div>
-        <div class="sector-tag" style="color:#22c55e">Energy</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$358.20</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,27.8 5.5,25.3 7.0,28.5 8.5,21.0 10.0,21.8 11.5,21.4 13.1,14.7 14.6,11.3 16.1,13.4 17.6,15.7 19.1,15.8 20.6,14.3 22.1,12.8 23.6,9.1 25.1,4.0 26.6,8.2 28.1,5.1 29.6,9.9 31.2,10.1 32.7,11.0 34.2,16.5 35.7,15.3 37.2,17.6 38.7,14.6 40.2,17.0 41.7,19.0 43.2,22.0 44.7,26.6 46.2,30.3 47.8,29.5 49.3,33.8 50.8,32.5 52.3,44.0 53.8,38.2 55.3,35.8 56.8,30.8 58.3,31.3 59.8,32.3 61.3,30.7 62.8,31.3 64.4,29.2 65.9,32.0 67.4,27.6 68.9,30.1 70.4,34.7 71.9,37.6 73.4,29.4 74.9,21.9 76.4,26.0 77.9,26.1 79.4,25.8 80.9,23.2 82.5,23.6 84.0,24.5 85.5,23.1 87.0,29.3 88.5,24.7 90.0,27.6 91.5,29.6 93.0,26.1 94.5,28.2 96.0,24.9 97.5,23.4 99.1,22.6 100.6,27.0 102.1,25.1 103.6,22.5 105.1,18.5 106.6,17.7 108.1,17.2 109.6,18.6 111.1,20.3 112.6,21.2 114.1,23.5 115.6,26.1 117.2,28.1 118.7,25.1 120.2,25.8 121.7,21.3 123.2,18.0 124.7,20.0 126.2,20.7 127.7,16.9 129.2,13.0 130.7,15.8 132.2,12.5 133.8,15.2 135.3,12.2 136.8,14.9 138.3,10.8 139.8,9.9 141.3,16.8 142.8,11.8 144.3,13.9 145.8,13.6 147.3,20.8 148.8,23.8 150.4,20.8 151.9,16.6 153.4,22.0 154.9,22.0 156.4,26.5 157.9,23.5 159.4,18.9 160.9,23.5 162.4,17.4 163.9,14.5 165.4,12.6 166.9,12.1 168.5,11.7 170.0,12.0 171.5,16.9 173.0,26.2 174.5,24.2 176.0,26.7 176,44" fill="url(#g7771)"/><polyline points="4.0,27.8 5.5,25.3 7.0,28.5 8.5,21.0 10.0,21.8 11.5,21.4 13.1,14.7 14.6,11.3 16.1,13.4 17.6,15.7 19.1,15.8 20.6,14.3 22.1,12.8 23.6,9.1 25.1,4.0 26.6,8.2 28.1,5.1 29.6,9.9 31.2,10.1 32.7,11.0 34.2,16.5 35.7,15.3 37.2,17.6 38.7,14.6 40.2,17.0 41.7,19.0 43.2,22.0 44.7,26.6 46.2,30.3 47.8,29.5 49.3,33.8 50.8,32.5 52.3,44.0 53.8,38.2 55.3,35.8 56.8,30.8 58.3,31.3 59.8,32.3 61.3,30.7 62.8,31.3 64.4,29.2 65.9,32.0 67.4,27.6 68.9,30.1 70.4,34.7 71.9,37.6 73.4,29.4 74.9,21.9 76.4,26.0 77.9,26.1 79.4,25.8 80.9,23.2 82.5,23.6 84.0,24.5 85.5,23.1 87.0,29.3 88.5,24.7 90.0,27.6 91.5,29.6 93.0,26.1 94.5,28.2 96.0,24.9 97.5,23.4 99.1,22.6 100.6,27.0 102.1,25.1 103.6,22.5 105.1,18.5 106.6,17.7 108.1,17.2 109.6,18.6 111.1,20.3 112.6,21.2 114.1,23.5 115.6,26.1 117.2,28.1 118.7,25.1 120.2,25.8 121.7,21.3 123.2,18.0 124.7,20.0 126.2,20.7 127.7,16.9 129.2,13.0 130.7,15.8 132.2,12.5 133.8,15.2 135.3,12.2 136.8,14.9 138.3,10.8 139.8,9.9 141.3,16.8 142.8,11.8 144.3,13.9 145.8,13.6 147.3,20.8 148.8,23.8 150.4,20.8 151.9,16.6 153.4,22.0 154.9,22.0 156.4,26.5 157.9,23.5 159.4,18.9 160.9,23.5 162.4,17.4 163.9,14.5 165.4,12.6 166.9,12.1 168.5,11.7 170.0,12.0 171.5,16.9 173.0,26.2 174.5,24.2 176.0,26.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">45</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$298.40</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+20.0%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$268.56</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">BE</span>
-          <span class="ytd-badge ytd-neg">-4.8% YTD</span>
-        </div>
-        <div class="company">⚡ Bloom Energy</div>
-        <div class="sector-tag" style="color:#22c55e">Energy</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$31.45</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,30.3 5.5,32.6 7.0,32.5 8.5,29.6 10.0,37.4 11.5,37.3 13.1,44.0 14.6,43.5 16.1,36.4 17.6,33.2 19.1,29.3 20.6,25.3 22.1,25.9 23.6,24.1 25.1,23.9 26.6,27.6 28.1,26.4 29.6,22.0 31.2,19.1 32.7,21.1 34.2,17.0 35.7,7.9 37.2,6.2 38.7,4.0 40.2,6.3 41.7,9.9 43.2,15.8 44.7,15.6 46.2,15.0 47.8,14.4 49.3,17.3 50.8,18.0 52.3,20.8 53.8,21.4 55.3,22.1 56.8,27.0 58.3,26.3 59.8,24.9 61.3,23.5 62.8,27.9 64.4,28.9 65.9,34.2 67.4,40.7 68.9,38.3 70.4,36.9 71.9,42.7 73.4,38.9 74.9,33.6 76.4,26.5 77.9,23.9 79.4,23.9 80.9,17.5 82.5,23.7 84.0,23.6 85.5,23.3 87.0,24.0 88.5,24.1 90.0,31.1 91.5,29.5 93.0,26.9 94.5,32.4 96.0,33.0 97.5,27.6 99.1,22.8 100.6,22.3 102.1,22.8 103.6,23.8 105.1,24.1 106.6,22.8 108.1,23.0 109.6,21.1 111.1,22.5 112.6,20.5 114.1,22.8 115.6,23.9 117.2,23.1 118.7,26.4 120.2,28.0 121.7,25.0 123.2,29.6 124.7,21.7 126.2,18.1 127.7,16.4 129.2,15.1 130.7,11.9 132.2,16.9 133.8,17.4 135.3,21.3 136.8,22.6 138.3,24.3 139.8,30.5 141.3,30.8 142.8,33.8 144.3,28.7 145.8,28.7 147.3,30.9 148.8,40.6 150.4,41.3 151.9,34.6 153.4,40.2 154.9,35.8 156.4,37.9 157.9,38.4 159.4,40.6 160.9,32.0 162.4,29.9 163.9,27.6 165.4,30.2 166.9,27.7 168.5,34.3 170.0,32.0 171.5,37.1 173.0,36.5 174.5,39.0 176.0,42.5 176,44" fill="url(#g2591)"/><polyline points="4.0,30.3 5.5,32.6 7.0,32.5 8.5,29.6 10.0,37.4 11.5,37.3 13.1,44.0 14.6,43.5 16.1,36.4 17.6,33.2 19.1,29.3 20.6,25.3 22.1,25.9 23.6,24.1 25.1,23.9 26.6,27.6 28.1,26.4 29.6,22.0 31.2,19.1 32.7,21.1 34.2,17.0 35.7,7.9 37.2,6.2 38.7,4.0 40.2,6.3 41.7,9.9 43.2,15.8 44.7,15.6 46.2,15.0 47.8,14.4 49.3,17.3 50.8,18.0 52.3,20.8 53.8,21.4 55.3,22.1 56.8,27.0 58.3,26.3 59.8,24.9 61.3,23.5 62.8,27.9 64.4,28.9 65.9,34.2 67.4,40.7 68.9,38.3 70.4,36.9 71.9,42.7 73.4,38.9 74.9,33.6 76.4,26.5 77.9,23.9 79.4,23.9 80.9,17.5 82.5,23.7 84.0,23.6 85.5,23.3 87.0,24.0 88.5,24.1 90.0,31.1 91.5,29.5 93.0,26.9 94.5,32.4 96.0,33.0 97.5,27.6 99.1,22.8 100.6,22.3 102.1,22.8 103.6,23.8 105.1,24.1 106.6,22.8 108.1,23.0 109.6,21.1 111.1,22.5 112.6,20.5 114.1,22.8 115.6,23.9 117.2,23.1 118.7,26.4 120.2,28.0 121.7,25.0 123.2,29.6 124.7,21.7 126.2,18.1 127.7,16.4 129.2,15.1 130.7,11.9 132.2,16.9 133.8,17.4 135.3,21.3 136.8,22.6 138.3,24.3 139.8,30.5 141.3,30.8 142.8,33.8 144.3,28.7 145.8,28.7 147.3,30.9 148.8,40.6 150.4,41.3 151.9,34.6 153.4,40.2 154.9,35.8 156.4,37.9 157.9,38.4 159.4,40.6 160.9,32.0 162.4,29.9 163.9,27.6 165.4,30.2 166.9,27.7 168.5,34.3 170.0,32.0 171.5,37.1 173.0,36.5 174.5,39.0 176.0,42.5" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">200</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$28.90</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+8.8%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$26.01</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-profit">● IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">KGS</span>
-          <span class="ytd-badge ytd-neg">-16.1% YTD</span>
-        </div>
-        <div class="company">⚡ Kodiak Gas</div>
-        <div class="sector-tag" style="color:#22c55e">Energy</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$24.18</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,7.3 5.5,9.1 7.0,6.7 8.5,11.9 10.0,9.3 11.5,8.1 13.1,4.8 14.6,6.1 16.1,6.9 17.6,14.5 19.1,11.9 20.6,10.0 22.1,4.5 23.6,5.0 25.1,8.8 26.6,6.3 28.1,9.2 29.6,9.2 31.2,9.8 32.7,13.3 34.2,11.3 35.7,13.1 37.2,11.1 38.7,15.0 40.2,15.6 41.7,12.6 43.2,8.9 44.7,10.3 46.2,9.0 47.8,5.7 49.3,4.6 50.8,4.0 52.3,7.3 53.8,13.5 55.3,8.2 56.8,9.2 58.3,11.2 59.8,10.2 61.3,9.9 62.8,6.7 64.4,9.3 65.9,12.9 67.4,10.8 68.9,9.7 70.4,11.4 71.9,13.4 73.4,17.8 74.9,17.1 76.4,19.1 77.9,16.1 79.4,21.2 80.9,22.0 82.5,24.2 84.0,27.2 85.5,26.6 87.0,26.2 88.5,28.2 90.0,33.4 91.5,34.8 93.0,31.6 94.5,32.4 96.0,29.9 97.5,29.1 99.1,30.6 100.6,28.7 102.1,31.3 103.6,32.2 105.1,32.7 106.6,28.7 108.1,26.4 109.6,26.6 111.1,25.0 112.6,24.8 114.1,22.8 115.6,21.0 117.2,22.3 118.7,26.2 120.2,24.8 121.7,27.4 123.2,30.5 124.7,29.1 126.2,22.5 127.7,24.7 129.2,23.5 130.7,22.1 132.2,23.9 133.8,27.1 135.3,30.8 136.8,33.0 138.3,30.7 139.8,28.2 141.3,26.9 142.8,27.5 144.3,29.3 145.8,29.8 147.3,31.9 148.8,31.8 150.4,30.4 151.9,29.2 153.4,31.8 154.9,34.3 156.4,34.7 157.9,34.7 159.4,35.3 160.9,35.8 162.4,33.6 163.9,34.2 165.4,34.9 166.9,36.3 168.5,38.3 170.0,39.6 171.5,40.9 173.0,44.0 174.5,37.3 176.0,36.8 176,44" fill="url(#g2591)"/><polyline points="4.0,7.3 5.5,9.1 7.0,6.7 8.5,11.9 10.0,9.3 11.5,8.1 13.1,4.8 14.6,6.1 16.1,6.9 17.6,14.5 19.1,11.9 20.6,10.0 22.1,4.5 23.6,5.0 25.1,8.8 26.6,6.3 28.1,9.2 29.6,9.2 31.2,9.8 32.7,13.3 34.2,11.3 35.7,13.1 37.2,11.1 38.7,15.0 40.2,15.6 41.7,12.6 43.2,8.9 44.7,10.3 46.2,9.0 47.8,5.7 49.3,4.6 50.8,4.0 52.3,7.3 53.8,13.5 55.3,8.2 56.8,9.2 58.3,11.2 59.8,10.2 61.3,9.9 62.8,6.7 64.4,9.3 65.9,12.9 67.4,10.8 68.9,9.7 70.4,11.4 71.9,13.4 73.4,17.8 74.9,17.1 76.4,19.1 77.9,16.1 79.4,21.2 80.9,22.0 82.5,24.2 84.0,27.2 85.5,26.6 87.0,26.2 88.5,28.2 90.0,33.4 91.5,34.8 93.0,31.6 94.5,32.4 96.0,29.9 97.5,29.1 99.1,30.6 100.6,28.7 102.1,31.3 103.6,32.2 105.1,32.7 106.6,28.7 108.1,26.4 109.6,26.6 111.1,25.0 112.6,24.8 114.1,22.8 115.6,21.0 117.2,22.3 118.7,26.2 120.2,24.8 121.7,27.4 123.2,30.5 124.7,29.1 126.2,22.5 127.7,24.7 129.2,23.5 130.7,22.1 132.2,23.9 133.8,27.1 135.3,30.8 136.8,33.0 138.3,30.7 139.8,28.2 141.3,26.9 142.8,27.5 144.3,29.3 145.8,29.8 147.3,31.9 148.8,31.8 150.4,30.4 151.9,29.2 153.4,31.8 154.9,34.3 156.4,34.7 157.9,34.7 159.4,35.3 160.9,35.8 162.4,33.6 163.9,34.2 165.4,34.9 166.9,36.3 168.5,38.3 170.0,39.6 171.5,40.9 173.0,44.0 174.5,37.3 176.0,36.8" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">175</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$26.50</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-neg">-8.8%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$23.85</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-stop">⚠ NEAR STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">QBTS</span>
-          <span class="ytd-badge ytd-neg">-3.0% YTD</span>
-        </div>
-        <div class="company">⚛ D-Wave Quantum</div>
-        <div class="sector-tag" style="color:#a855f7">Quantum</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$9.72</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,16.6 5.5,17.6 7.0,19.6 8.5,17.0 10.0,23.1 11.5,19.6 13.1,18.8 14.6,17.5 16.1,14.8 17.6,16.7 19.1,18.5 20.6,18.8 22.1,21.5 23.6,29.6 25.1,30.4 26.6,29.6 28.1,28.3 29.6,33.8 31.2,34.2 32.7,36.5 34.2,36.3 35.7,34.7 37.2,30.3 38.7,31.8 40.2,28.7 41.7,31.3 43.2,28.4 44.7,29.3 46.2,29.8 47.8,24.3 49.3,25.6 50.8,25.5 52.3,26.1 53.8,22.6 55.3,26.0 56.8,27.7 58.3,24.0 59.8,27.8 61.3,34.1 62.8,34.4 64.4,35.6 65.9,37.0 67.4,37.2 68.9,35.0 70.4,32.8 71.9,32.1 73.4,30.6 74.9,31.1 76.4,33.4 77.9,34.3 79.4,38.4 80.9,42.2 82.5,44.0 84.0,43.6 85.5,40.3 87.0,42.1 88.5,39.2 90.0,37.6 91.5,38.6 93.0,38.2 94.5,40.6 96.0,38.3 97.5,39.1 99.1,43.8 100.6,37.0 102.1,36.8 103.6,36.7 105.1,36.4 106.6,31.5 108.1,30.8 109.6,31.5 111.1,32.0 112.6,28.9 114.1,27.4 115.6,26.7 117.2,30.3 118.7,29.5 120.2,26.2 121.7,27.3 123.2,22.6 124.7,21.8 126.2,21.7 127.7,22.3 129.2,23.6 130.7,25.5 132.2,22.4 133.8,15.8 135.3,14.5 136.8,15.0 138.3,15.0 139.8,11.5 141.3,13.0 142.8,15.5 144.3,18.1 145.8,17.4 147.3,19.4 148.8,17.5 150.4,21.8 151.9,17.3 153.4,16.6 154.9,13.7 156.4,14.0 157.9,14.3 159.4,6.1 160.9,9.7 162.4,6.3 163.9,4.0 165.4,8.4 166.9,14.2 168.5,12.6 170.0,20.1 171.5,21.7 173.0,25.0 174.5,24.8 176.0,23.1 176,44" fill="url(#g2591)"/><polyline points="4.0,16.6 5.5,17.6 7.0,19.6 8.5,17.0 10.0,23.1 11.5,19.6 13.1,18.8 14.6,17.5 16.1,14.8 17.6,16.7 19.1,18.5 20.6,18.8 22.1,21.5 23.6,29.6 25.1,30.4 26.6,29.6 28.1,28.3 29.6,33.8 31.2,34.2 32.7,36.5 34.2,36.3 35.7,34.7 37.2,30.3 38.7,31.8 40.2,28.7 41.7,31.3 43.2,28.4 44.7,29.3 46.2,29.8 47.8,24.3 49.3,25.6 50.8,25.5 52.3,26.1 53.8,22.6 55.3,26.0 56.8,27.7 58.3,24.0 59.8,27.8 61.3,34.1 62.8,34.4 64.4,35.6 65.9,37.0 67.4,37.2 68.9,35.0 70.4,32.8 71.9,32.1 73.4,30.6 74.9,31.1 76.4,33.4 77.9,34.3 79.4,38.4 80.9,42.2 82.5,44.0 84.0,43.6 85.5,40.3 87.0,42.1 88.5,39.2 90.0,37.6 91.5,38.6 93.0,38.2 94.5,40.6 96.0,38.3 97.5,39.1 99.1,43.8 100.6,37.0 102.1,36.8 103.6,36.7 105.1,36.4 106.6,31.5 108.1,30.8 109.6,31.5 111.1,32.0 112.6,28.9 114.1,27.4 115.6,26.7 117.2,30.3 118.7,29.5 120.2,26.2 121.7,27.3 123.2,22.6 124.7,21.8 126.2,21.7 127.7,22.3 129.2,23.6 130.7,25.5 132.2,22.4 133.8,15.8 135.3,14.5 136.8,15.0 138.3,15.0 139.8,11.5 141.3,13.0 142.8,15.5 144.3,18.1 145.8,17.4 147.3,19.4 148.8,17.5 150.4,21.8 151.9,17.3 153.4,16.6 154.9,13.7 156.4,14.0 157.9,14.3 159.4,6.1 160.9,9.7 162.4,6.3 163.9,4.0 165.4,8.4 166.9,14.2 168.5,12.6 170.0,20.1 171.5,21.7 173.0,25.0 174.5,24.8 176.0,23.1" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">500</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$7.40</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+31.4%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$6.66</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">IONQ</span>
-          <span class="ytd-badge ytd-pos">+14.9% YTD</span>
-        </div>
-        <div class="company">⚛ IonQ</div>
-        <div class="sector-tag" style="color:#a855f7">Quantum</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$42.30</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,42.2 5.5,44.0 7.0,43.0 8.5,39.5 10.0,33.8 11.5,34.6 13.1,39.8 14.6,37.8 16.1,35.7 17.6,38.8 19.1,38.1 20.6,34.5 22.1,32.1 23.6,37.6 25.1,33.6 26.6,33.2 28.1,30.0 29.6,31.5 31.2,32.1 32.7,27.9 34.2,29.6 35.7,30.2 37.2,28.3 38.7,31.9 40.2,30.3 41.7,28.2 43.2,31.4 44.7,31.8 46.2,28.4 47.8,31.8 49.3,29.9 50.8,29.7 52.3,30.2 53.8,31.6 55.3,32.9 56.8,31.8 58.3,29.9 59.8,25.3 61.3,26.3 62.8,26.5 64.4,24.4 65.9,24.3 67.4,20.9 68.9,20.6 70.4,18.3 71.9,17.3 73.4,14.8 74.9,16.0 76.4,18.4 77.9,19.1 79.4,20.9 80.9,20.2 82.5,19.7 84.0,17.9 85.5,19.0 87.0,17.2 88.5,18.4 90.0,16.8 91.5,16.5 93.0,16.7 94.5,20.0 96.0,18.7 97.5,24.2 99.1,23.3 100.6,17.6 102.1,14.3 103.6,13.9 105.1,15.4 106.6,18.5 108.1,17.9 109.6,20.8 111.1,23.8 112.6,21.9 114.1,18.1 115.6,14.9 117.2,15.6 118.7,13.9 120.2,16.5 121.7,14.8 123.2,17.1 124.7,17.4 126.2,14.2 127.7,16.7 129.2,12.7 130.7,11.5 132.2,10.5 133.8,11.7 135.3,11.0 136.8,10.7 138.3,7.5 139.8,4.9 141.3,8.7 142.8,4.0 144.3,8.4 145.8,11.7 147.3,14.9 148.8,18.2 150.4,12.2 151.9,11.6 153.4,16.8 154.9,15.1 156.4,18.5 157.9,15.0 159.4,14.8 160.9,16.7 162.4,14.4 163.9,15.7 165.4,18.7 166.9,15.3 168.5,18.4 170.0,21.7 171.5,20.3 173.0,15.8 174.5,16.7 176.0,15.7 176,44" fill="url(#g7771)"/><polyline points="4.0,42.2 5.5,44.0 7.0,43.0 8.5,39.5 10.0,33.8 11.5,34.6 13.1,39.8 14.6,37.8 16.1,35.7 17.6,38.8 19.1,38.1 20.6,34.5 22.1,32.1 23.6,37.6 25.1,33.6 26.6,33.2 28.1,30.0 29.6,31.5 31.2,32.1 32.7,27.9 34.2,29.6 35.7,30.2 37.2,28.3 38.7,31.9 40.2,30.3 41.7,28.2 43.2,31.4 44.7,31.8 46.2,28.4 47.8,31.8 49.3,29.9 50.8,29.7 52.3,30.2 53.8,31.6 55.3,32.9 56.8,31.8 58.3,29.9 59.8,25.3 61.3,26.3 62.8,26.5 64.4,24.4 65.9,24.3 67.4,20.9 68.9,20.6 70.4,18.3 71.9,17.3 73.4,14.8 74.9,16.0 76.4,18.4 77.9,19.1 79.4,20.9 80.9,20.2 82.5,19.7 84.0,17.9 85.5,19.0 87.0,17.2 88.5,18.4 90.0,16.8 91.5,16.5 93.0,16.7 94.5,20.0 96.0,18.7 97.5,24.2 99.1,23.3 100.6,17.6 102.1,14.3 103.6,13.9 105.1,15.4 106.6,18.5 108.1,17.9 109.6,20.8 111.1,23.8 112.6,21.9 114.1,18.1 115.6,14.9 117.2,15.6 118.7,13.9 120.2,16.5 121.7,14.8 123.2,17.1 124.7,17.4 126.2,14.2 127.7,16.7 129.2,12.7 130.7,11.5 132.2,10.5 133.8,11.7 135.3,11.0 136.8,10.7 138.3,7.5 139.8,4.9 141.3,8.7 142.8,4.0 144.3,8.4 145.8,11.7 147.3,14.9 148.8,18.2 150.4,12.2 151.9,11.6 153.4,16.8 154.9,15.1 156.4,18.5 157.9,15.0 159.4,14.8 160.9,16.7 162.4,14.4 163.9,15.7 165.4,18.7 166.9,15.3 168.5,18.4 170.0,21.7 171.5,20.3 173.0,15.8 174.5,16.7 176.0,15.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">300</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$35.20</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+20.2%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$31.68</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">QUBT</span>
-          <span class="ytd-badge ytd-neg">-3.5% YTD</span>
-        </div>
-        <div class="company">⚛ Quantum Computing</div>
-        <div class="sector-tag" style="color:#a855f7">Quantum</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$6.88</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,27.4 5.5,25.5 7.0,22.7 8.5,23.3 10.0,22.2 11.5,22.5 13.1,20.4 14.6,18.9 16.1,19.1 17.6,14.1 19.1,11.5 20.6,15.7 22.1,15.6 23.6,13.5 25.1,14.9 26.6,12.0 28.1,11.5 29.6,11.9 31.2,18.6 32.7,19.7 34.2,21.5 35.7,16.5 37.2,16.5 38.7,18.3 40.2,19.1 41.7,19.1 43.2,18.6 44.7,22.9 46.2,23.6 47.8,23.0 49.3,25.8 50.8,25.1 52.3,23.6 53.8,26.4 55.3,25.0 56.8,22.5 58.3,21.7 59.8,21.3 61.3,20.8 62.8,23.2 64.4,24.0 65.9,23.0 67.4,24.8 68.9,24.4 70.4,21.2 71.9,19.9 73.4,16.9 74.9,13.2 76.4,10.3 77.9,7.4 79.4,6.9 80.9,9.8 82.5,13.0 84.0,9.2 85.5,12.1 87.0,11.3 88.5,10.2 90.0,9.4 91.5,9.6 93.0,9.4 94.5,8.3 96.0,9.8 97.5,5.1 99.1,4.0 100.6,6.4 102.1,6.5 103.6,13.9 105.1,18.7 106.6,17.8 108.1,16.5 109.6,16.0 111.1,14.7 112.6,14.9 114.1,16.0 115.6,16.4 117.2,19.7 118.7,19.9 120.2,21.9 121.7,22.6 123.2,23.6 124.7,23.2 126.2,26.8 127.7,27.5 129.2,30.7 130.7,32.1 132.2,36.4 133.8,35.4 135.3,36.6 136.8,37.3 138.3,35.6 139.8,36.2 141.3,36.6 142.8,37.6 144.3,40.0 145.8,37.5 147.3,38.2 148.8,38.6 150.4,40.4 151.9,40.1 153.4,44.0 154.9,41.3 156.4,42.0 157.9,39.6 159.4,35.9 160.9,35.0 162.4,38.4 163.9,33.2 165.4,33.7 166.9,35.5 168.5,36.8 170.0,34.5 171.5,30.2 173.0,32.7 174.5,28.6 176.0,32.5 176,44" fill="url(#g2591)"/><polyline points="4.0,27.4 5.5,25.5 7.0,22.7 8.5,23.3 10.0,22.2 11.5,22.5 13.1,20.4 14.6,18.9 16.1,19.1 17.6,14.1 19.1,11.5 20.6,15.7 22.1,15.6 23.6,13.5 25.1,14.9 26.6,12.0 28.1,11.5 29.6,11.9 31.2,18.6 32.7,19.7 34.2,21.5 35.7,16.5 37.2,16.5 38.7,18.3 40.2,19.1 41.7,19.1 43.2,18.6 44.7,22.9 46.2,23.6 47.8,23.0 49.3,25.8 50.8,25.1 52.3,23.6 53.8,26.4 55.3,25.0 56.8,22.5 58.3,21.7 59.8,21.3 61.3,20.8 62.8,23.2 64.4,24.0 65.9,23.0 67.4,24.8 68.9,24.4 70.4,21.2 71.9,19.9 73.4,16.9 74.9,13.2 76.4,10.3 77.9,7.4 79.4,6.9 80.9,9.8 82.5,13.0 84.0,9.2 85.5,12.1 87.0,11.3 88.5,10.2 90.0,9.4 91.5,9.6 93.0,9.4 94.5,8.3 96.0,9.8 97.5,5.1 99.1,4.0 100.6,6.4 102.1,6.5 103.6,13.9 105.1,18.7 106.6,17.8 108.1,16.5 109.6,16.0 111.1,14.7 112.6,14.9 114.1,16.0 115.6,16.4 117.2,19.7 118.7,19.9 120.2,21.9 121.7,22.6 123.2,23.6 124.7,23.2 126.2,26.8 127.7,27.5 129.2,30.7 130.7,32.1 132.2,36.4 133.8,35.4 135.3,36.6 136.8,37.3 138.3,35.6 139.8,36.2 141.3,36.6 142.8,37.6 144.3,40.0 145.8,37.5 147.3,38.2 148.8,38.6 150.4,40.4 151.9,40.1 153.4,44.0 154.9,41.3 156.4,42.0 157.9,39.6 159.4,35.9 160.9,35.0 162.4,38.4 163.9,33.2 165.4,33.7 166.9,35.5 168.5,36.8 170.0,34.5 171.5,30.2 173.0,32.7 174.5,28.6 176.0,32.5" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">1000</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$8.50</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-neg">-19.1%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$7.65</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-stop">⚠ NEAR STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">SNDK</span>
-          <span class="ytd-badge ytd-pos">+4.4% YTD</span>
-        </div>
-        <div class="company">🔬 SanDisk</div>
-        <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$58.40</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,41.8 5.5,42.4 7.0,40.0 8.5,35.0 10.0,40.9 11.5,42.1 13.1,38.1 14.6,42.3 16.1,44.0 17.6,41.3 19.1,41.8 20.6,40.5 22.1,40.6 23.6,35.0 25.1,26.8 26.6,36.1 28.1,38.9 29.6,39.8 31.2,36.4 32.7,30.6 34.2,35.1 35.7,32.4 37.2,33.5 38.7,33.2 40.2,31.3 41.7,28.1 43.2,26.6 44.7,27.4 46.2,36.8 47.8,39.2 49.3,38.4 50.8,33.1 52.3,36.0 53.8,26.5 55.3,25.4 56.8,29.3 58.3,31.5 59.8,32.5 61.3,23.0 62.8,18.3 64.4,20.3 65.9,25.4 67.4,25.3 68.9,26.3 70.4,21.3 71.9,21.5 73.4,18.5 74.9,19.9 76.4,14.4 77.9,19.4 79.4,15.7 80.9,15.5 82.5,8.6 84.0,14.4 85.5,11.4 87.0,11.8 88.5,14.4 90.0,18.4 91.5,20.2 93.0,22.6 94.5,21.2 96.0,28.6 97.5,17.5 99.1,20.5 100.6,15.2 102.1,17.9 103.6,14.2 105.1,17.3 106.6,17.4 108.1,21.9 109.6,17.5 111.1,18.7 112.6,14.3 114.1,12.1 115.6,11.5 117.2,14.9 118.7,12.9 120.2,10.5 121.7,13.2 123.2,15.6 124.7,16.8 126.2,14.4 127.7,10.6 129.2,8.4 130.7,13.2 132.2,8.4 133.8,12.5 135.3,15.7 136.8,12.9 138.3,10.8 139.8,15.6 141.3,14.2 142.8,7.3 144.3,4.0 145.8,4.7 147.3,5.4 148.8,11.5 150.4,17.4 151.9,14.3 153.4,12.0 154.9,18.5 156.4,21.9 157.9,16.3 159.4,18.6 160.9,18.6 162.4,18.0 163.9,17.3 165.4,13.5 166.9,11.4 168.5,13.4 170.0,16.5 171.5,14.0 173.0,15.9 174.5,28.0 176.0,30.5 176,44" fill="url(#g7771)"/><polyline points="4.0,41.8 5.5,42.4 7.0,40.0 8.5,35.0 10.0,40.9 11.5,42.1 13.1,38.1 14.6,42.3 16.1,44.0 17.6,41.3 19.1,41.8 20.6,40.5 22.1,40.6 23.6,35.0 25.1,26.8 26.6,36.1 28.1,38.9 29.6,39.8 31.2,36.4 32.7,30.6 34.2,35.1 35.7,32.4 37.2,33.5 38.7,33.2 40.2,31.3 41.7,28.1 43.2,26.6 44.7,27.4 46.2,36.8 47.8,39.2 49.3,38.4 50.8,33.1 52.3,36.0 53.8,26.5 55.3,25.4 56.8,29.3 58.3,31.5 59.8,32.5 61.3,23.0 62.8,18.3 64.4,20.3 65.9,25.4 67.4,25.3 68.9,26.3 70.4,21.3 71.9,21.5 73.4,18.5 74.9,19.9 76.4,14.4 77.9,19.4 79.4,15.7 80.9,15.5 82.5,8.6 84.0,14.4 85.5,11.4 87.0,11.8 88.5,14.4 90.0,18.4 91.5,20.2 93.0,22.6 94.5,21.2 96.0,28.6 97.5,17.5 99.1,20.5 100.6,15.2 102.1,17.9 103.6,14.2 105.1,17.3 106.6,17.4 108.1,21.9 109.6,17.5 111.1,18.7 112.6,14.3 114.1,12.1 115.6,11.5 117.2,14.9 118.7,12.9 120.2,10.5 121.7,13.2 123.2,15.6 124.7,16.8 126.2,14.4 127.7,10.6 129.2,8.4 130.7,13.2 132.2,8.4 133.8,12.5 135.3,15.7 136.8,12.9 138.3,10.8 139.8,15.6 141.3,14.2 142.8,7.3 144.3,4.0 145.8,4.7 147.3,5.4 148.8,11.5 150.4,17.4 151.9,14.3 153.4,12.0 154.9,18.5 156.4,21.9 157.9,16.3 159.4,18.6 160.9,18.6 162.4,18.0 163.9,17.3 165.4,13.5 166.9,11.4 168.5,13.4 170.0,16.5 171.5,14.0 173.0,15.9 174.5,28.0 176.0,30.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">80</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$51.20</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+14.1%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$46.08</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">MU</span>
-          <span class="ytd-badge ytd-neg">-0.9% YTD</span>
-        </div>
-        <div class="company">🔬 Micron Technology</div>
-        <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$98.75</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,36.7 5.5,36.3 7.0,35.9 8.5,32.6 10.0,33.0 11.5,29.2 13.1,26.2 14.6,25.5 16.1,26.6 17.6,31.9 19.1,32.5 20.6,28.8 22.1,29.9 23.6,30.6 25.1,29.6 26.6,29.5 28.1,28.7 29.6,28.2 31.2,30.6 32.7,28.2 34.2,28.9 35.7,24.1 37.2,22.8 38.7,19.7 40.2,15.3 41.7,13.3 43.2,14.7 44.7,14.1 46.2,18.3 47.8,17.7 49.3,14.3 50.8,14.3 52.3,18.0 53.8,17.9 55.3,18.3 56.8,17.0 58.3,15.8 59.8,13.9 61.3,15.8 62.8,14.2 64.4,17.6 65.9,15.0 67.4,13.0 68.9,12.6 70.4,13.6 71.9,14.5 73.4,19.8 74.9,17.0 76.4,16.8 77.9,16.2 79.4,12.2 80.9,11.6 82.5,4.0 84.0,11.0 85.5,11.3 87.0,13.7 88.5,11.8 90.0,15.8 91.5,17.2 93.0,19.4 94.5,17.8 96.0,21.8 97.5,27.9 99.1,27.9 100.6,29.5 102.1,27.9 103.6,28.7 105.1,28.2 106.6,28.9 108.1,27.2 109.6,26.3 111.1,28.5 112.6,27.5 114.1,28.8 115.6,31.0 117.2,31.9 118.7,32.4 120.2,31.4 121.7,30.7 123.2,34.6 124.7,28.1 126.2,28.5 127.7,28.7 129.2,32.9 130.7,35.7 132.2,35.9 133.8,30.5 135.3,31.4 136.8,32.8 138.3,35.0 139.8,32.6 141.3,30.8 142.8,34.6 144.3,33.0 145.8,34.6 147.3,34.9 148.8,36.0 150.4,35.4 151.9,39.3 153.4,40.7 154.9,42.3 156.4,40.6 157.9,44.0 159.4,42.4 160.9,41.9 162.4,38.6 163.9,38.9 165.4,38.1 166.9,39.4 168.5,37.8 170.0,40.3 171.5,40.4 173.0,40.3 174.5,38.7 176.0,38.0 176,44" fill="url(#g2591)"/><polyline points="4.0,36.7 5.5,36.3 7.0,35.9 8.5,32.6 10.0,33.0 11.5,29.2 13.1,26.2 14.6,25.5 16.1,26.6 17.6,31.9 19.1,32.5 20.6,28.8 22.1,29.9 23.6,30.6 25.1,29.6 26.6,29.5 28.1,28.7 29.6,28.2 31.2,30.6 32.7,28.2 34.2,28.9 35.7,24.1 37.2,22.8 38.7,19.7 40.2,15.3 41.7,13.3 43.2,14.7 44.7,14.1 46.2,18.3 47.8,17.7 49.3,14.3 50.8,14.3 52.3,18.0 53.8,17.9 55.3,18.3 56.8,17.0 58.3,15.8 59.8,13.9 61.3,15.8 62.8,14.2 64.4,17.6 65.9,15.0 67.4,13.0 68.9,12.6 70.4,13.6 71.9,14.5 73.4,19.8 74.9,17.0 76.4,16.8 77.9,16.2 79.4,12.2 80.9,11.6 82.5,4.0 84.0,11.0 85.5,11.3 87.0,13.7 88.5,11.8 90.0,15.8 91.5,17.2 93.0,19.4 94.5,17.8 96.0,21.8 97.5,27.9 99.1,27.9 100.6,29.5 102.1,27.9 103.6,28.7 105.1,28.2 106.6,28.9 108.1,27.2 109.6,26.3 111.1,28.5 112.6,27.5 114.1,28.8 115.6,31.0 117.2,31.9 118.7,32.4 120.2,31.4 121.7,30.7 123.2,34.6 124.7,28.1 126.2,28.5 127.7,28.7 129.2,32.9 130.7,35.7 132.2,35.9 133.8,30.5 135.3,31.4 136.8,32.8 138.3,35.0 139.8,32.6 141.3,30.8 142.8,34.6 144.3,33.0 145.8,34.6 147.3,34.9 148.8,36.0 150.4,35.4 151.9,39.3 153.4,40.7 154.9,42.3 156.4,40.6 157.9,44.0 159.4,42.4 160.9,41.9 162.4,38.6 163.9,38.9 165.4,38.1 166.9,39.4 168.5,37.8 170.0,40.3 171.5,40.4 173.0,40.3 174.5,38.7 176.0,38.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">60</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$88.30</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+11.8%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$79.47</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">WDC</span>
-          <span class="ytd-badge ytd-neg">-3.7% YTD</span>
-        </div>
-        <div class="company">🔬 Western Digital</div>
-        <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$62.10</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,32.8 5.5,30.2 7.0,26.9 8.5,20.2 10.0,14.8 11.5,17.3 13.1,6.5 14.6,4.0 16.1,10.9 17.6,12.1 19.1,16.1 20.6,13.3 22.1,12.5 23.6,18.5 25.1,21.2 26.6,22.3 28.1,25.1 29.6,22.0 31.2,24.2 32.7,25.8 34.2,25.4 35.7,30.0 37.2,31.8 38.7,34.8 40.2,37.7 41.7,40.5 43.2,36.9 44.7,34.1 46.2,34.8 47.8,29.1 49.3,27.4 50.8,30.2 52.3,28.5 53.8,28.1 55.3,31.1 56.8,32.3 58.3,32.0 59.8,34.6 61.3,33.5 62.8,29.0 64.4,32.9 65.9,31.8 67.4,26.7 68.9,30.4 70.4,30.4 71.9,27.8 73.4,28.4 74.9,23.6 76.4,24.9 77.9,27.8 79.4,30.6 80.9,30.1 82.5,34.2 84.0,34.9 85.5,38.5 87.0,37.2 88.5,34.7 90.0,33.2 91.5,34.3 93.0,38.0 94.5,44.0 96.0,36.6 97.5,37.4 99.1,36.6 100.6,38.2 102.1,35.7 103.6,33.0 105.1,38.6 106.6,35.2 108.1,36.2 109.6,36.3 111.1,32.3 112.6,32.6 114.1,23.6 115.6,10.7 117.2,13.6 118.7,16.9 120.2,23.3 121.7,21.5 123.2,24.7 124.7,23.4 126.2,18.2 127.7,16.1 129.2,17.2 130.7,16.2 132.2,14.9 133.8,12.7 135.3,11.4 136.8,5.9 138.3,11.0 139.8,12.7 141.3,12.8 142.8,16.9 144.3,21.1 145.8,17.5 147.3,18.8 148.8,19.2 150.4,20.8 151.9,18.3 153.4,16.8 154.9,16.4 156.4,17.7 157.9,18.0 159.4,21.4 160.9,28.4 162.4,29.9 163.9,31.1 165.4,28.6 166.9,24.3 168.5,27.9 170.0,34.3 171.5,34.6 173.0,37.6 174.5,33.0 176.0,41.1 176,44" fill="url(#g2591)"/><polyline points="4.0,32.8 5.5,30.2 7.0,26.9 8.5,20.2 10.0,14.8 11.5,17.3 13.1,6.5 14.6,4.0 16.1,10.9 17.6,12.1 19.1,16.1 20.6,13.3 22.1,12.5 23.6,18.5 25.1,21.2 26.6,22.3 28.1,25.1 29.6,22.0 31.2,24.2 32.7,25.8 34.2,25.4 35.7,30.0 37.2,31.8 38.7,34.8 40.2,37.7 41.7,40.5 43.2,36.9 44.7,34.1 46.2,34.8 47.8,29.1 49.3,27.4 50.8,30.2 52.3,28.5 53.8,28.1 55.3,31.1 56.8,32.3 58.3,32.0 59.8,34.6 61.3,33.5 62.8,29.0 64.4,32.9 65.9,31.8 67.4,26.7 68.9,30.4 70.4,30.4 71.9,27.8 73.4,28.4 74.9,23.6 76.4,24.9 77.9,27.8 79.4,30.6 80.9,30.1 82.5,34.2 84.0,34.9 85.5,38.5 87.0,37.2 88.5,34.7 90.0,33.2 91.5,34.3 93.0,38.0 94.5,44.0 96.0,36.6 97.5,37.4 99.1,36.6 100.6,38.2 102.1,35.7 103.6,33.0 105.1,38.6 106.6,35.2 108.1,36.2 109.6,36.3 111.1,32.3 112.6,32.6 114.1,23.6 115.6,10.7 117.2,13.6 118.7,16.9 120.2,23.3 121.7,21.5 123.2,24.7 124.7,23.4 126.2,18.2 127.7,16.1 129.2,17.2 130.7,16.2 132.2,14.9 133.8,12.7 135.3,11.4 136.8,5.9 138.3,11.0 139.8,12.7 141.3,12.8 142.8,16.9 144.3,21.1 145.8,17.5 147.3,18.8 148.8,19.2 150.4,20.8 151.9,18.3 153.4,16.8 154.9,16.4 156.4,17.7 157.9,18.0 159.4,21.4 160.9,28.4 162.4,29.9 163.9,31.1 165.4,28.6 166.9,24.3 168.5,27.9 170.0,34.3 171.5,34.6 173.0,37.6 174.5,33.0 176.0,41.1" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">90</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$67.40</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-neg">-7.9%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$60.66</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">MRVL</span>
-          <span class="ytd-badge ytd-pos">+12.8% YTD</span>
-        </div>
-        <div class="company">🔬 Marvell Technology</div>
-        <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$128.50</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,44.0 5.5,43.8 7.0,42.0 8.5,42.6 10.0,42.0 11.5,40.9 13.1,39.9 14.6,38.9 16.1,40.8 17.6,39.6 19.1,37.6 20.6,35.1 22.1,32.7 23.6,33.4 25.1,37.5 26.6,36.5 28.1,39.7 29.6,37.9 31.2,35.9 32.7,34.4 34.2,34.5 35.7,36.6 37.2,34.5 38.7,33.1 40.2,31.5 41.7,31.0 43.2,29.8 44.7,30.4 46.2,31.7 47.8,28.6 49.3,30.6 50.8,31.9 52.3,32.1 53.8,36.7 55.3,39.1 56.8,37.3 58.3,36.2 59.8,35.1 61.3,36.4 62.8,33.2 64.4,35.0 65.9,32.0 67.4,30.8 68.9,31.9 70.4,27.8 71.9,28.3 73.4,26.7 74.9,21.8 76.4,21.5 77.9,20.6 79.4,20.5 80.9,20.3 82.5,19.7 84.0,18.0 85.5,16.1 87.0,15.4 88.5,14.0 90.0,14.3 91.5,14.5 93.0,15.7 94.5,16.3 96.0,17.9 97.5,22.6 99.1,23.0 100.6,23.7 102.1,20.7 103.6,17.4 105.1,13.8 106.6,13.9 108.1,14.2 109.6,16.1 111.1,12.4 112.6,6.7 114.1,4.0 115.6,7.5 117.2,9.0 118.7,11.0 120.2,16.0 121.7,16.8 123.2,13.7 124.7,13.1 126.2,8.5 127.7,8.2 129.2,9.5 130.7,8.4 132.2,8.0 133.8,10.8 135.3,12.4 136.8,14.2 138.3,11.5 139.8,12.7 141.3,17.0 142.8,19.1 144.3,19.4 145.8,18.9 147.3,20.2 148.8,23.9 150.4,23.6 151.9,21.6 153.4,26.8 154.9,25.6 156.4,24.8 157.9,21.4 159.4,20.9 160.9,20.8 162.4,21.4 163.9,23.4 165.4,24.6 166.9,27.9 168.5,24.9 170.0,24.2 171.5,24.3 173.0,24.8 174.5,23.1 176.0,27.5 176,44" fill="url(#g7771)"/><polyline points="4.0,44.0 5.5,43.8 7.0,42.0 8.5,42.6 10.0,42.0 11.5,40.9 13.1,39.9 14.6,38.9 16.1,40.8 17.6,39.6 19.1,37.6 20.6,35.1 22.1,32.7 23.6,33.4 25.1,37.5 26.6,36.5 28.1,39.7 29.6,37.9 31.2,35.9 32.7,34.4 34.2,34.5 35.7,36.6 37.2,34.5 38.7,33.1 40.2,31.5 41.7,31.0 43.2,29.8 44.7,30.4 46.2,31.7 47.8,28.6 49.3,30.6 50.8,31.9 52.3,32.1 53.8,36.7 55.3,39.1 56.8,37.3 58.3,36.2 59.8,35.1 61.3,36.4 62.8,33.2 64.4,35.0 65.9,32.0 67.4,30.8 68.9,31.9 70.4,27.8 71.9,28.3 73.4,26.7 74.9,21.8 76.4,21.5 77.9,20.6 79.4,20.5 80.9,20.3 82.5,19.7 84.0,18.0 85.5,16.1 87.0,15.4 88.5,14.0 90.0,14.3 91.5,14.5 93.0,15.7 94.5,16.3 96.0,17.9 97.5,22.6 99.1,23.0 100.6,23.7 102.1,20.7 103.6,17.4 105.1,13.8 106.6,13.9 108.1,14.2 109.6,16.1 111.1,12.4 112.6,6.7 114.1,4.0 115.6,7.5 117.2,9.0 118.7,11.0 120.2,16.0 121.7,16.8 123.2,13.7 124.7,13.1 126.2,8.5 127.7,8.2 129.2,9.5 130.7,8.4 132.2,8.0 133.8,10.8 135.3,12.4 136.8,14.2 138.3,11.5 139.8,12.7 141.3,17.0 142.8,19.1 144.3,19.4 145.8,18.9 147.3,20.2 148.8,23.9 150.4,23.6 151.9,21.6 153.4,26.8 154.9,25.6 156.4,24.8 157.9,21.4 159.4,20.9 160.9,20.8 162.4,21.4 163.9,23.4 165.4,24.6 166.9,27.9 168.5,24.9 170.0,24.2 171.5,24.3 173.0,24.8 174.5,23.1 176.0,27.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">70</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$105.20</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+22.1%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$94.68</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">ALMU</span>
-          <span class="ytd-badge ytd-pos">+4.9% YTD</span>
-        </div>
-        <div class="company">🔬 Aeluma Inc</div>
-        <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$1.84</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,40.8 5.5,42.2 7.0,43.4 8.5,43.2 10.0,38.9 11.5,40.4 13.1,39.5 14.6,34.4 16.1,33.2 17.6,29.5 19.1,33.7 20.6,30.8 22.1,25.6 23.6,26.9 25.1,30.3 26.6,29.8 28.1,26.8 29.6,26.2 31.2,28.7 32.7,29.1 34.2,27.5 35.7,30.0 37.2,31.0 38.7,32.4 40.2,31.8 41.7,28.7 43.2,26.0 44.7,25.7 46.2,29.0 47.8,28.9 49.3,24.2 50.8,22.8 52.3,22.2 53.8,27.1 55.3,28.4 56.8,30.7 58.3,27.1 59.8,25.9 61.3,24.6 62.8,27.2 64.4,27.5 65.9,23.8 67.4,23.1 68.9,19.4 70.4,20.7 71.9,22.2 73.4,21.2 74.9,16.7 76.4,17.3 77.9,15.6 79.4,14.9 80.9,18.1 82.5,14.9 84.0,9.9 85.5,6.8 87.0,12.4 88.5,10.3 90.0,15.0 91.5,13.1 93.0,11.9 94.5,16.2 96.0,15.0 97.5,11.0 99.1,12.8 100.6,7.2 102.1,9.0 103.6,12.9 105.1,8.7 106.6,9.5 108.1,5.9 109.6,13.0 111.1,12.2 112.6,12.6 114.1,7.4 115.6,4.0 117.2,12.5 118.7,14.3 120.2,17.2 121.7,22.9 123.2,21.5 124.7,23.5 126.2,26.0 127.7,28.2 129.2,31.7 130.7,30.0 132.2,30.3 133.8,29.2 135.3,28.3 136.8,27.6 138.3,29.5 139.8,28.8 141.3,31.4 142.8,28.7 144.3,25.8 145.8,30.8 147.3,32.5 148.8,36.6 150.4,33.7 151.9,34.2 153.4,31.5 154.9,32.8 156.4,35.4 157.9,41.2 159.4,42.1 160.9,44.0 162.4,41.1 163.9,37.8 165.4,34.9 166.9,32.1 168.5,32.2 170.0,28.7 171.5,31.6 173.0,30.8 174.5,30.1 176.0,31.8 176,44" fill="url(#g7771)"/><polyline points="4.0,40.8 5.5,42.2 7.0,43.4 8.5,43.2 10.0,38.9 11.5,40.4 13.1,39.5 14.6,34.4 16.1,33.2 17.6,29.5 19.1,33.7 20.6,30.8 22.1,25.6 23.6,26.9 25.1,30.3 26.6,29.8 28.1,26.8 29.6,26.2 31.2,28.7 32.7,29.1 34.2,27.5 35.7,30.0 37.2,31.0 38.7,32.4 40.2,31.8 41.7,28.7 43.2,26.0 44.7,25.7 46.2,29.0 47.8,28.9 49.3,24.2 50.8,22.8 52.3,22.2 53.8,27.1 55.3,28.4 56.8,30.7 58.3,27.1 59.8,25.9 61.3,24.6 62.8,27.2 64.4,27.5 65.9,23.8 67.4,23.1 68.9,19.4 70.4,20.7 71.9,22.2 73.4,21.2 74.9,16.7 76.4,17.3 77.9,15.6 79.4,14.9 80.9,18.1 82.5,14.9 84.0,9.9 85.5,6.8 87.0,12.4 88.5,10.3 90.0,15.0 91.5,13.1 93.0,11.9 94.5,16.2 96.0,15.0 97.5,11.0 99.1,12.8 100.6,7.2 102.1,9.0 103.6,12.9 105.1,8.7 106.6,9.5 108.1,5.9 109.6,13.0 111.1,12.2 112.6,12.6 114.1,7.4 115.6,4.0 117.2,12.5 118.7,14.3 120.2,17.2 121.7,22.9 123.2,21.5 124.7,23.5 126.2,26.0 127.7,28.2 129.2,31.7 130.7,30.0 132.2,30.3 133.8,29.2 135.3,28.3 136.8,27.6 138.3,29.5 139.8,28.8 141.3,31.4 142.8,28.7 144.3,25.8 145.8,30.8 147.3,32.5 148.8,36.6 150.4,33.7 151.9,34.2 153.4,31.5 154.9,32.8 156.4,35.4 157.9,41.2 159.4,42.1 160.9,44.0 162.4,41.1 163.9,37.8 165.4,34.9 166.9,32.1 168.5,32.2 170.0,28.7 171.5,31.6 173.0,30.8 174.5,30.1 176.0,31.8" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">2000</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$2.30</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-neg">-20.0%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$2.07</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-stop">⚠ NEAR STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">IPGP</span>
-          <span class="ytd-badge ytd-pos">+18.2% YTD</span>
-        </div>
-        <div class="company">💡 IPG Photonics</div>
-        <div class="sector-tag" style="color:#06b6d4">Photonics</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$74.20</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,27.5 5.5,24.1 7.0,28.0 8.5,25.6 10.0,23.5 11.5,22.2 13.1,22.0 14.6,20.7 16.1,23.0 17.6,26.1 19.1,25.6 20.6,25.0 22.1,27.2 23.6,28.5 25.1,28.8 26.6,29.0 28.1,30.7 29.6,29.4 31.2,29.5 32.7,31.9 34.2,31.9 35.7,33.2 37.2,36.8 38.7,38.1 40.2,42.0 41.7,39.8 43.2,42.1 44.7,42.7 46.2,44.0 47.8,41.6 49.3,41.5 50.8,39.5 52.3,41.8 53.8,39.5 55.3,38.0 56.8,37.2 58.3,32.2 59.8,30.0 61.3,27.7 62.8,27.0 64.4,25.0 65.9,22.9 67.4,18.3 68.9,18.1 70.4,19.8 71.9,21.6 73.4,21.0 74.9,20.7 76.4,20.7 77.9,24.0 79.4,27.2 80.9,26.7 82.5,25.2 84.0,24.5 85.5,24.2 87.0,20.8 88.5,21.0 90.0,22.0 91.5,21.6 93.0,20.9 94.5,22.8 96.0,23.9 97.5,26.2 99.1,26.0 100.6,30.0 102.1,26.5 103.6,27.6 105.1,27.8 106.6,27.8 108.1,27.4 109.6,28.0 111.1,27.6 112.6,27.1 114.1,26.7 115.6,28.1 117.2,27.7 118.7,28.6 120.2,25.2 121.7,23.4 123.2,25.9 124.7,22.0 126.2,21.5 127.7,21.1 129.2,19.0 130.7,20.3 132.2,20.8 133.8,16.6 135.3,14.3 136.8,12.0 138.3,11.0 139.8,13.8 141.3,12.0 142.8,10.3 144.3,7.7 145.8,5.8 147.3,5.3 148.8,8.2 150.4,8.7 151.9,10.4 153.4,11.5 154.9,10.2 156.4,7.6 157.9,7.0 159.4,7.0 160.9,6.8 162.4,8.3 163.9,4.8 165.4,4.0 166.9,5.2 168.5,5.3 170.0,7.9 171.5,8.7 173.0,8.8 174.5,8.8 176.0,5.9 176,44" fill="url(#g7771)"/><polyline points="4.0,27.5 5.5,24.1 7.0,28.0 8.5,25.6 10.0,23.5 11.5,22.2 13.1,22.0 14.6,20.7 16.1,23.0 17.6,26.1 19.1,25.6 20.6,25.0 22.1,27.2 23.6,28.5 25.1,28.8 26.6,29.0 28.1,30.7 29.6,29.4 31.2,29.5 32.7,31.9 34.2,31.9 35.7,33.2 37.2,36.8 38.7,38.1 40.2,42.0 41.7,39.8 43.2,42.1 44.7,42.7 46.2,44.0 47.8,41.6 49.3,41.5 50.8,39.5 52.3,41.8 53.8,39.5 55.3,38.0 56.8,37.2 58.3,32.2 59.8,30.0 61.3,27.7 62.8,27.0 64.4,25.0 65.9,22.9 67.4,18.3 68.9,18.1 70.4,19.8 71.9,21.6 73.4,21.0 74.9,20.7 76.4,20.7 77.9,24.0 79.4,27.2 80.9,26.7 82.5,25.2 84.0,24.5 85.5,24.2 87.0,20.8 88.5,21.0 90.0,22.0 91.5,21.6 93.0,20.9 94.5,22.8 96.0,23.9 97.5,26.2 99.1,26.0 100.6,30.0 102.1,26.5 103.6,27.6 105.1,27.8 106.6,27.8 108.1,27.4 109.6,28.0 111.1,27.6 112.6,27.1 114.1,26.7 115.6,28.1 117.2,27.7 118.7,28.6 120.2,25.2 121.7,23.4 123.2,25.9 124.7,22.0 126.2,21.5 127.7,21.1 129.2,19.0 130.7,20.3 132.2,20.8 133.8,16.6 135.3,14.3 136.8,12.0 138.3,11.0 139.8,13.8 141.3,12.0 142.8,10.3 144.3,7.7 145.8,5.8 147.3,5.3 148.8,8.2 150.4,8.7 151.9,10.4 153.4,11.5 154.9,10.2 156.4,7.6 157.9,7.0 159.4,7.0 160.9,6.8 162.4,8.3 163.9,4.8 165.4,4.0 166.9,5.2 168.5,5.3 170.0,7.9 171.5,8.7 173.0,8.8 174.5,8.8 176.0,5.9" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">40</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$69.80</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+6.3%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$62.82</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-profit">● IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">POET</span>
-          <span class="ytd-badge ytd-neg">-13.9% YTD</span>
-        </div>
-        <div class="company">💡 POET Technologies</div>
-        <div class="sector-tag" style="color:#06b6d4">Photonics</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$0.92</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,14.7 5.5,15.7 7.0,13.5 8.5,11.7 10.0,6.0 11.5,7.3 13.1,4.5 14.6,5.1 16.1,8.0 17.6,9.6 19.1,14.2 20.6,15.9 22.1,18.8 23.6,21.6 25.1,19.0 26.6,19.1 28.1,15.3 29.6,11.4 31.2,10.4 32.7,6.1 34.2,6.5 35.7,5.5 37.2,4.0 38.7,4.4 40.2,6.8 41.7,6.5 43.2,7.7 44.7,11.3 46.2,12.3 47.8,13.2 49.3,12.8 50.8,13.4 52.3,13.4 53.8,12.4 55.3,13.4 56.8,12.2 58.3,12.5 59.8,10.7 61.3,12.2 62.8,11.6 64.4,15.6 65.9,23.5 67.4,28.9 68.9,31.4 70.4,30.0 71.9,34.1 73.4,32.0 74.9,32.9 76.4,31.5 77.9,30.5 79.4,28.1 80.9,29.4 82.5,31.3 84.0,34.2 85.5,32.2 87.0,30.3 88.5,33.4 90.0,31.5 91.5,31.1 93.0,28.0 94.5,30.9 96.0,33.8 97.5,38.4 99.1,38.7 100.6,37.6 102.1,38.0 103.6,37.5 105.1,38.3 106.6,35.5 108.1,34.0 109.6,28.9 111.1,32.0 112.6,33.5 114.1,34.1 115.6,34.1 117.2,31.3 118.7,29.9 120.2,27.3 121.7,25.5 123.2,30.8 124.7,28.2 126.2,29.2 127.7,29.0 129.2,24.8 130.7,24.4 132.2,30.1 133.8,31.8 135.3,28.7 136.8,32.9 138.3,29.7 139.8,31.8 141.3,32.3 142.8,32.2 144.3,32.6 145.8,34.0 147.3,37.5 148.8,36.9 150.4,38.1 151.9,40.4 153.4,43.4 154.9,42.4 156.4,42.9 157.9,42.3 159.4,43.2 160.9,44.0 162.4,43.9 163.9,43.4 165.4,42.8 166.9,42.4 168.5,39.7 170.0,38.7 171.5,40.9 173.0,41.9 174.5,42.5 176.0,38.7 176,44" fill="url(#g2591)"/><polyline points="4.0,14.7 5.5,15.7 7.0,13.5 8.5,11.7 10.0,6.0 11.5,7.3 13.1,4.5 14.6,5.1 16.1,8.0 17.6,9.6 19.1,14.2 20.6,15.9 22.1,18.8 23.6,21.6 25.1,19.0 26.6,19.1 28.1,15.3 29.6,11.4 31.2,10.4 32.7,6.1 34.2,6.5 35.7,5.5 37.2,4.0 38.7,4.4 40.2,6.8 41.7,6.5 43.2,7.7 44.7,11.3 46.2,12.3 47.8,13.2 49.3,12.8 50.8,13.4 52.3,13.4 53.8,12.4 55.3,13.4 56.8,12.2 58.3,12.5 59.8,10.7 61.3,12.2 62.8,11.6 64.4,15.6 65.9,23.5 67.4,28.9 68.9,31.4 70.4,30.0 71.9,34.1 73.4,32.0 74.9,32.9 76.4,31.5 77.9,30.5 79.4,28.1 80.9,29.4 82.5,31.3 84.0,34.2 85.5,32.2 87.0,30.3 88.5,33.4 90.0,31.5 91.5,31.1 93.0,28.0 94.5,30.9 96.0,33.8 97.5,38.4 99.1,38.7 100.6,37.6 102.1,38.0 103.6,37.5 105.1,38.3 106.6,35.5 108.1,34.0 109.6,28.9 111.1,32.0 112.6,33.5 114.1,34.1 115.6,34.1 117.2,31.3 118.7,29.9 120.2,27.3 121.7,25.5 123.2,30.8 124.7,28.2 126.2,29.2 127.7,29.0 129.2,24.8 130.7,24.4 132.2,30.1 133.8,31.8 135.3,28.7 136.8,32.9 138.3,29.7 139.8,31.8 141.3,32.3 142.8,32.2 144.3,32.6 145.8,34.0 147.3,37.5 148.8,36.9 150.4,38.1 151.9,40.4 153.4,43.4 154.9,42.4 156.4,42.9 157.9,42.3 159.4,43.2 160.9,44.0 162.4,43.9 163.9,43.4 165.4,42.8 166.9,42.4 168.5,39.7 170.0,38.7 171.5,40.9 173.0,41.9 174.5,42.5 176.0,38.7" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">3000</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$1.15</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-neg">-20.0%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$1.03</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-stop">⚠ NEAR STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#ef4444">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">TSLA</span>
-          <span class="ytd-badge ytd-pos">+23.3% YTD</span>
-        </div>
-        <div class="company">🚗 Tesla</div>
-        <div class="sector-tag" style="color:#ef4444">EV</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$312.80</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,39.2 5.5,39.8 7.0,43.9 8.5,44.0 10.0,43.2 11.5,39.9 13.1,39.2 14.6,35.1 16.1,33.3 17.6,32.6 19.1,30.9 20.6,27.9 22.1,28.7 23.6,30.7 25.1,27.6 26.6,28.1 28.1,25.8 29.6,23.6 31.2,24.2 32.7,25.8 34.2,22.9 35.7,21.4 37.2,20.1 38.7,19.9 40.2,17.2 41.7,14.8 43.2,14.7 44.7,12.1 46.2,7.6 47.8,9.5 49.3,11.4 50.8,11.4 52.3,14.2 53.8,14.6 55.3,16.0 56.8,14.2 58.3,14.5 59.8,17.8 61.3,17.2 62.8,16.5 64.4,20.2 65.9,19.1 67.4,18.5 68.9,18.2 70.4,22.4 71.9,20.8 73.4,20.3 74.9,23.2 76.4,22.3 77.9,23.5 79.4,21.6 80.9,23.5 82.5,25.4 84.0,26.7 85.5,28.2 87.0,28.8 88.5,30.1 90.0,30.0 91.5,32.1 93.0,32.9 94.5,33.4 96.0,33.9 97.5,33.0 99.1,34.4 100.6,31.7 102.1,28.8 103.6,29.8 105.1,30.1 106.6,29.5 108.1,27.0 109.6,26.4 111.1,24.7 112.6,22.3 114.1,20.8 115.6,20.4 117.2,25.1 118.7,24.3 120.2,22.4 121.7,22.0 123.2,21.2 124.7,18.6 126.2,18.5 127.7,14.9 129.2,19.0 130.7,18.7 132.2,18.1 133.8,18.9 135.3,19.3 136.8,18.9 138.3,15.1 139.8,15.3 141.3,15.4 142.8,15.8 144.3,14.6 145.8,13.8 147.3,13.1 148.8,15.2 150.4,14.5 151.9,11.7 153.4,9.2 154.9,9.9 156.4,5.7 157.9,7.3 159.4,7.4 160.9,9.8 162.4,8.4 163.9,7.3 165.4,9.4 166.9,10.8 168.5,10.4 170.0,11.6 171.5,5.0 173.0,4.0 174.5,8.8 176.0,9.6 176,44" fill="url(#g7771)"/><polyline points="4.0,39.2 5.5,39.8 7.0,43.9 8.5,44.0 10.0,43.2 11.5,39.9 13.1,39.2 14.6,35.1 16.1,33.3 17.6,32.6 19.1,30.9 20.6,27.9 22.1,28.7 23.6,30.7 25.1,27.6 26.6,28.1 28.1,25.8 29.6,23.6 31.2,24.2 32.7,25.8 34.2,22.9 35.7,21.4 37.2,20.1 38.7,19.9 40.2,17.2 41.7,14.8 43.2,14.7 44.7,12.1 46.2,7.6 47.8,9.5 49.3,11.4 50.8,11.4 52.3,14.2 53.8,14.6 55.3,16.0 56.8,14.2 58.3,14.5 59.8,17.8 61.3,17.2 62.8,16.5 64.4,20.2 65.9,19.1 67.4,18.5 68.9,18.2 70.4,22.4 71.9,20.8 73.4,20.3 74.9,23.2 76.4,22.3 77.9,23.5 79.4,21.6 80.9,23.5 82.5,25.4 84.0,26.7 85.5,28.2 87.0,28.8 88.5,30.1 90.0,30.0 91.5,32.1 93.0,32.9 94.5,33.4 96.0,33.9 97.5,33.0 99.1,34.4 100.6,31.7 102.1,28.8 103.6,29.8 105.1,30.1 106.6,29.5 108.1,27.0 109.6,26.4 111.1,24.7 112.6,22.3 114.1,20.8 115.6,20.4 117.2,25.1 118.7,24.3 120.2,22.4 121.7,22.0 123.2,21.2 124.7,18.6 126.2,18.5 127.7,14.9 129.2,19.0 130.7,18.7 132.2,18.1 133.8,18.9 135.3,19.3 136.8,18.9 138.3,15.1 139.8,15.3 141.3,15.4 142.8,15.8 144.3,14.6 145.8,13.8 147.3,13.1 148.8,15.2 150.4,14.5 151.9,11.7 153.4,9.2 154.9,9.9 156.4,5.7 157.9,7.3 159.4,7.4 160.9,9.8 162.4,8.4 163.9,7.3 165.4,9.4 166.9,10.8 168.5,10.4 170.0,11.6 171.5,5.0 173.0,4.0 174.5,8.8 176.0,9.6" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">25</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$245.60</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+27.4%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$221.04</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#64748b">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">AAPL</span>
-          <span class="ytd-badge ytd-pos">+1.1% YTD</span>
-        </div>
-        <div class="company">📱 Apple</div>
-        <div class="sector-tag" style="color:#64748b">Consumer Tech</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$214.30</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,26.3 5.5,27.5 7.0,28.6 8.5,24.9 10.0,24.7 11.5,22.2 13.1,21.3 14.6,22.4 16.1,20.5 17.6,19.5 19.1,19.9 20.6,14.2 22.1,12.6 23.6,9.8 25.1,9.2 26.6,14.7 28.1,11.2 29.6,6.8 31.2,4.6 32.7,4.0 34.2,8.6 35.7,11.3 37.2,7.1 38.7,8.3 40.2,13.6 41.7,14.9 43.2,15.9 44.7,10.2 46.2,14.3 47.8,11.8 49.3,18.3 50.8,18.7 52.3,25.8 53.8,28.1 55.3,30.2 56.8,31.9 58.3,32.3 59.8,30.0 61.3,25.3 62.8,23.1 64.4,20.9 65.9,17.6 67.4,18.2 68.9,17.5 70.4,17.3 71.9,13.4 73.4,11.4 74.9,12.2 76.4,10.2 77.9,11.0 79.4,8.4 80.9,10.7 82.5,5.3 84.0,4.2 85.5,4.9 87.0,6.3 88.5,7.6 90.0,6.9 91.5,7.2 93.0,8.3 94.5,13.4 96.0,9.5 97.5,5.3 99.1,16.2 100.6,12.6 102.1,15.2 103.6,18.4 105.1,26.9 106.6,30.6 108.1,30.7 109.6,35.1 111.1,40.2 112.6,44.0 114.1,43.3 115.6,43.1 117.2,40.4 118.7,36.9 120.2,34.9 121.7,37.6 123.2,39.0 124.7,43.1 126.2,37.2 127.7,33.2 129.2,35.1 130.7,38.1 132.2,36.3 133.8,40.0 135.3,41.1 136.8,41.3 138.3,39.1 139.8,38.1 141.3,38.6 142.8,41.1 144.3,37.5 145.8,33.7 147.3,37.1 148.8,35.4 150.4,35.9 151.9,35.4 153.4,36.4 154.9,35.8 156.4,37.0 157.9,38.2 159.4,37.8 160.9,38.1 162.4,36.1 163.9,33.7 165.4,34.9 166.9,36.2 168.5,27.6 170.0,25.9 171.5,26.4 173.0,29.4 174.5,24.9 176.0,24.1 176,44" fill="url(#g7771)"/><polyline points="4.0,26.3 5.5,27.5 7.0,28.6 8.5,24.9 10.0,24.7 11.5,22.2 13.1,21.3 14.6,22.4 16.1,20.5 17.6,19.5 19.1,19.9 20.6,14.2 22.1,12.6 23.6,9.8 25.1,9.2 26.6,14.7 28.1,11.2 29.6,6.8 31.2,4.6 32.7,4.0 34.2,8.6 35.7,11.3 37.2,7.1 38.7,8.3 40.2,13.6 41.7,14.9 43.2,15.9 44.7,10.2 46.2,14.3 47.8,11.8 49.3,18.3 50.8,18.7 52.3,25.8 53.8,28.1 55.3,30.2 56.8,31.9 58.3,32.3 59.8,30.0 61.3,25.3 62.8,23.1 64.4,20.9 65.9,17.6 67.4,18.2 68.9,17.5 70.4,17.3 71.9,13.4 73.4,11.4 74.9,12.2 76.4,10.2 77.9,11.0 79.4,8.4 80.9,10.7 82.5,5.3 84.0,4.2 85.5,4.9 87.0,6.3 88.5,7.6 90.0,6.9 91.5,7.2 93.0,8.3 94.5,13.4 96.0,9.5 97.5,5.3 99.1,16.2 100.6,12.6 102.1,15.2 103.6,18.4 105.1,26.9 106.6,30.6 108.1,30.7 109.6,35.1 111.1,40.2 112.6,44.0 114.1,43.3 115.6,43.1 117.2,40.4 118.7,36.9 120.2,34.9 121.7,37.6 123.2,39.0 124.7,43.1 126.2,37.2 127.7,33.2 129.2,35.1 130.7,38.1 132.2,36.3 133.8,40.0 135.3,41.1 136.8,41.3 138.3,39.1 139.8,38.1 141.3,38.6 142.8,41.1 144.3,37.5 145.8,33.7 147.3,37.1 148.8,35.4 150.4,35.9 151.9,35.4 153.4,36.4 154.9,35.8 156.4,37.0 157.9,38.2 159.4,37.8 160.9,38.1 162.4,36.1 163.9,33.7 165.4,34.9 166.9,36.2 168.5,27.6 170.0,25.9 171.5,26.4 173.0,29.4 174.5,24.9 176.0,24.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">50</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$185.70</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+15.4%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$167.13</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#ec4899">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">NFLX</span>
-          <span class="ytd-badge ytd-pos">+4.0% YTD</span>
-        </div>
-        <div class="company">▶ Netflix</div>
-        <div class="sector-tag" style="color:#ec4899">Streaming</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$892.40</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7771" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,30.5 5.5,29.1 7.0,30.4 8.5,29.9 10.0,28.4 11.5,26.5 13.1,35.1 14.6,27.2 16.1,27.4 17.6,30.7 19.1,31.5 20.6,33.3 22.1,37.4 23.6,30.3 25.1,28.0 26.6,29.2 28.1,33.6 29.6,32.1 31.2,28.0 32.7,23.4 34.2,23.1 35.7,22.3 37.2,23.1 38.7,26.6 40.2,23.2 41.7,20.0 43.2,22.0 44.7,27.6 46.2,32.1 47.8,38.5 49.3,35.7 50.8,30.6 52.3,35.1 53.8,35.6 55.3,36.2 56.8,37.2 58.3,34.1 59.8,34.2 61.3,33.5 62.8,30.4 64.4,30.6 65.9,38.6 67.4,38.2 68.9,39.2 70.4,44.0 71.9,41.6 73.4,37.1 74.9,36.6 76.4,37.2 77.9,37.4 79.4,34.8 80.9,35.3 82.5,37.7 84.0,37.4 85.5,36.5 87.0,34.1 88.5,30.6 90.0,21.8 91.5,19.0 93.0,24.6 94.5,21.8 96.0,13.3 97.5,5.5 99.1,9.3 100.6,11.9 102.1,11.8 103.6,12.1 105.1,19.1 106.6,13.9 108.1,13.4 109.6,21.1 111.1,13.3 112.6,12.4 114.1,13.5 115.6,13.5 117.2,10.6 118.7,16.1 120.2,13.7 121.7,18.3 123.2,15.5 124.7,7.9 126.2,18.5 127.7,17.4 129.2,13.7 130.7,15.4 132.2,14.6 133.8,13.8 135.3,13.7 136.8,6.6 138.3,10.9 139.8,10.5 141.3,7.6 142.8,11.0 144.3,11.3 145.8,12.0 147.3,13.1 148.8,7.5 150.4,12.6 151.9,12.2 153.4,12.0 154.9,4.9 156.4,7.3 157.9,5.1 159.4,4.8 160.9,4.0 162.4,4.7 163.9,9.2 165.4,12.5 166.9,12.8 168.5,10.4 170.0,17.1 171.5,19.9 173.0,25.6 174.5,24.3 176.0,20.4 176,44" fill="url(#g7771)"/><polyline points="4.0,30.5 5.5,29.1 7.0,30.4 8.5,29.9 10.0,28.4 11.5,26.5 13.1,35.1 14.6,27.2 16.1,27.4 17.6,30.7 19.1,31.5 20.6,33.3 22.1,37.4 23.6,30.3 25.1,28.0 26.6,29.2 28.1,33.6 29.6,32.1 31.2,28.0 32.7,23.4 34.2,23.1 35.7,22.3 37.2,23.1 38.7,26.6 40.2,23.2 41.7,20.0 43.2,22.0 44.7,27.6 46.2,32.1 47.8,38.5 49.3,35.7 50.8,30.6 52.3,35.1 53.8,35.6 55.3,36.2 56.8,37.2 58.3,34.1 59.8,34.2 61.3,33.5 62.8,30.4 64.4,30.6 65.9,38.6 67.4,38.2 68.9,39.2 70.4,44.0 71.9,41.6 73.4,37.1 74.9,36.6 76.4,37.2 77.9,37.4 79.4,34.8 80.9,35.3 82.5,37.7 84.0,37.4 85.5,36.5 87.0,34.1 88.5,30.6 90.0,21.8 91.5,19.0 93.0,24.6 94.5,21.8 96.0,13.3 97.5,5.5 99.1,9.3 100.6,11.9 102.1,11.8 103.6,12.1 105.1,19.1 106.6,13.9 108.1,13.4 109.6,21.1 111.1,13.3 112.6,12.4 114.1,13.5 115.6,13.5 117.2,10.6 118.7,16.1 120.2,13.7 121.7,18.3 123.2,15.5 124.7,7.9 126.2,18.5 127.7,17.4 129.2,13.7 130.7,15.4 132.2,14.6 133.8,13.8 135.3,13.7 136.8,6.6 138.3,10.9 139.8,10.5 141.3,7.6 142.8,11.0 144.3,11.3 145.8,12.0 147.3,13.1 148.8,7.5 150.4,12.6 151.9,12.2 153.4,12.0 154.9,4.9 156.4,7.3 157.9,5.1 159.4,4.8 160.9,4.0 162.4,4.7 163.9,9.2 165.4,12.5 166.9,12.8 168.5,10.4 170.0,17.1 171.5,19.9 173.0,25.6 174.5,24.3 176.0,20.4" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">15</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$748.20</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+19.3%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$673.38</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-trailing">▲ TRAILING STOP</span></div>
-    </div>
-    <div class="card" style="--accent:#f59e0b">
-      <div class="card-header">
-        <div class="sym-row">
-          <span class="symbol">CAT</span>
-          <span class="ytd-badge ytd-neg">-10.5% YTD</span>
-        </div>
-        <div class="company">⚙ Caterpillar</div>
-        <div class="sector-tag" style="color:#f59e0b">Industrial</div>
-      </div>
-      <div class="price-row">
-        <span class="cur-price">$378.60</span>
-      </div>
-      <div class="spark"><svg width="180" height="48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2591" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/></linearGradient></defs><polygon points="4,44 4.0,11.6 5.5,11.1 7.0,10.6 8.5,9.2 10.0,10.5 11.5,5.9 13.1,8.1 14.6,7.1 16.1,4.5 17.6,4.0 19.1,4.1 20.6,13.4 22.1,22.9 23.6,23.6 25.1,19.6 26.6,17.6 28.1,20.5 29.6,15.6 31.2,15.3 32.7,15.5 34.2,16.2 35.7,16.5 37.2,14.9 38.7,16.6 40.2,14.5 41.7,20.0 43.2,16.6 44.7,17.5 46.2,17.9 47.8,18.4 49.3,16.0 50.8,18.4 52.3,17.5 53.8,18.6 55.3,19.4 56.8,16.9 58.3,17.9 59.8,22.9 61.3,22.7 62.8,27.1 64.4,29.0 65.9,27.1 67.4,28.5 68.9,30.6 70.4,30.0 71.9,34.2 73.4,29.0 74.9,32.8 76.4,33.0 77.9,34.4 79.4,35.0 80.9,33.7 82.5,36.9 84.0,35.5 85.5,30.8 87.0,24.9 88.5,21.4 90.0,17.5 91.5,17.1 93.0,16.9 94.5,14.3 96.0,18.0 97.5,19.9 99.1,20.9 100.6,15.8 102.1,17.4 103.6,12.5 105.1,15.4 106.6,14.2 108.1,8.8 109.6,16.1 111.1,15.3 112.6,15.8 114.1,18.3 115.6,16.2 117.2,20.0 118.7,14.1 120.2,10.4 121.7,17.0 123.2,19.0 124.7,20.1 126.2,23.6 127.7,21.3 129.2,20.7 130.7,19.0 132.2,19.8 133.8,20.0 135.3,21.4 136.8,22.4 138.3,22.1 139.8,26.7 141.3,26.5 142.8,28.7 144.3,31.9 145.8,30.9 147.3,26.2 148.8,23.4 150.4,22.0 151.9,25.5 153.4,27.5 154.9,29.5 156.4,30.2 157.9,33.7 159.4,29.3 160.9,34.5 162.4,39.7 163.9,42.3 165.4,44.0 166.9,42.8 168.5,40.2 170.0,40.8 171.5,38.0 173.0,38.1 174.5,35.3 176.0,33.6 176,44" fill="url(#g2591)"/><polyline points="4.0,11.6 5.5,11.1 7.0,10.6 8.5,9.2 10.0,10.5 11.5,5.9 13.1,8.1 14.6,7.1 16.1,4.5 17.6,4.0 19.1,4.1 20.6,13.4 22.1,22.9 23.6,23.6 25.1,19.6 26.6,17.6 28.1,20.5 29.6,15.6 31.2,15.3 32.7,15.5 34.2,16.2 35.7,16.5 37.2,14.9 38.7,16.6 40.2,14.5 41.7,20.0 43.2,16.6 44.7,17.5 46.2,17.9 47.8,18.4 49.3,16.0 50.8,18.4 52.3,17.5 53.8,18.6 55.3,19.4 56.8,16.9 58.3,17.9 59.8,22.9 61.3,22.7 62.8,27.1 64.4,29.0 65.9,27.1 67.4,28.5 68.9,30.6 70.4,30.0 71.9,34.2 73.4,29.0 74.9,32.8 76.4,33.0 77.9,34.4 79.4,35.0 80.9,33.7 82.5,36.9 84.0,35.5 85.5,30.8 87.0,24.9 88.5,21.4 90.0,17.5 91.5,17.1 93.0,16.9 94.5,14.3 96.0,18.0 97.5,19.9 99.1,20.9 100.6,15.8 102.1,17.4 103.6,12.5 105.1,15.4 106.6,14.2 108.1,8.8 109.6,16.1 111.1,15.3 112.6,15.8 114.1,18.3 115.6,16.2 117.2,20.0 118.7,14.1 120.2,10.4 121.7,17.0 123.2,19.0 124.7,20.1 126.2,23.6 127.7,21.3 129.2,20.7 130.7,19.0 132.2,19.8 133.8,20.0 135.3,21.4 136.8,22.4 138.3,22.1 139.8,26.7 141.3,26.5 142.8,28.7 144.3,31.9 145.8,30.9 147.3,26.2 148.8,23.4 150.4,22.0 151.9,25.5 153.4,27.5 154.9,29.5 156.4,30.2 157.9,33.7 159.4,29.3 160.9,34.5 162.4,39.7 163.9,42.3 165.4,44.0 166.9,42.8 168.5,40.2 170.0,40.8 171.5,38.0 173.0,38.1 174.5,35.3 176.0,33.6" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="pos-row">
-        <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">30</span></div>
-        <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">$352.40</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val pl-pos">+7.4%</span></div>
-        <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop-val">$317.16</span></div>
-      </div>
-      <div class="badge-row"><span class="badge badge-profit">● IN PROFIT</span></div>
-    </div>
-</div>
+<footer>
+  DCA Dashboard · Paper Trading Account · Data via Alpaca Markets · Auto-refreshes every 60 min
+</footer>
 
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const API_KEY    = 'PKVSKGUO3BBBBYYOX2TL5L7RPC';
+const API_SECRET = '7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X';
+const BASE       = 'https://paper-api.alpaca.markets/v2';
+const DATA       = 'https://data.alpaca.markets';
+
+const STOCKS = [
+  { symbol:'STRC',  name:'Strategy Inc',        sector:'Crypto Treasury',  color:'#f7931a' },
+  { symbol:'MSTR',  name:'MicroStrategy',        sector:'Crypto Treasury',  color:'#f7931a' },
+  { symbol:'GEV',   name:'GE Vernova',           sector:'Energy',           color:'#22c55e' },
+  { symbol:'BE',    name:'Bloom Energy',         sector:'Energy',           color:'#22c55e' },
+  { symbol:'KGS',   name:'Kodiak Gas',           sector:'Energy',           color:'#22c55e' },
+  { symbol:'QBTS',  name:'D-Wave Quantum',       sector:'Quantum',          color:'#a855f7' },
+  { symbol:'IONQ',  name:'IonQ',                 sector:'Quantum',          color:'#a855f7' },
+  { symbol:'QUBT',  name:'Quantum Computing',    sector:'Quantum',          color:'#a855f7' },
+  { symbol:'SNDK',  name:'SanDisk',              sector:'Semiconductors',   color:'#3b82f6' },
+  { symbol:'MU',    name:'Micron Technology',    sector:'Semiconductors',   color:'#3b82f6' },
+  { symbol:'WDC',   name:'Western Digital',      sector:'Semiconductors',   color:'#3b82f6' },
+  { symbol:'MRVL',  name:'Marvell Technology',   sector:'Semiconductors',   color:'#3b82f6' },
+  { symbol:'ALMU',  name:'Aeluma Inc',           sector:'Semiconductors',   color:'#3b82f6' },
+  { symbol:'IPGP',  name:'IPG Photonics',        sector:'Photonics',        color:'#06b6d4' },
+  { symbol:'POET',  name:'POET Technologies',    sector:'Photonics',        color:'#06b6d4' },
+  { symbol:'TSLA',  name:'Tesla',                sector:'EV',               color:'#ef4444' },
+  { symbol:'AAPL',  name:'Apple',                sector:'Consumer Tech',    color:'#64748b' },
+  { symbol:'NFLX',  name:'Netflix',              sector:'Streaming',        color:'#ec4899' },
+  { symbol:'CAT',   name:'Caterpillar',          sector:'Industrial',       color:'#f59e0b' },
+];
+
+const SECTOR_ICONS = {
+  'Crypto Treasury': '₿',
+  'Energy':          '⚡',
+  'Quantum':         '⚛',
+  'Semiconductors':  '🔲',
+  'Photonics':       '💡',
+  'EV':              '🚗',
+  'Consumer Tech':   '🍎',
+  'Streaming':       '🎬',
+  'Industrial':      '🏗',
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const hdrs = { 'APCA-API-KEY-ID': API_KEY, 'APCA-API-SECRET-KEY': API_SECRET };
+const fmt$ = v => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
+const fmt2 = v => v != null ? v.toFixed(2) : '—';
+const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+
+async function apiFetch(url) {
+  const r = await fetch(url, { headers: hdrs });
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText} — ${url}`);
+  return r.json();
+}
+
+// ─── SPARKLINE SVG ───────────────────────────────────────────────────────────
+function sparklineSVG(closes, color) {
+  if (!closes || closes.length < 2) return '<svg viewBox="0 0 200 48"><text x="50%" y="50%" text-anchor="middle" fill="#64748b" font-size="10">No data</text></svg>';
+  const W = 200, H = 48, PAD = 4;
+  const mn = Math.min(...closes), mx = Math.max(...closes);
+  const range = mx - mn || 1;
+  const pts = closes.map((v, i) => {
+    const x = PAD + (i / (closes.length - 1)) * (W - PAD * 2);
+    const y = H - PAD - ((v - mn) / range) * (H - PAD * 2);
+    return [x, y];
+  });
+  const line = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
+  const area = line + ` L${pts[pts.length-1][0]},${H} L${pts[0][0]},${H} Z`;
+  const isPos = closes[closes.length-1] >= closes[0];
+  const lineColor = isPos ? '#22c55e' : '#ef4444';
+  const fillColor = isPos ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)';
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <path d="${area}" fill="${fillColor}" stroke="none"/>
+    <path d="${line}" fill="none" stroke="${lineColor}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// ─── STATUS ───────────────────────────────────────────────────────────────────
+function statusBadge(plpc) {
+  if (plpc == null) return `<div class="status-badge watching">👁 Watching</div>`;
+  if (plpc >= 10)  return `<div class="status-badge trailing">🚀 Trailing</div>`;
+  if (plpc <= -8)  return `<div class="status-badge near-stop">⚠ Near Stop</div>`;
+  if (plpc > 0)   return `<div class="status-badge in-profit">✓ In Profit</div>`;
+  return `<div class="status-badge watching">👁 Watching</div>`;
+}
+
+// ─── CARD BUILDER ────────────────────────────────────────────────────────────
+function buildCard(stock, position, closes) {
+  const { symbol, name, sector, color } = stock;
+  const icon = SECTOR_ICONS[sector] || '•';
+
+  const price      = position ? parseFloat(position.current_price) : (closes?.length ? closes[closes.length-1] : null);
+  const ytdFirst   = closes?.[0];
+  const ytdLast    = closes?.[closes.length-1];
+  const ytdPct     = (ytdFirst && ytdLast) ? ((ytdLast - ytdFirst) / ytdFirst * 100) : null;
+  const plpc       = position ? parseFloat(position.unrealized_plpc) * 100 : null;
+  const qty        = position ? parseFloat(position.qty) : null;
+  const avgCost    = position ? parseFloat(position.avg_entry_price) : null;
+  const stopPrice  = avgCost ? avgCost * 0.9 : null;
+
+  const ytdClass   = ytdPct == null ? 'neu' : ytdPct >= 0 ? 'pos' : 'neg';
+  const ytdLabel   = ytdPct != null ? fmtPct(ytdPct) : 'N/A';
+
+  const positionHTML = position ? `
+    <div class="position-row">
+      <div class="pos-item">
+        <div class="pos-label">Shares</div>
+        <div class="pos-value">${qty % 1 === 0 ? qty : qty.toFixed(4)}</div>
+      </div>
+      <div class="pos-item">
+        <div class="pos-label">Avg Cost</div>
+        <div class="pos-value">${fmt$(avgCost)}</div>
+      </div>
+      <div class="pos-item">
+        <div class="pos-label">P&amp;L %</div>
+        <div class="pos-value ${plpc >= 0 ? 'green' : 'red'}">${fmtPct(plpc)}</div>
+      </div>
+      <div class="pos-item">
+        <div class="pos-label">Stop Price</div>
+        <div class="pos-value">${fmt$(stopPrice)}</div>
+      </div>
+    </div>
+    ${statusBadge(plpc)}
+  ` : `<div class="no-position">No open position</div>`;
+
+  return `
+    <div class="stock-card" style="--sector-color:${color}">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="symbol">${symbol}</div>
+          <div class="company-name">${name}</div>
+          <span class="sector-badge" style="color:${color}">${icon} ${sector}</span>
+        </div>
+        <div class="card-right">
+          <div class="current-price">${price != null ? fmt$(price) : '—'}</div>
+          <div class="ytd-badge ${ytdClass}">YTD ${ytdLabel}</div>
+        </div>
+      </div>
+      <div class="sparkline-wrap">${sparklineSVG(closes, color)}</div>
+      ${positionHTML}
+    </div>`;
+}
+
+// ─── MAIN ────────────────────────────────────────────────────────────────────
+async function init() {
+  try {
+    // Fetch all data in parallel
+    const symbols = STOCKS.map(s => s.symbol).join(',');
+    const ytdStart = '2026-01-02T00:00:00Z';
+
+    const [account, positions, barsData] = await Promise.all([
+      apiFetch(`${BASE}/account`),
+      apiFetch(`${BASE}/positions`),
+      apiFetch(`${DATA}/v2/stocks/bars?symbols=${symbols}&timeframe=1Day&start=${ytdStart}&limit=10000&feed=iex&adjustment=raw`),
+    ]);
+
+    // ── Header stats ──
+    const equity      = parseFloat(account.equity);
+    const cash        = parseFloat(account.cash);
+    const invested    = equity - cash;
+    const unrealPnl   = positions.reduce((s, p) => s + parseFloat(p.unrealized_pl), 0);
+    const dayPnl      = parseFloat(account.equity) - parseFloat(account.last_equity);
+    const isUnPos     = unrealPnl >= 0;
+    const isDayPos    = dayPnl >= 0;
+
+    document.getElementById('s-value').textContent     = fmt$(equity);
+    document.getElementById('s-cash').textContent      = fmt$(cash);
+    document.getElementById('s-invested').textContent  = fmt$(invested);
+
+    const pnlEl = document.getElementById('s-pnl');
+    pnlEl.textContent = (isUnPos ? '+' : '') + fmt$(unrealPnl);
+    pnlEl.className   = 'stat-value ' + (isUnPos ? 'green' : 'red');
+
+    const dayEl = document.getElementById('s-daypnl');
+    dayEl.textContent = (isDayPos ? '+' : '') + fmt$(dayPnl);
+    dayEl.className   = 'stat-value ' + (isDayPos ? 'green' : 'red');
+
+    document.getElementById('s-positions').textContent = positions.length;
+
+    // ── Build lookup maps ──
+    const posMap  = {};
+    positions.forEach(p => { posMap[p.symbol] = p; });
+
+    const barsMap = {};
+    const bars = barsData.bars || {};
+    Object.entries(bars).forEach(([sym, arr]) => {
+      barsMap[sym] = arr.map(b => b.c);
+    });
+
+    // ── Group by sector ──
+    const sectors = {};
+    STOCKS.forEach(s => {
+      if (!sectors[s.sector]) sectors[s.sector] = [];
+      sectors[s.sector].push(s);
+    });
+
+    let html = '';
+    Object.entries(sectors).forEach(([sector, stocks]) => {
+      html += `<div class="section-header">${SECTOR_ICONS[sector] || ''} ${sector}</div>`;
+      html += `<div class="stock-grid">`;
+      stocks.forEach(stock => {
+        html += buildCard(stock, posMap[stock.symbol] || null, barsMap[stock.symbol] || null);
+      });
+      html += `</div>`;
+    });
+
+    document.getElementById('content').innerHTML = html;
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('loading-wrap').style.display = 'none';
+
+    const now = new Date();
+    document.getElementById('last-updated').textContent =
+      'Updated ' + now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}) +
+      ' · ' + now.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+  } catch(err) {
+    document.getElementById('loading-wrap').innerHTML = `
+      <div style="color:#ef4444;text-align:center;max-width:480px;padding:24px">
+        <div style="font-size:32px;margin-bottom:12px">⚠</div>
+        <div style="font-weight:700;margin-bottom:8px">Failed to load data</div>
+        <div style="font-size:12px;color:#64748b;word-break:break-all">${err.message}</div>
+        <button onclick="location.reload()" style="margin-top:16px;padding:8px 20px;background:#3b82f6;border:none;border-radius:8px;color:white;cursor:pointer;font-size:13px">Retry</button>
+      </div>`;
+  }
+}
+
+init();
+</script>
 </body>
 </html>
