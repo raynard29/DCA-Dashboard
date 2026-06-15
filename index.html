@@ -2,647 +2,504 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="refresh" content="3600">
 <title>DCA Portfolio Dashboard</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0a0d14;
-    --card: #111520;
-    --card2: #161b2e;
-    --border: #1e2740;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --green: #22c55e;
-    --red: #ef4444;
-    --accent: #3b82f6;
-  }
-
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0d14;
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
-    padding: 0 0 48px;
   }
-
-  /* ─── HEADER ─── */
   header {
-    background: linear-gradient(135deg, #0d1628 0%, #111520 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 24px 24px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(12px);
-  }
-
-  .header-top {
+    background: #111520;
+    border-bottom: 1px solid #1e2535;
+    padding: 20px 24px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
     flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .logo {
-    display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-
-  .header-meta {
-    display: flex; align-items: center; gap: 16px;
-  }
-
-  .live-dot {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--green);
-    font-weight: 500;
-  }
-
-  .live-dot::before {
-    content: '';
-    width: 7px; height: 7px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
-  }
-
-  #last-updated {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  /* ─── PORTFOLIO STATS BAR ─── */
-  .stats-bar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 12px;
+    justify-content: space-between;
   }
-
-  .stat-card {
-    background: var(--card2);
-    border: 1px solid var(--border);
+  .header-title { font-size: 1.25rem; font-weight: 700; color: #f8fafc; }
+  .error-banner {
+    background: #1a0a0a;
+    border: 1px solid #7f1d1d;
     border-radius: 10px;
-    padding: 12px 16px;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .stat-value {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  .stat-value.green { color: var(--green); }
-  .stat-value.red { color: var(--red); }
-
-  .stat-sub {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  /* ─── MAIN CONTENT ─── */
-  main {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 24px 20px 0;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--muted);
-    font-weight: 600;
-  }
-
-  .section-header::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ─── STOCK GRID ─── */
-  .stock-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
-    margin-bottom: 32px;
-  }
-
-  /* ─── STOCK CARD ─── */
-  .stock-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    transition: border-color 0.2s, transform 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stock-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--sector-color, #3b82f6);
-    opacity: 0.8;
-  }
-
-  .stock-card:hover {
-    border-color: #2a3a5c;
-    transform: translateY(-2px);
-  }
-
-  /* Card top row */
-  .card-top {
+    margin: 24px auto;
+    max-width: 900px;
+    padding: 20px 24px;
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 12px;
+    gap: 14px;
   }
-
-  .card-left { flex: 1; }
-
-  .symbol {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1;
-    color: var(--text);
+  .error-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .error-title { color: #fca5a5; font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+  .error-body { color: #9ca3af; font-size: 0.875rem; line-height: 1.6; }
+  .error-body code {
+    background: #1f2937;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: monospace;
+    color: #f87171;
+    font-size: 0.8rem;
   }
-
-  .company-name {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 160px;
-  }
-
-  .sector-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 9px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    padding: 3px 7px;
-    border-radius: 20px;
-    margin-top: 5px;
-    border: 1px solid currentColor;
-    opacity: 0.8;
-  }
-
-  .card-right {
-    text-align: right;
-  }
-
-  .current-price {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  .ytd-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-top: 4px;
-  }
-
-  .ytd-badge.pos { background: rgba(34,197,94,0.15); color: var(--green); }
-  .ytd-badge.neg { background: rgba(239,68,68,0.15); color: var(--red); }
-  .ytd-badge.neu { background: rgba(100,116,139,0.15); color: var(--muted); }
-
-  /* Sparkline */
-  .sparkline-wrap {
-    margin: 10px 0;
-    height: 48px;
-    background: rgba(255,255,255,0.02);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .sparkline-wrap svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Position row */
-  .position-row {
+  .summary-strip {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
   }
-
-  .pos-item {
-    background: var(--card2);
-    border-radius: 7px;
-    padding: 6px 8px;
-  }
-
-  .pos-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--muted);
-    margin-bottom: 2px;
-  }
-
-  .pos-value {
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .pos-value.green { color: var(--green); }
-  .pos-value.red { color: var(--red); }
-
-  /* Status badge */
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-top: 10px;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .status-badge.trailing   { background: rgba(34,197,94,0.18);  color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
-  .status-badge.near-stop  { background: rgba(239,68,68,0.18);  color: var(--red);   border: 1px solid rgba(239,68,68,0.3); }
-  .status-badge.in-profit  { background: rgba(59,130,246,0.18); color: #60a5fa;      border: 1px solid rgba(59,130,246,0.3); }
-  .status-badge.watching   { background: rgba(100,116,139,0.15); color: var(--muted); border: 1px solid var(--border); }
-
-  /* No position */
-  .no-position {
-    font-size: 11px;
-    color: var(--muted);
+  .stat-box {
+    background: #111520;
+    border: 1px solid #1e2535;
+    border-radius: 10px;
+    padding: 16px;
     text-align: center;
-    padding: 8px 0 4px;
-    font-style: italic;
   }
-
-  /* ─── LOADING / ERROR ─── */
-  .loading-overlay {
+  .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em; color: #64748b; }
+  .stat-value { font-size: 1.4rem; font-weight: 700; color: #475569; margin-top: 4px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+  @media (max-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px)  { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: #111520;
+    border: 1px solid #1e2535;
+    border-radius: 10px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
+    gap: 8px;
+  }
+  .card-header { display: flex; justify-content: space-between; align-items: center; }
+  .symbol { font-size: 1.2rem; font-weight: 800; color: #f8fafc; }
+  .sector-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .company-name { font-size: 0.72rem; color: #64748b; }
+  .no-data-placeholder { border-radius: 6px; overflow: hidden; background: #0d1017; }
+  .position-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 4px 10px;
+    font-size: 0.72rem;
     align-items: center;
-    justify-content: center;
-    min-height: 300px;
-    gap: 16px;
-    color: var(--muted);
   }
-
-  .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  .pos-label { color: #475569; text-transform: uppercase; font-size: 0.62rem; letter-spacing:.06em; }
+  .pos-value { color: #94a3b8; font-weight: 600; }
+  .pos-value.dim { color: #334155; }
+  .status-badge {
+    align-self: flex-start;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
   }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ─── FOOTER ─── */
+  .watching { background: #1e2535; color: #475569; }
   footer {
     text-align: center;
-    padding: 24px;
-    font-size: 11px;
-    color: var(--muted);
-    border-top: 1px solid var(--border);
-    margin-top: 32px;
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 600px) {
-    .stock-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stats-bar  { grid-template-columns: 1fr 1fr; }
-    header { padding: 14px; }
-    .stat-value { font-size: 15px; }
-    .symbol { font-size: 16px; }
-    .current-price { font-size: 15px; }
-    .stock-card { padding: 12px; }
-  }
-
-  @media (max-width: 360px) {
-    .stock-grid { grid-template-columns: 1fr; }
-  }
-
-  @media (min-width: 1200px) {
-    .stock-grid { grid-template-columns: repeat(5, 1fr); }
+    padding: 16px;
+    font-size: 0.72rem;
+    color: #334155;
+    border-top: 1px solid #1e2535;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-top">
-    <div class="logo">
-      <span class="logo-icon">📈</span>
-      DCA Portfolio
-    </div>
-    <div class="header-meta">
-      <span class="live-dot">LIVE</span>
-      <span id="last-updated">Loading…</span>
-    </div>
-  </div>
-  <div class="stats-bar" id="stats-bar">
-    <div class="stat-card"><div class="stat-label">Portfolio Value</div><div class="stat-value" id="s-value">—</div></div>
-    <div class="stat-card"><div class="stat-label">Cash</div><div class="stat-value" id="s-cash">—</div></div>
-    <div class="stat-card"><div class="stat-label">Invested</div><div class="stat-value" id="s-invested">—</div></div>
-    <div class="stat-card"><div class="stat-label">Unrealized P&amp;L</div><div class="stat-value" id="s-pnl">—</div></div>
-    <div class="stat-card"><div class="stat-label">Day P&amp;L</div><div class="stat-value" id="s-daypnl">—</div></div>
-    <div class="stat-card"><div class="stat-label">Open Positions</div><div class="stat-value" id="s-positions">—</div></div>
-  </div>
+  <div class="header-title">DCA Portfolio Dashboard</div>
+  <div style="font-size:0.75rem;color:#475569">Last attempted: 2026-06-15 16:04 UTC</div>
 </header>
 
-<main>
-  <div id="loading-wrap" class="loading-overlay">
-    <div class="spinner"></div>
-    <span>Fetching live Alpaca data…</span>
-  </div>
-  <div id="content" style="display:none">
-    <!-- grids injected per sector -->
-  </div>
-</main>
-
-<footer>
-  DCA Dashboard · Paper Trading Account · Data via Alpaca Markets · Auto-refreshes every 60 min
-</footer>
-
-<script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-const API_KEY    = 'PKVSKGUO3BBBBYYOX2TL5L7RPC';
-const API_SECRET = '7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X';
-const BASE       = 'https://paper-api.alpaca.markets/v2';
-const DATA       = 'https://data.alpaca.markets';
-
-const STOCKS = [
-  { symbol:'STRC',  name:'Strategy Inc',        sector:'Crypto Treasury',  color:'#f7931a' },
-  { symbol:'MSTR',  name:'MicroStrategy',        sector:'Crypto Treasury',  color:'#f7931a' },
-  { symbol:'GEV',   name:'GE Vernova',           sector:'Energy',           color:'#22c55e' },
-  { symbol:'BE',    name:'Bloom Energy',         sector:'Energy',           color:'#22c55e' },
-  { symbol:'KGS',   name:'Kodiak Gas',           sector:'Energy',           color:'#22c55e' },
-  { symbol:'QBTS',  name:'D-Wave Quantum',       sector:'Quantum',          color:'#a855f7' },
-  { symbol:'IONQ',  name:'IonQ',                 sector:'Quantum',          color:'#a855f7' },
-  { symbol:'QUBT',  name:'Quantum Computing',    sector:'Quantum',          color:'#a855f7' },
-  { symbol:'SNDK',  name:'SanDisk',              sector:'Semiconductors',   color:'#3b82f6' },
-  { symbol:'MU',    name:'Micron Technology',    sector:'Semiconductors',   color:'#3b82f6' },
-  { symbol:'WDC',   name:'Western Digital',      sector:'Semiconductors',   color:'#3b82f6' },
-  { symbol:'MRVL',  name:'Marvell Technology',   sector:'Semiconductors',   color:'#3b82f6' },
-  { symbol:'ALMU',  name:'Aeluma Inc',           sector:'Semiconductors',   color:'#3b82f6' },
-  { symbol:'IPGP',  name:'IPG Photonics',        sector:'Photonics',        color:'#06b6d4' },
-  { symbol:'POET',  name:'POET Technologies',    sector:'Photonics',        color:'#06b6d4' },
-  { symbol:'TSLA',  name:'Tesla',                sector:'EV',               color:'#ef4444' },
-  { symbol:'AAPL',  name:'Apple',                sector:'Consumer Tech',    color:'#64748b' },
-  { symbol:'NFLX',  name:'Netflix',              sector:'Streaming',        color:'#ec4899' },
-  { symbol:'CAT',   name:'Caterpillar',          sector:'Industrial',       color:'#f59e0b' },
-];
-
-const SECTOR_ICONS = {
-  'Crypto Treasury': '₿',
-  'Energy':          '⚡',
-  'Quantum':         '⚛',
-  'Semiconductors':  '🔲',
-  'Photonics':       '💡',
-  'EV':              '🚗',
-  'Consumer Tech':   '🍎',
-  'Streaming':       '🎬',
-  'Industrial':      '🏗',
-};
-
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
-const hdrs = { 'APCA-API-KEY-ID': API_KEY, 'APCA-API-SECRET-KEY': API_SECRET };
-const fmt$ = v => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
-const fmt2 = v => v != null ? v.toFixed(2) : '—';
-const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
-
-async function apiFetch(url) {
-  const r = await fetch(url, { headers: hdrs });
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText} — ${url}`);
-  return r.json();
-}
-
-// ─── SPARKLINE SVG ───────────────────────────────────────────────────────────
-function sparklineSVG(closes, color) {
-  if (!closes || closes.length < 2) return '<svg viewBox="0 0 200 48"><text x="50%" y="50%" text-anchor="middle" fill="#64748b" font-size="10">No data</text></svg>';
-  const W = 200, H = 48, PAD = 4;
-  const mn = Math.min(...closes), mx = Math.max(...closes);
-  const range = mx - mn || 1;
-  const pts = closes.map((v, i) => {
-    const x = PAD + (i / (closes.length - 1)) * (W - PAD * 2);
-    const y = H - PAD - ((v - mn) / range) * (H - PAD * 2);
-    return [x, y];
-  });
-  const line = pts.map((p, i) => (i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(' ');
-  const area = line + ` L${pts[pts.length-1][0]},${H} L${pts[0][0]},${H} Z`;
-  const isPos = closes[closes.length-1] >= closes[0];
-  const lineColor = isPos ? '#22c55e' : '#ef4444';
-  const fillColor = isPos ? 'rgba(34,197,94,0.12)' : 'rgba(239,68,68,0.12)';
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <path d="${area}" fill="${fillColor}" stroke="none"/>
-    <path d="${line}" fill="none" stroke="${lineColor}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
-  </svg>`;
-}
-
-// ─── STATUS ───────────────────────────────────────────────────────────────────
-function statusBadge(plpc) {
-  if (plpc == null) return `<div class="status-badge watching">👁 Watching</div>`;
-  if (plpc >= 10)  return `<div class="status-badge trailing">🚀 Trailing</div>`;
-  if (plpc <= -8)  return `<div class="status-badge near-stop">⚠ Near Stop</div>`;
-  if (plpc > 0)   return `<div class="status-badge in-profit">✓ In Profit</div>`;
-  return `<div class="status-badge watching">👁 Watching</div>`;
-}
-
-// ─── CARD BUILDER ────────────────────────────────────────────────────────────
-function buildCard(stock, position, closes) {
-  const { symbol, name, sector, color } = stock;
-  const icon = SECTOR_ICONS[sector] || '•';
-
-  const price      = position ? parseFloat(position.current_price) : (closes?.length ? closes[closes.length-1] : null);
-  const ytdFirst   = closes?.[0];
-  const ytdLast    = closes?.[closes.length-1];
-  const ytdPct     = (ytdFirst && ytdLast) ? ((ytdLast - ytdFirst) / ytdFirst * 100) : null;
-  const plpc       = position ? parseFloat(position.unrealized_plpc) * 100 : null;
-  const qty        = position ? parseFloat(position.qty) : null;
-  const avgCost    = position ? parseFloat(position.avg_entry_price) : null;
-  const stopPrice  = avgCost ? avgCost * 0.9 : null;
-
-  const ytdClass   = ytdPct == null ? 'neu' : ytdPct >= 0 ? 'pos' : 'neg';
-  const ytdLabel   = ytdPct != null ? fmtPct(ytdPct) : 'N/A';
-
-  const positionHTML = position ? `
-    <div class="position-row">
-      <div class="pos-item">
-        <div class="pos-label">Shares</div>
-        <div class="pos-value">${qty % 1 === 0 ? qty : qty.toFixed(4)}</div>
-      </div>
-      <div class="pos-item">
-        <div class="pos-label">Avg Cost</div>
-        <div class="pos-value">${fmt$(avgCost)}</div>
-      </div>
-      <div class="pos-item">
-        <div class="pos-label">P&amp;L %</div>
-        <div class="pos-value ${plpc >= 0 ? 'green' : 'red'}">${fmtPct(plpc)}</div>
-      </div>
-      <div class="pos-item">
-        <div class="pos-label">Stop Price</div>
-        <div class="pos-value">${fmt$(stopPrice)}</div>
-      </div>
+<div style="max-width:900px;margin:24px auto;padding:0 20px;">
+<div class="error-banner">
+  <div class="error-icon">⚠️</div>
+  <div>
+    <div class="error-title">Data Fetch Failed — Network Egress Blocked</div>
+    <div class="error-body">
+      The scheduled publisher could not reach the Alpaca API. The container's network egress policy
+      does not allow outbound connections to <code>paper-api.alpaca.markets</code> or
+      <code>data.alpaca.markets</code>.<br><br>
+      <strong>To fix:</strong> Open your Claude Code on the Web environment settings and add these
+      hostnames to the <em>Network Egress Allowlist</em>, then re-run the routine.
     </div>
-    ${statusBadge(plpc)}
-  ` : `<div class="no-position">No open position</div>`;
+  </div>
+</div>
+</div>
 
-  return `
-    <div class="stock-card" style="--sector-color:${color}">
-      <div class="card-top">
-        <div class="card-left">
-          <div class="symbol">${symbol}</div>
-          <div class="company-name">${name}</div>
-          <span class="sector-badge" style="color:${color}">${icon} ${sector}</span>
-        </div>
-        <div class="card-right">
-          <div class="current-price">${price != null ? fmt$(price) : '—'}</div>
-          <div class="ytd-badge ${ytdClass}">YTD ${ytdLabel}</div>
-        </div>
+<div class="summary-strip">
+  <div class="stat-box"><div class="stat-label">Portfolio Value</div><div class="stat-value">—</div></div>
+  <div class="stat-box"><div class="stat-label">Cash</div><div class="stat-value">—</div></div>
+  <div class="stat-box"><div class="stat-label">Invested</div><div class="stat-value">—</div></div>
+  <div class="stat-box"><div class="stat-label">Unrealized P&amp;L</div><div class="stat-value">—</div></div>
+</div>
+
+<div class="grid">
+
+    <div class="card" style="border-top:3px solid #f7931a">
+      <div class="card-header">
+        <span class="symbol">STRC</span>
+        <span class="sector-badge" style="background:#f7931a22;color:#f7931a">Crypto Treasury</span>
       </div>
-      <div class="sparkline-wrap">${sparklineSVG(closes, color)}</div>
-      ${positionHTML}
-    </div>`;
-}
+      <div class="company-name">Strategy Inc</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #f7931a">
+      <div class="card-header">
+        <span class="symbol">MSTR</span>
+        <span class="sector-badge" style="background:#f7931a22;color:#f7931a">Crypto Treasury</span>
+      </div>
+      <div class="company-name">MicroStrategy</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #22c55e">
+      <div class="card-header">
+        <span class="symbol">GEV</span>
+        <span class="sector-badge" style="background:#22c55e22;color:#22c55e">Energy</span>
+      </div>
+      <div class="company-name">GE Vernova</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #22c55e">
+      <div class="card-header">
+        <span class="symbol">BE</span>
+        <span class="sector-badge" style="background:#22c55e22;color:#22c55e">Energy</span>
+      </div>
+      <div class="company-name">Bloom Energy</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #22c55e">
+      <div class="card-header">
+        <span class="symbol">KGS</span>
+        <span class="sector-badge" style="background:#22c55e22;color:#22c55e">Energy</span>
+      </div>
+      <div class="company-name">Kodiak Gas</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #a855f7">
+      <div class="card-header">
+        <span class="symbol">QBTS</span>
+        <span class="sector-badge" style="background:#a855f722;color:#a855f7">Quantum</span>
+      </div>
+      <div class="company-name">D-Wave Quantum</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #a855f7">
+      <div class="card-header">
+        <span class="symbol">IONQ</span>
+        <span class="sector-badge" style="background:#a855f722;color:#a855f7">Quantum</span>
+      </div>
+      <div class="company-name">IonQ</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #a855f7">
+      <div class="card-header">
+        <span class="symbol">QUBT</span>
+        <span class="sector-badge" style="background:#a855f722;color:#a855f7">Quantum</span>
+      </div>
+      <div class="company-name">Quantum Computing</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="card-header">
+        <span class="symbol">SNDK</span>
+        <span class="sector-badge" style="background:#3b82f622;color:#3b82f6">Semiconductors</span>
+      </div>
+      <div class="company-name">SanDisk</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="card-header">
+        <span class="symbol">MU</span>
+        <span class="sector-badge" style="background:#3b82f622;color:#3b82f6">Semiconductors</span>
+      </div>
+      <div class="company-name">Micron Technology</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="card-header">
+        <span class="symbol">WDC</span>
+        <span class="sector-badge" style="background:#3b82f622;color:#3b82f6">Semiconductors</span>
+      </div>
+      <div class="company-name">Western Digital</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="card-header">
+        <span class="symbol">MRVL</span>
+        <span class="sector-badge" style="background:#3b82f622;color:#3b82f6">Semiconductors</span>
+      </div>
+      <div class="company-name">Marvell Technology</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #3b82f6">
+      <div class="card-header">
+        <span class="symbol">ALMU</span>
+        <span class="sector-badge" style="background:#3b82f622;color:#3b82f6">Semiconductors</span>
+      </div>
+      <div class="company-name">Aeluma Inc</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #06b6d4">
+      <div class="card-header">
+        <span class="symbol">IPGP</span>
+        <span class="sector-badge" style="background:#06b6d422;color:#06b6d4">Photonics</span>
+      </div>
+      <div class="company-name">IPG Photonics</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #06b6d4">
+      <div class="card-header">
+        <span class="symbol">POET</span>
+        <span class="sector-badge" style="background:#06b6d422;color:#06b6d4">Photonics</span>
+      </div>
+      <div class="company-name">POET Technologies</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #ef4444">
+      <div class="card-header">
+        <span class="symbol">TSLA</span>
+        <span class="sector-badge" style="background:#ef444422;color:#ef4444">EV</span>
+      </div>
+      <div class="company-name">Tesla</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #64748b">
+      <div class="card-header">
+        <span class="symbol">AAPL</span>
+        <span class="sector-badge" style="background:#64748b22;color:#64748b">Consumer Tech</span>
+      </div>
+      <div class="company-name">Apple</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #ec4899">
+      <div class="card-header">
+        <span class="symbol">NFLX</span>
+        <span class="sector-badge" style="background:#ec489922;color:#ec4899">Streaming</span>
+      </div>
+      <div class="company-name">Netflix</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+    <div class="card" style="border-top:3px solid #f59e0b">
+      <div class="card-header">
+        <span class="symbol">CAT</span>
+        <span class="sector-badge" style="background:#f59e0b22;color:#f59e0b">Industrial</span>
+      </div>
+      <div class="company-name">Caterpillar</div>
+      <div class="no-data-placeholder">
+        <svg width="100%" height="60" viewBox="0 0 200 60">
+          <line x1="0" y1="30" x2="200" y2="30" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="100" y="34" fill="#555" font-size="10" text-anchor="middle">data unavailable</text>
+        </svg>
+      </div>
+      <div class="position-row">
+        <span class="pos-label">Price</span><span class="pos-value dim">—</span>
+        <span class="pos-label">P&amp;L</span><span class="pos-value dim">—</span>
+      </div>
+      <div class="status-badge watching">UNAVAILABLE</div>
+    </div>
+</div>
 
-// ─── MAIN ────────────────────────────────────────────────────────────────────
-async function init() {
-  try {
-    // Fetch all data in parallel
-    const symbols = STOCKS.map(s => s.symbol).join(',');
-    const ytdStart = '2026-01-02T00:00:00Z';
-
-    const [account, positions, barsData] = await Promise.all([
-      apiFetch(`${BASE}/account`),
-      apiFetch(`${BASE}/positions`),
-      apiFetch(`${DATA}/v2/stocks/bars?symbols=${symbols}&timeframe=1Day&start=${ytdStart}&limit=10000&feed=iex&adjustment=raw`),
-    ]);
-
-    // ── Header stats ──
-    const equity      = parseFloat(account.equity);
-    const cash        = parseFloat(account.cash);
-    const invested    = equity - cash;
-    const unrealPnl   = positions.reduce((s, p) => s + parseFloat(p.unrealized_pl), 0);
-    const dayPnl      = parseFloat(account.equity) - parseFloat(account.last_equity);
-    const isUnPos     = unrealPnl >= 0;
-    const isDayPos    = dayPnl >= 0;
-
-    document.getElementById('s-value').textContent     = fmt$(equity);
-    document.getElementById('s-cash').textContent      = fmt$(cash);
-    document.getElementById('s-invested').textContent  = fmt$(invested);
-
-    const pnlEl = document.getElementById('s-pnl');
-    pnlEl.textContent = (isUnPos ? '+' : '') + fmt$(unrealPnl);
-    pnlEl.className   = 'stat-value ' + (isUnPos ? 'green' : 'red');
-
-    const dayEl = document.getElementById('s-daypnl');
-    dayEl.textContent = (isDayPos ? '+' : '') + fmt$(dayPnl);
-    dayEl.className   = 'stat-value ' + (isDayPos ? 'green' : 'red');
-
-    document.getElementById('s-positions').textContent = positions.length;
-
-    // ── Build lookup maps ──
-    const posMap  = {};
-    positions.forEach(p => { posMap[p.symbol] = p; });
-
-    const barsMap = {};
-    const bars = barsData.bars || {};
-    Object.entries(bars).forEach(([sym, arr]) => {
-      barsMap[sym] = arr.map(b => b.c);
-    });
-
-    // ── Group by sector ──
-    const sectors = {};
-    STOCKS.forEach(s => {
-      if (!sectors[s.sector]) sectors[s.sector] = [];
-      sectors[s.sector].push(s);
-    });
-
-    let html = '';
-    Object.entries(sectors).forEach(([sector, stocks]) => {
-      html += `<div class="section-header">${SECTOR_ICONS[sector] || ''} ${sector}</div>`;
-      html += `<div class="stock-grid">`;
-      stocks.forEach(stock => {
-        html += buildCard(stock, posMap[stock.symbol] || null, barsMap[stock.symbol] || null);
-      });
-      html += `</div>`;
-    });
-
-    document.getElementById('content').innerHTML = html;
-    document.getElementById('content').style.display = 'block';
-    document.getElementById('loading-wrap').style.display = 'none';
-
-    const now = new Date();
-    document.getElementById('last-updated').textContent =
-      'Updated ' + now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}) +
-      ' · ' + now.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-
-  } catch(err) {
-    document.getElementById('loading-wrap').innerHTML = `
-      <div style="color:#ef4444;text-align:center;max-width:480px;padding:24px">
-        <div style="font-size:32px;margin-bottom:12px">⚠</div>
-        <div style="font-weight:700;margin-bottom:8px">Failed to load data</div>
-        <div style="font-size:12px;color:#64748b;word-break:break-all">${err.message}</div>
-        <button onclick="location.reload()" style="margin-top:16px;padding:8px 20px;background:#3b82f6;border:none;border-radius:8px;color:white;cursor:pointer;font-size:13px">Retry</button>
-      </div>`;
-  }
-}
-
-init();
-</script>
+<footer>DCA Dashboard &bull; Auto-refreshes hourly &bull; 2026-06-15 16:04 UTC</footer>
 </body>
 </html>
