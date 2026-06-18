@@ -78,9 +78,9 @@
 <header>
   <div class="logo">
     <h1>&#9670; DCA Portfolio Dashboard</h1>
-    <span class="source-tag">LIVE · Yahoo Finance</span>
+    <span class="source-tag">CACHED · Yahoo Finance</span>
   </div>
-  <span class="last-updated">Updated: 2026-06-18 18:20 UTC</span>
+  <span class="last-updated">Updated: 2026-06-18 19:06 UTC (data cached from 18:20 UTC)</span>
 </header>
 
 <div class="summary-bar">
@@ -116,9 +116,13 @@
   </div>
 </div>
 
-<div class="note-banner">
-  <strong>&#9432; Live market prices from Yahoo Finance.</strong> Position data (shares, avg cost, unrealized P&amp;L) requires Alpaca API — blocked by egress policy.
-  Add <code style="background:#0a1628;padding:1px 5px;border-radius:4px">paper-api.alpaca.markets</code> and <code style="background:#0a1628;padding:1px 5px;border-radius:4px">data.alpaca.markets</code> to your network allowlist to enable full dashboard.
+<div class="note-banner" style="background:#1a1200;border-color:#f59e0b;color:#fbbf24">
+  <strong>&#9888; Scheduled refresh ran at 2026-06-18 19:06 UTC — both Alpaca API and Yahoo Finance are blocked by network egress policy.</strong>
+  Market prices shown are from the last successful run (18:20 UTC today). To enable live data, add
+  <code style="background:#0a1628;padding:1px 5px;border-radius:4px">paper-api.alpaca.markets</code>,
+  <code style="background:#0a1628;padding:1px 5px;border-radius:4px">data.alpaca.markets</code>, and
+  <code style="background:#0a1628;padding:1px 5px;border-radius:4px">query1.finance.yahoo.com</code>
+  to your network allowlist in the remote environment settings.
 </div>
 
 <div class="grid">
