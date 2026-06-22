@@ -163,10 +163,6 @@
 
     .no-pos { font-size: .72rem; color: var(--muted); font-style: italic; }
 
-    /* ── Global P&L colours ── */
-    .pl-pos { color: var(--green); }
-    .pl-neg { color: var(--red); }
-
     /* ── Footer ── */
     .footer {
       text-align: center;
@@ -180,7 +176,7 @@
 
   <div class="top-bar">
     <div class="logo">DCA <span>Portfolio</span></div>
-    <div class="updated">Last updated: 2026-06-22 16:04 UTC &nbsp;·&nbsp; Auto-refresh: 60 min</div>
+    <div class="updated">Last updated: 2026-06-22 17:04 UTC &nbsp;·&nbsp; Auto-refresh: 60 min</div>
   </div>
 
   
@@ -188,11 +184,11 @@
       <div class="ne-icon">⚠</div>
       <div>
         <strong>Live data unavailable — network egress restriction</strong><br>
-        <span>The Alpaca API hosts (<code>paper-api.alpaca.markets</code> and
+        The Alpaca API hosts (<code>paper-api.alpaca.markets</code> and
         <code>data.alpaca.markets</code>) are not in this environment's egress
         allowlist. To fix: open <em>Claude Code on the Web → Environment settings →
         Network egress</em> and add both hosts. The next scheduled run will
-        automatically fetch live prices.</span>
+        automatically fetch live prices and positions.
       </div>
     </div>
     
@@ -220,7 +216,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -237,7 +233,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -254,7 +250,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -271,7 +267,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -288,7 +284,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -305,7 +301,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -322,7 +318,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -339,7 +335,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -356,7 +352,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -373,7 +369,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -390,7 +386,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -407,7 +403,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -424,7 +420,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -434,14 +430,14 @@
         <div>
           <div class="sym">IPGP</div>
           <div class="co-name">IPG Photonics</div>
-          <div class="sector"><span class="sector-icon">🔬</span>Photonics</div>
+          <div class="sector"><span class="sector-icon">🔦</span>Photonics</div>
         </div>
         <div class="price-block">
           <div class="price">—</div>
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -451,14 +447,14 @@
         <div>
           <div class="sym">POET</div>
           <div class="co-name">POET Technologies</div>
-          <div class="sector"><span class="sector-icon">🔬</span>Photonics</div>
+          <div class="sector"><span class="sector-icon">🔦</span>Photonics</div>
         </div>
         <div class="price-block">
           <div class="price">—</div>
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -475,7 +471,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -492,7 +488,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -509,7 +505,7 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
@@ -526,14 +522,14 @@
           <span class="ytd-badge ytd-na">— YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="50"><text x="50%" y="50%" text-anchor="middle" fill="#444" font-size="11">no data</text></svg></div>
+      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
       <div class="no-pos">No position</div>
     </div>
     
   </div>
 
   <div class="footer">
-    DCA Portfolio Dashboard &nbsp;·&nbsp; Powered by Alpaca Markets &nbsp;·&nbsp; 2026-06-22 16:04 UTC
+    DCA Portfolio Dashboard &nbsp;·&nbsp; Powered by Alpaca Markets &nbsp;·&nbsp; 2026-06-22 17:04 UTC
   </div>
 
 </body>
