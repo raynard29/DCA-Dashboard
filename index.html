@@ -7,205 +7,157 @@
   <title>DCA Portfolio Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:      #0a0d14;
-      --card-bg: #111520;
-      --border:  #1e2535;
-      --text:    #e2e8f0;
-      --muted:   #64748b;
-      --green:   #22c55e;
-      --red:     #ef4444;
-      --gold:    #f59e0b;
+      --bg: #0a0d14; --card-bg: #111520; --border: #1e2535;
+      --text: #e2e8f0; --muted: #64748b;
+      --green: #22c55e; --red: #ef4444; --gold: #f59e0b;
     }
-
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg); color: var(--text);
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      padding: 24px 16px 48px;
+      min-height: 100vh; padding: 20px 16px 56px;
     }
 
-    /* ── Header ── */
+    /* ── Top bar ── */
     .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
     }
-    .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -.5px; }
+    .logo { font-size: 1.45rem; font-weight: 800; letter-spacing: -.5px; }
     .logo span { color: var(--green); }
-    .updated { font-size: .75rem; color: var(--muted); }
-
-    /* ── Network error banner ── */
-    .network-error {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      background: #1a0d0d;
-      border: 1px solid #7f1d1d;
-      border-radius: 10px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      font-size: .85rem;
-      line-height: 1.6;
-      color: #fca5a5;
+    .updated { font-size: .72rem; color: var(--muted); }
+    .data-source {
+      font-size: .68rem; color: #3b82f6; background: rgba(59,130,246,.08);
+      border: 1px solid rgba(59,130,246,.2); border-radius: 6px;
+      padding: 3px 10px; display: flex; align-items: center; gap: 5px;
     }
-    .ne-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 2px; }
-    .network-error strong { color: #fecaca; font-size: .9rem; }
-    .network-error code { background: #2d1111; padding: 1px 5px; border-radius: 4px; font-size: .82rem; }
-    .network-error em { font-style: normal; text-decoration: underline dotted; }
+    .dot { width: 6px; height: 6px; background: #3b82f6; border-radius: 50%;
+      animation: pulse 2s infinite; }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: .3; }
+    }
 
-    /* ── Summary grid ── */
+    /* ── Info banner ── */
+    .info-banner {
+      background: rgba(59,130,246,.06); border: 1px solid rgba(59,130,246,.2);
+      border-radius: 10px; padding: 12px 18px; margin-bottom: 22px;
+      font-size: .8rem; color: #93c5fd; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .info-banner strong { color: #bfdbfe; }
+    .info-banner code { background: rgba(59,130,246,.12); padding: 1px 5px; border-radius: 4px; font-size: .75rem; }
+
+    /* ── Summary ── */
     .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 28px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;
     }
-    @media (max-width: 700px) {
-      .summary-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 700px) { .summary-grid { grid-template-columns: repeat(2, 1fr); } }
     .summary-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
     }
-    .sum-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
-    .sum-val { font-size: 1.35rem; font-weight: 700; }
-    .sum-na { color: var(--muted); }
+    .sum-label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px; }
+    .sum-val { font-size: 1.3rem; font-weight: 700; }
+    .sum-na { color: var(--muted); font-size: 1rem; }
 
     /* ── Stock grid ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+    .section-title {
+      font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 12px;
     }
-    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 750px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+    .grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    }
+    @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 800px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 480px)  { .grid { grid-template-columns: 1fr; } }
 
     /* ── Card ── */
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-top: 3px solid var(--accent, #334155);
-      border-radius: 10px;
-      padding: 16px;
-      transition: transform .15s, box-shadow .15s;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-top: 3px solid var(--accent, #334155); border-radius: 10px;
+      padding: 14px; transition: transform .15s, box-shadow .15s;
     }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,.4);
-    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.45); }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-      gap: 8px;
-    }
-
-    .sym { font-size: 1.3rem; font-weight: 800; color: var(--accent, #e2e8f0); letter-spacing: -.3px; }
-    .co-name { font-size: .75rem; color: var(--muted); margin-top: 2px; }
-    .sector { font-size: .68rem; color: var(--muted); margin-top: 5px; display: flex; align-items: center; gap: 4px; }
-    .sector-icon { font-size: .9rem; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
+    .sym { font-size: 1.25rem; font-weight: 800; color: var(--accent, #e2e8f0); letter-spacing: -.3px; }
+    .co-name { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+    .sector { font-size: .66rem; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .sector-icon { font-size: .85rem; }
 
     .price-block { text-align: right; flex-shrink: 0; }
-    .price { font-size: 1.05rem; font-weight: 700; }
+    .price { font-size: 1rem; font-weight: 700; white-space: nowrap; }
     .ytd-badge {
-      display: inline-block;
-      font-size: .65rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 99px;
-      margin-top: 4px;
+      display: inline-block; font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 99px; margin-top: 4px; white-space: nowrap;
     }
-    .ytd-pos { background: rgba(34,197,94,.15); color: var(--green); }
-    .ytd-neg { background: rgba(239,68,68,.15); color: var(--red); }
+    .ytd-pos { background: rgba(34,197,94,.12); color: var(--green); }
+    .ytd-neg { background: rgba(239,68,68,.12); color: var(--red); }
     .ytd-na  { background: rgba(100,116,139,.12); color: var(--muted); }
 
-    /* ── Sparkline ── */
-    .sparkline { margin: 0 -4px 12px; overflow: hidden; border-radius: 4px; }
-    .sparkline svg { display: block; width: 100%; height: 48px; }
+    .sparkline { margin: 8px 0; line-height: 0; }
+    .sparkline svg { width: 100%; height: auto; max-height: 48px; }
 
-    /* ── Position row ── */
-    .pos-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .pos-item { font-size: .7rem; }
-    .pos-label { display: block; color: var(--muted); font-size: .62rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
-    .pl-pos { color: var(--green); font-weight: 700; }
-    .pl-neg { color: var(--red); font-weight: 700; }
-
-    /* ── Badges ── */
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; gap: 6px; flex-wrap: wrap; }
     .badge {
-      display: inline-block;
-      font-size: .62rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 4px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+      font-size: .6rem; font-weight: 700; padding: 2px 8px;
+      border-radius: 99px; letter-spacing: .04em; white-space: nowrap;
     }
-    .badge-gold  { background: rgba(245,158,11,.18); color: var(--gold);  border: 1px solid rgba(245,158,11,.3); }
-    .badge-red   { background: rgba(239,68,68,.18);  color: var(--red);   border: 1px solid rgba(239,68,68,.3); }
-    .badge-green { background: rgba(34,197,94,.15);  color: var(--green); border: 1px solid rgba(34,197,94,.25); }
-    .badge-gray  { background: rgba(100,116,139,.12); color: var(--muted); border: 1px solid rgba(100,116,139,.2); }
-
-    .no-pos { font-size: .72rem; color: var(--muted); font-style: italic; }
+    .badge-trailing { background: rgba(245,158,11,.15); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
+    .badge-stop     { background: rgba(239,68,68,.15);  color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+    .badge-profit   { background: rgba(34,197,94,.15);  color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
+    .badge-watch    { background: rgba(100,116,139,.15); color: #94a3b8; border: 1px solid rgba(100,116,139,.3); }
+    .stop-note { font-size: .62rem; color: var(--muted); }
 
     /* ── Footer ── */
-    .footer {
-      text-align: center;
-      font-size: .7rem;
-      color: var(--muted);
-      margin-top: 40px;
+    footer {
+      text-align: center; margin-top: 40px; font-size: .72rem; color: var(--muted);
+      border-top: 1px solid var(--border); padding-top: 20px;
     }
   </style>
 </head>
-<body><div style="background:#7f1d1d;color:#fca5a5;padding:12px 20px;text-align:center;font-family:sans-serif;font-size:14px;position:sticky;top:0;z-index:9999;border-bottom:2px solid #ef4444;">
-  ⚠️ <strong>Live data unavailable</strong> — Scheduled update failed 2026-06-22. Alpaca API hosts blocked by egress policy (<code>paper-api.alpaca.markets</code>, <code>data.alpaca.markets</code>). Add them to your network allowlist to resume updates. Data shown is from last successful run.
-</div>
+<body>
 
   <div class="top-bar">
     <div class="logo">DCA <span>Portfolio</span></div>
-    <div class="updated">Last updated: 2026-06-22 17:04 UTC &nbsp;·&nbsp; Auto-refresh: 60 min</div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div class="data-source"><span class="dot"></span> Live prices · Yahoo Finance / Finviz</div>
+      <div class="updated">Updated: 2026-06-22 20:17 UTC &nbsp;·&nbsp; Auto-refresh: 60 min</div>
+    </div>
   </div>
 
-  
-    <div class="network-error">
-      <div class="ne-icon">⚠</div>
-      <div>
-        <strong>Live data unavailable — network egress restriction</strong><br>
-        The Alpaca API hosts (<code>paper-api.alpaca.markets</code> and
-        <code>data.alpaca.markets</code>) are not in this environment's egress
-        allowlist. To fix: open <em>Claude Code on the Web → Environment settings →
-        Network egress</em> and add both hosts. The next scheduled run will
-        automatically fetch live prices and positions.
-      </div>
+  <div class="info-banner">
+    <span style="font-size:1rem;">ℹ</span>
+    <div>
+      <strong>Live price data restored via alternative sources.</strong>
+      Prices &amp; YTD performance are fetched from Yahoo Finance and Finviz.
+      Position data (shares, avg cost, P&amp;L) requires <code>paper-api.alpaca.markets</code> —
+      add it to your environment's egress allowlist to restore the full portfolio view.
     </div>
-    
+  </div>
 
-  
-        <div class="summary-grid">
-          <div class="summary-card"><div class="sum-label">Portfolio Value</div><div class="sum-val sum-na">—</div></div>
-          <div class="summary-card"><div class="sum-label">Cash</div><div class="sum-val sum-na">—</div></div>
-          <div class="summary-card"><div class="sum-label">Invested</div><div class="sum-val sum-na">—</div></div>
-          <div class="summary-card"><div class="sum-label">Unrealized P&amp;L</div><div class="sum-val sum-na">—</div></div>
-        </div>
-        
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="sum-label">Portfolio Value</div>
+      <div class="sum-val sum-na">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="sum-label">Cash</div>
+      <div class="sum-val sum-na">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="sum-label">Invested</div>
+      <div class="sum-val sum-na">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="sum-label">Unrealized P&amp;L</div>
+      <div class="sum-val sum-na">—</div>
+    </div>
+  </div>
+
+  <div class="section-title">19 Tracked Positions — Live Prices</div>
 
   <div class="grid">
-    
     <div class="card" style="--accent:#f7931a">
       <div class="card-header">
         <div>
@@ -214,15 +166,16 @@
           <div class="sector"><span class="sector-icon">₿</span>Crypto Treasury</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$88.57</div>
+          <span class="ytd-badge ytd-neg">-2.90% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3811" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,5.4 4.8,4.5 6.7,4.3 8.5,4.3 10.4,4.1 12.2,4.1 14.1,4.0 15.9,4.2 17.8,4.1 19.6,4.3 21.4,4.2 23.3,7.3 25.1,5.8 27.0,5.3 28.8,6.0 30.7,7.6 32.5,7.2 34.4,7.8 36.2,10.6 38.1,7.8 39.9,7.6 41.7,9.6 43.6,11.2 45.4,26.3 47.3,8.6 49.1,5.2 51.0,5.4 52.8,4.2 54.7,4.1 56.5,4.9 58.3,6.6 60.2,6.0 62.0,5.4 63.9,4.9 65.7,4.8 67.6,4.6 69.4,4.4 71.3,4.2 73.1,4.2 74.9,4.2 76.8,4.2 78.6,4.1 80.5,4.2 82.3,4.2 84.2,4.0 86.0,4.2 87.9,4.1 89.7,4.2 91.6,5.1 93.4,4.8 95.2,4.7 97.1,5.7 98.9,6.1 100.8,5.8 102.6,4.7 104.5,4.4 106.3,4.5 108.2,4.3 110.0,4.6 111.8,4.3 113.7,4.2 115.5,4.2 117.4,4.2 119.2,4.2 121.1,4.2 122.9,4.2 124.8,4.2 126.6,4.2 128.4,4.2 130.3,4.2 132.1,6.6 134.0,7.5 135.8,7.0 137.7,6.6 139.5,6.7 141.4,6.2 143.2,5.6 145.1,5.9 146.9,6.2 148.7,6.2 150.6,6.1 152.4,5.1 154.3,4.7 156.1,4.4 158.0,4.4 159.8,4.3 161.7,4.4 163.5,4.3 165.3,4.2 167.2,4.3 169.0,4.2 170.9,4.2 172.7,7.1 174.6,9.1 176.4,7.8 178.3,7.2 180.1,6.6 181.9,6.7 183.8,6.1 185.6,7.1 187.5,9.2 189.3,7.8 191.2,11.0 193.0,15.7 194.9,22.9 196.7,20.2 198.6,27.2 200.4,15.2 202.2,17.6 204.1,18.8 205.9,16.5 207.8,22.4 209.6,21.0 211.5,32.9 213.3,42.6 215.2,44.0 217.0,43.3 217.0,44" fill="url(#g3811)"/><polyline points="3.0,5.4 4.8,4.5 6.7,4.3 8.5,4.3 10.4,4.1 12.2,4.1 14.1,4.0 15.9,4.2 17.8,4.1 19.6,4.3 21.4,4.2 23.3,7.3 25.1,5.8 27.0,5.3 28.8,6.0 30.7,7.6 32.5,7.2 34.4,7.8 36.2,10.6 38.1,7.8 39.9,7.6 41.7,9.6 43.6,11.2 45.4,26.3 47.3,8.6 49.1,5.2 51.0,5.4 52.8,4.2 54.7,4.1 56.5,4.9 58.3,6.6 60.2,6.0 62.0,5.4 63.9,4.9 65.7,4.8 67.6,4.6 69.4,4.4 71.3,4.2 73.1,4.2 74.9,4.2 76.8,4.2 78.6,4.1 80.5,4.2 82.3,4.2 84.2,4.0 86.0,4.2 87.9,4.1 89.7,4.2 91.6,5.1 93.4,4.8 95.2,4.7 97.1,5.7 98.9,6.1 100.8,5.8 102.6,4.7 104.5,4.4 106.3,4.5 108.2,4.3 110.0,4.6 111.8,4.3 113.7,4.2 115.5,4.2 117.4,4.2 119.2,4.2 121.1,4.2 122.9,4.2 124.8,4.2 126.6,4.2 128.4,4.2 130.3,4.2 132.1,6.6 134.0,7.5 135.8,7.0 137.7,6.6 139.5,6.7 141.4,6.2 143.2,5.6 145.1,5.9 146.9,6.2 148.7,6.2 150.6,6.1 152.4,5.1 154.3,4.7 156.1,4.4 158.0,4.4 159.8,4.3 161.7,4.4 163.5,4.3 165.3,4.2 167.2,4.3 169.0,4.2 170.9,4.2 172.7,7.1 174.6,9.1 176.4,7.8 178.3,7.2 180.1,6.6 181.9,6.7 183.8,6.1 185.6,7.1 187.5,9.2 189.3,7.8 191.2,11.0 193.0,15.7 194.9,22.9 196.7,20.2 198.6,27.2 200.4,15.2 202.2,17.6 204.1,18.8 205.9,16.5 207.8,22.4 209.6,21.0 211.5,32.9 213.3,42.6 215.2,44.0 217.0,43.3" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-watch">WATCHING</span>
+        <span class="stop-note">Stop: $79.71</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#f7931a">
       <div class="card-header">
         <div>
@@ -231,15 +184,16 @@
           <div class="sector"><span class="sector-icon">₿</span>Crypto Treasury</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$107.65</div>
+          <span class="ytd-badge ytd-neg">-50.31% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3348" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,21.4 4.8,18.0 6.7,21.1 8.5,19.3 10.4,17.0 12.2,21.4 14.1,19.2 15.9,14.3 17.8,11.5 19.6,15.3 21.4,14.0 23.3,20.1 25.1,18.4 27.0,19.7 28.8,18.8 30.7,19.9 32.5,19.5 34.4,20.9 36.2,27.7 38.1,24.8 39.9,29.3 41.7,32.2 43.6,34.1 45.4,44.0 47.3,31.4 49.1,29.9 51.0,32.3 52.8,35.4 54.7,36.8 56.5,31.9 58.3,34.3 60.2,35.8 62.0,33.9 63.9,33.2 65.7,36.5 67.6,36.1 69.4,31.1 71.3,32.1 73.1,33.9 74.9,30.2 76.8,32.4 78.6,26.3 80.5,29.2 82.3,32.1 84.2,29.6 86.0,29.8 87.9,29.9 89.7,30.4 91.6,29.3 93.4,25.8 95.2,24.5 97.1,28.9 98.9,29.9 100.8,31.1 102.6,30.0 104.5,30.8 106.3,29.5 108.2,32.3 110.0,35.4 111.8,37.5 113.7,36.0 115.5,36.9 117.4,38.2 119.2,34.7 121.1,36.5 122.9,34.4 124.8,34.2 126.6,34.3 128.4,32.6 130.3,30.3 132.1,27.6 134.0,25.1 135.8,17.2 137.7,15.3 139.5,18.4 141.4,11.5 143.2,14.6 145.1,15.2 146.9,16.0 148.7,17.6 150.6,21.0 152.4,17.7 154.3,12.4 156.1,9.5 158.0,8.1 159.8,8.1 161.7,11.2 163.5,7.8 165.3,4.0 167.2,9.2 169.0,12.1 170.9,8.0 172.7,12.3 174.6,17.2 176.4,18.1 178.3,17.5 180.1,18.0 181.9,20.2 183.8,20.2 185.6,22.8 187.5,23.9 189.3,20.6 191.2,24.8 193.0,30.9 194.9,35.2 196.7,33.9 198.6,38.0 200.4,34.9 202.2,39.5 204.1,40.2 205.9,38.1 207.8,36.4 209.6,33.1 211.5,36.9 213.3,39.7 215.2,41.5 217.0,42.9 217.0,44" fill="url(#g3348)"/><polyline points="3.0,21.4 4.8,18.0 6.7,21.1 8.5,19.3 10.4,17.0 12.2,21.4 14.1,19.2 15.9,14.3 17.8,11.5 19.6,15.3 21.4,14.0 23.3,20.1 25.1,18.4 27.0,19.7 28.8,18.8 30.7,19.9 32.5,19.5 34.4,20.9 36.2,27.7 38.1,24.8 39.9,29.3 41.7,32.2 43.6,34.1 45.4,44.0 47.3,31.4 49.1,29.9 51.0,32.3 52.8,35.4 54.7,36.8 56.5,31.9 58.3,34.3 60.2,35.8 62.0,33.9 63.9,33.2 65.7,36.5 67.6,36.1 69.4,31.1 71.3,32.1 73.1,33.9 74.9,30.2 76.8,32.4 78.6,26.3 80.5,29.2 82.3,32.1 84.2,29.6 86.0,29.8 87.9,29.9 89.7,30.4 91.6,29.3 93.4,25.8 95.2,24.5 97.1,28.9 98.9,29.9 100.8,31.1 102.6,30.0 104.5,30.8 106.3,29.5 108.2,32.3 110.0,35.4 111.8,37.5 113.7,36.0 115.5,36.9 117.4,38.2 119.2,34.7 121.1,36.5 122.9,34.4 124.8,34.2 126.6,34.3 128.4,32.6 130.3,30.3 132.1,27.6 134.0,25.1 135.8,17.2 137.7,15.3 139.5,18.4 141.4,11.5 143.2,14.6 145.1,15.2 146.9,16.0 148.7,17.6 150.6,21.0 152.4,17.7 154.3,12.4 156.1,9.5 158.0,8.1 159.8,8.1 161.7,11.2 163.5,7.8 165.3,4.0 167.2,9.2 169.0,12.1 170.9,8.0 172.7,12.3 174.6,17.2 176.4,18.1 178.3,17.5 180.1,18.0 181.9,20.2 183.8,20.2 185.6,22.8 187.5,23.9 189.3,20.6 191.2,24.8 193.0,30.9 194.9,35.2 196.7,33.9 198.6,38.0 200.4,34.9 202.2,39.5 204.1,40.2 205.9,38.1 207.8,36.4 209.6,33.1 211.5,36.9 213.3,39.7 215.2,41.5 217.0,42.9" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-stop">NEAR STOP</span>
+        <span class="stop-note">Stop: $96.89</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
@@ -248,15 +202,16 @@
           <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$1,123.76</div>
+          <span class="ytd-badge ytd-pos">+17.75% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g5987" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,39.7 4.8,39.6 6.7,39.2 8.5,41.0 10.4,43.6 12.2,44.0 14.1,42.7 15.9,41.8 17.8,42.4 19.6,42.5 21.4,39.5 23.3,39.3 25.1,40.6 27.0,41.0 28.8,41.3 30.7,40.7 32.5,38.7 34.4,37.2 36.2,36.8 38.1,36.1 39.9,33.9 41.7,32.0 43.6,34.6 45.4,35.3 47.3,32.1 49.1,30.4 51.0,31.2 52.8,28.7 54.7,29.3 56.5,30.4 58.3,29.1 60.2,29.2 62.0,27.9 63.9,28.2 65.7,28.1 67.6,24.5 69.4,24.8 71.3,24.7 73.1,24.9 74.9,24.4 76.8,27.3 78.6,27.4 80.5,29.4 82.3,31.3 84.2,28.2 86.0,27.6 87.9,26.9 89.7,28.1 91.6,30.1 93.4,28.5 95.2,27.2 97.1,26.1 98.9,24.7 100.8,26.7 102.6,24.3 104.5,22.2 106.3,21.1 108.2,25.0 110.0,26.5 111.8,29.2 113.7,25.0 115.5,23.3 117.4,23.0 119.2,23.1 121.1,22.1 122.9,20.2 124.8,17.8 126.6,16.0 128.4,16.0 130.3,16.3 132.1,16.4 134.0,17.0 135.8,15.1 137.7,16.1 139.5,16.0 141.4,5.7 143.2,4.0 145.1,4.0 146.9,6.2 148.7,8.6 150.6,10.6 152.4,9.0 154.3,10.6 156.1,9.7 158.0,8.1 159.8,6.3 161.7,11.9 163.5,12.3 165.3,9.8 167.2,9.9 169.0,10.6 170.9,8.5 172.7,11.6 174.6,14.4 176.4,14.5 178.3,13.5 180.1,12.0 181.9,12.4 183.8,10.0 185.6,12.9 187.5,15.7 189.3,17.8 191.2,19.1 193.0,17.7 194.9,18.4 196.7,18.1 198.6,20.4 200.4,20.4 202.2,21.4 204.1,25.4 205.9,22.4 207.8,19.9 209.6,16.9 211.5,16.7 213.3,11.6 215.2,7.0 217.0,5.7 217.0,44" fill="url(#g5987)"/><polyline points="3.0,39.7 4.8,39.6 6.7,39.2 8.5,41.0 10.4,43.6 12.2,44.0 14.1,42.7 15.9,41.8 17.8,42.4 19.6,42.5 21.4,39.5 23.3,39.3 25.1,40.6 27.0,41.0 28.8,41.3 30.7,40.7 32.5,38.7 34.4,37.2 36.2,36.8 38.1,36.1 39.9,33.9 41.7,32.0 43.6,34.6 45.4,35.3 47.3,32.1 49.1,30.4 51.0,31.2 52.8,28.7 54.7,29.3 56.5,30.4 58.3,29.1 60.2,29.2 62.0,27.9 63.9,28.2 65.7,28.1 67.6,24.5 69.4,24.8 71.3,24.7 73.1,24.9 74.9,24.4 76.8,27.3 78.6,27.4 80.5,29.4 82.3,31.3 84.2,28.2 86.0,27.6 87.9,26.9 89.7,28.1 91.6,30.1 93.4,28.5 95.2,27.2 97.1,26.1 98.9,24.7 100.8,26.7 102.6,24.3 104.5,22.2 106.3,21.1 108.2,25.0 110.0,26.5 111.8,29.2 113.7,25.0 115.5,23.3 117.4,23.0 119.2,23.1 121.1,22.1 122.9,20.2 124.8,17.8 126.6,16.0 128.4,16.0 130.3,16.3 132.1,16.4 134.0,17.0 135.8,15.1 137.7,16.1 139.5,16.0 141.4,5.7 143.2,4.0 145.1,4.0 146.9,6.2 148.7,8.6 150.6,10.6 152.4,9.0 154.3,10.6 156.1,9.7 158.0,8.1 159.8,6.3 161.7,11.9 163.5,12.3 165.3,9.8 167.2,9.9 169.0,10.6 170.9,8.5 172.7,11.6 174.6,14.4 176.4,14.5 178.3,13.5 180.1,12.0 181.9,12.4 183.8,10.0 185.6,12.9 187.5,15.7 189.3,17.8 191.2,19.1 193.0,17.7 194.9,18.4 196.7,18.1 198.6,20.4 200.4,20.4 202.2,21.4 204.1,25.4 205.9,22.4 207.8,19.9 209.6,16.9 211.5,16.7 213.3,11.6 215.2,7.0 217.0,5.7" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $1,011.38</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
@@ -265,15 +220,16 @@
           <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$342.92</div>
+          <span class="ytd-badge ytd-pos">+39.58% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g4640" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,44.0 4.8,43.2 6.7,43.3 8.5,42.5 10.4,40.3 12.2,38.3 14.1,37.8 15.9,37.3 17.8,38.4 19.6,37.4 21.4,35.8 23.3,35.4 25.1,35.6 27.0,36.4 28.8,36.5 30.7,37.4 32.5,35.3 34.4,33.2 36.2,34.6 38.1,35.5 39.9,34.7 41.7,32.6 43.6,36.1 45.4,37.9 47.3,36.8 49.1,34.9 51.0,35.9 52.8,34.8 54.7,37.5 56.5,37.4 58.3,36.5 60.2,34.5 62.0,34.2 63.9,36.1 65.7,34.0 67.6,33.1 69.4,31.7 71.3,32.7 73.1,34.8 74.9,33.1 76.8,35.2 78.6,33.3 80.5,34.1 82.3,38.1 84.2,35.5 86.0,35.0 87.9,34.2 89.7,34.5 91.6,35.0 93.4,35.1 95.2,34.1 97.1,34.6 98.9,33.0 100.8,35.7 102.6,37.1 104.5,36.4 106.3,35.7 108.2,38.4 110.0,38.4 111.8,40.6 113.7,38.0 115.5,38.5 117.4,38.0 119.2,38.1 121.1,38.0 122.9,36.2 124.8,34.1 126.6,33.0 128.4,31.4 130.3,24.5 132.1,25.4 134.0,26.0 135.8,26.3 137.7,24.6 139.5,24.2 141.4,22.8 143.2,21.5 145.1,22.6 146.9,22.0 148.7,23.3 150.6,13.4 152.4,14.1 154.3,12.9 156.1,13.2 158.0,12.2 159.8,13.8 161.7,18.1 163.5,17.7 165.3,14.0 167.2,14.5 169.0,13.1 170.9,10.9 172.7,15.3 174.6,18.1 176.4,17.7 178.3,14.3 180.1,10.1 181.9,11.0 183.8,11.0 185.6,12.4 187.5,13.0 189.3,13.8 191.2,15.7 193.0,10.9 194.9,13.5 196.7,12.8 198.6,17.3 200.4,18.9 202.2,17.9 204.1,22.1 205.9,19.7 207.8,17.8 209.6,15.5 211.5,14.5 213.3,13.8 215.2,6.7 217.0,4.0 217.0,44" fill="url(#g4640)"/><polyline points="3.0,44.0 4.8,43.2 6.7,43.3 8.5,42.5 10.4,40.3 12.2,38.3 14.1,37.8 15.9,37.3 17.8,38.4 19.6,37.4 21.4,35.8 23.3,35.4 25.1,35.6 27.0,36.4 28.8,36.5 30.7,37.4 32.5,35.3 34.4,33.2 36.2,34.6 38.1,35.5 39.9,34.7 41.7,32.6 43.6,36.1 45.4,37.9 47.3,36.8 49.1,34.9 51.0,35.9 52.8,34.8 54.7,37.5 56.5,37.4 58.3,36.5 60.2,34.5 62.0,34.2 63.9,36.1 65.7,34.0 67.6,33.1 69.4,31.7 71.3,32.7 73.1,34.8 74.9,33.1 76.8,35.2 78.6,33.3 80.5,34.1 82.3,38.1 84.2,35.5 86.0,35.0 87.9,34.2 89.7,34.5 91.6,35.0 93.4,35.1 95.2,34.1 97.1,34.6 98.9,33.0 100.8,35.7 102.6,37.1 104.5,36.4 106.3,35.7 108.2,38.4 110.0,38.4 111.8,40.6 113.7,38.0 115.5,38.5 117.4,38.0 119.2,38.1 121.1,38.0 122.9,36.2 124.8,34.1 126.6,33.0 128.4,31.4 130.3,24.5 132.1,25.4 134.0,26.0 135.8,26.3 137.7,24.6 139.5,24.2 141.4,22.8 143.2,21.5 145.1,22.6 146.9,22.0 148.7,23.3 150.6,13.4 152.4,14.1 154.3,12.9 156.1,13.2 158.0,12.2 159.8,13.8 161.7,18.1 163.5,17.7 165.3,14.0 167.2,14.5 169.0,13.1 170.9,10.9 172.7,15.3 174.6,18.1 176.4,17.7 178.3,14.3 180.1,10.1 181.9,11.0 183.8,11.0 185.6,12.4 187.5,13.0 189.3,13.8 191.2,15.7 193.0,10.9 194.9,13.5 196.7,12.8 198.6,17.3 200.4,18.9 202.2,17.9 204.1,22.1 205.9,19.7 207.8,17.8 209.6,15.5 211.5,14.5 213.3,13.8 215.2,6.7 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $308.63</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
@@ -282,15 +238,16 @@
           <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$70.51</div>
+          <span class="ytd-badge ytd-neg">-6.72% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6179" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,42.0 4.8,43.1 6.7,44.0 8.5,43.8 10.4,43.2 12.2,43.2 14.1,44.0 15.9,42.9 17.8,43.5 19.6,42.9 21.4,42.0 23.3,41.3 25.1,40.0 27.0,39.8 28.8,39.7 30.7,38.8 32.5,38.4 34.4,39.2 36.2,38.6 38.1,37.7 39.9,38.2 41.7,37.8 43.6,37.3 45.4,32.4 47.3,29.8 49.1,28.6 51.0,28.7 52.8,27.6 54.7,29.5 56.5,29.5 58.3,28.8 60.2,29.3 62.0,29.7 63.9,29.1 65.7,29.5 67.6,28.6 69.4,27.0 71.3,24.9 73.1,25.2 74.9,22.9 76.8,22.1 78.6,21.6 80.5,23.4 82.3,24.5 84.2,23.9 86.0,23.3 87.9,23.1 89.7,25.4 91.6,25.6 93.4,24.6 95.2,23.8 97.1,24.2 98.9,22.5 100.8,23.9 102.6,21.3 104.5,20.7 106.3,20.7 108.2,21.1 110.0,21.3 111.8,22.3 113.7,21.5 115.5,21.9 117.4,21.9 119.2,21.6 121.1,20.6 122.9,19.6 124.8,19.4 126.6,19.0 128.4,17.1 130.3,17.7 132.1,18.2 134.0,17.6 135.8,16.6 137.7,16.4 139.5,16.8 141.4,15.9 143.2,15.0 145.1,13.9 146.9,13.7 148.7,13.1 150.6,13.0 152.4,12.0 154.3,11.3 156.1,11.7 158.0,9.0 159.8,8.5 161.7,9.6 163.5,10.2 165.3,4.4 167.2,4.7 169.0,4.1 170.9,5.7 172.7,6.4 174.6,4.1 176.4,4.0 178.3,6.5 180.1,7.5 181.9,6.2 183.8,6.2 185.6,9.4 187.5,11.0 189.3,13.0 191.2,14.6 193.0,12.7 194.9,12.5 196.7,11.7 198.6,14.7 200.4,12.2 202.2,12.8 204.1,13.3 205.9,12.7 207.8,10.8 209.6,10.6 211.5,12.0 213.3,13.3 215.2,10.7 217.0,9.2 217.0,44" fill="url(#g6179)"/><polyline points="3.0,42.0 4.8,43.1 6.7,44.0 8.5,43.8 10.4,43.2 12.2,43.2 14.1,44.0 15.9,42.9 17.8,43.5 19.6,42.9 21.4,42.0 23.3,41.3 25.1,40.0 27.0,39.8 28.8,39.7 30.7,38.8 32.5,38.4 34.4,39.2 36.2,38.6 38.1,37.7 39.9,38.2 41.7,37.8 43.6,37.3 45.4,32.4 47.3,29.8 49.1,28.6 51.0,28.7 52.8,27.6 54.7,29.5 56.5,29.5 58.3,28.8 60.2,29.3 62.0,29.7 63.9,29.1 65.7,29.5 67.6,28.6 69.4,27.0 71.3,24.9 73.1,25.2 74.9,22.9 76.8,22.1 78.6,21.6 80.5,23.4 82.3,24.5 84.2,23.9 86.0,23.3 87.9,23.1 89.7,25.4 91.6,25.6 93.4,24.6 95.2,23.8 97.1,24.2 98.9,22.5 100.8,23.9 102.6,21.3 104.5,20.7 106.3,20.7 108.2,21.1 110.0,21.3 111.8,22.3 113.7,21.5 115.5,21.9 117.4,21.9 119.2,21.6 121.1,20.6 122.9,19.6 124.8,19.4 126.6,19.0 128.4,17.1 130.3,17.7 132.1,18.2 134.0,17.6 135.8,16.6 137.7,16.4 139.5,16.8 141.4,15.9 143.2,15.0 145.1,13.9 146.9,13.7 148.7,13.1 150.6,13.0 152.4,12.0 154.3,11.3 156.1,11.7 158.0,9.0 159.8,8.5 161.7,9.6 163.5,10.2 165.3,4.4 167.2,4.7 169.0,4.1 170.9,5.7 172.7,6.4 174.6,4.1 176.4,4.0 178.3,6.5 180.1,7.5 181.9,6.2 183.8,6.2 185.6,9.4 187.5,11.0 189.3,13.0 191.2,14.6 193.0,12.7 194.9,12.5 196.7,11.7 198.6,14.7 200.4,12.2 202.2,12.8 204.1,13.3 205.9,12.7 207.8,10.8 209.6,10.6 211.5,12.0 213.3,13.3 215.2,10.7 217.0,9.2" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-watch">WATCHING</span>
+        <span class="stop-note">Stop: $63.46</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
@@ -299,15 +256,16 @@
           <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$24.24</div>
+          <span class="ytd-badge ytd-neg">-38.16% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6307" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,10.9 4.8,5.4 6.7,4.0 8.5,6.3 10.4,8.4 12.2,10.9 14.1,9.4 15.9,9.4 17.8,6.4 19.6,9.6 21.4,9.3 23.3,13.3 25.1,15.4 27.0,12.4 28.8,16.3 30.7,20.4 32.5,18.4 34.4,17.8 36.2,21.6 38.1,26.0 39.9,26.5 41.7,25.6 43.6,28.4 45.4,34.7 47.3,27.1 49.1,26.0 51.0,27.7 52.8,29.4 54.7,31.2 56.5,29.4 58.3,32.1 60.2,30.7 62.0,30.0 63.9,32.9 65.7,32.9 67.6,31.6 69.4,29.4 71.3,28.3 73.1,31.3 74.9,31.0 76.8,32.5 78.6,31.0 80.5,31.2 82.3,31.7 84.2,30.7 86.0,31.4 87.9,31.0 89.7,33.4 91.6,34.0 93.4,34.2 95.2,34.2 97.1,36.3 98.9,37.2 100.8,38.0 102.6,36.7 104.5,37.5 106.3,37.0 108.2,40.3 110.0,42.0 111.8,44.0 113.7,40.8 115.5,42.4 117.4,41.1 119.2,41.5 121.1,42.3 122.9,40.5 124.8,42.1 126.6,41.2 128.4,40.3 130.3,35.3 132.1,26.9 134.0,25.3 135.8,25.0 137.7,25.0 139.5,27.9 141.4,25.9 143.2,30.2 145.1,31.9 146.9,31.3 148.7,32.8 150.6,32.4 152.4,28.0 154.3,27.6 156.1,26.6 158.0,25.3 159.8,20.3 161.7,24.3 163.5,23.0 165.3,19.8 167.2,23.5 169.0,25.5 170.9,24.0 172.7,27.9 174.6,30.7 176.4,32.6 178.3,30.2 180.1,16.1 181.9,8.1 183.8,11.5 185.6,12.3 187.5,7.9 189.3,6.5 191.2,8.6 193.0,7.0 194.9,12.1 196.7,11.9 198.6,20.2 200.4,15.9 202.2,20.9 204.1,21.5 205.9,20.3 207.8,21.3 209.6,15.0 211.5,20.0 213.3,22.3 215.2,18.4 217.0,18.9 217.0,44" fill="url(#g6307)"/><polyline points="3.0,10.9 4.8,5.4 6.7,4.0 8.5,6.3 10.4,8.4 12.2,10.9 14.1,9.4 15.9,9.4 17.8,6.4 19.6,9.6 21.4,9.3 23.3,13.3 25.1,15.4 27.0,12.4 28.8,16.3 30.7,20.4 32.5,18.4 34.4,17.8 36.2,21.6 38.1,26.0 39.9,26.5 41.7,25.6 43.6,28.4 45.4,34.7 47.3,27.1 49.1,26.0 51.0,27.7 52.8,29.4 54.7,31.2 56.5,29.4 58.3,32.1 60.2,30.7 62.0,30.0 63.9,32.9 65.7,32.9 67.6,31.6 69.4,29.4 71.3,28.3 73.1,31.3 74.9,31.0 76.8,32.5 78.6,31.0 80.5,31.2 82.3,31.7 84.2,30.7 86.0,31.4 87.9,31.0 89.7,33.4 91.6,34.0 93.4,34.2 95.2,34.2 97.1,36.3 98.9,37.2 100.8,38.0 102.6,36.7 104.5,37.5 106.3,37.0 108.2,40.3 110.0,42.0 111.8,44.0 113.7,40.8 115.5,42.4 117.4,41.1 119.2,41.5 121.1,42.3 122.9,40.5 124.8,42.1 126.6,41.2 128.4,40.3 130.3,35.3 132.1,26.9 134.0,25.3 135.8,25.0 137.7,25.0 139.5,27.9 141.4,25.9 143.2,30.2 145.1,31.9 146.9,31.3 148.7,32.8 150.6,32.4 152.4,28.0 154.3,27.6 156.1,26.6 158.0,25.3 159.8,20.3 161.7,24.3 163.5,23.0 165.3,19.8 167.2,23.5 169.0,25.5 170.9,24.0 172.7,27.9 174.6,30.7 176.4,32.6 178.3,30.2 180.1,16.1 181.9,8.1 183.8,11.5 185.6,12.3 187.5,7.9 189.3,6.5 191.2,8.6 193.0,7.0 194.9,12.1 196.7,11.9 198.6,20.2 200.4,15.9 202.2,20.9 204.1,21.5 205.9,20.3 207.8,21.3 209.6,15.0 211.5,20.0 213.3,22.3 215.2,18.4 217.0,18.9" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-stop">NEAR STOP</span>
+        <span class="stop-note">Stop: $21.82</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
@@ -316,15 +274,16 @@
           <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$58.26</div>
+          <span class="ytd-badge ytd-pos">+45.89% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6051" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,26.3 4.8,24.5 6.7,22.7 8.5,23.6 10.4,23.0 12.2,23.9 14.1,22.6 15.9,24.3 17.8,22.6 19.6,25.6 21.4,22.7 23.3,22.8 25.1,24.9 27.0,24.0 28.8,25.8 30.7,29.2 32.5,27.4 34.4,27.1 36.2,29.4 38.1,32.2 39.9,33.5 41.7,33.6 43.6,36.3 45.4,40.6 47.3,36.6 49.1,36.2 51.0,36.4 52.8,37.8 54.7,39.9 56.5,37.4 58.3,38.2 60.2,38.1 62.0,38.0 63.9,39.3 65.7,40.3 67.6,39.6 69.4,37.8 71.3,31.4 73.1,33.6 74.9,33.7 76.8,34.8 78.6,34.7 80.5,35.7 82.3,36.0 84.2,35.8 86.0,36.5 87.9,37.2 89.7,38.3 91.6,38.4 93.4,38.1 95.2,38.1 97.1,38.9 98.9,39.3 100.8,39.9 102.6,38.3 104.5,38.6 106.3,39.3 108.2,41.1 110.0,43.2 111.8,44.0 113.7,42.0 115.5,42.9 117.4,41.6 119.2,41.7 121.1,42.3 122.9,41.9 124.8,42.7 126.6,42.1 128.4,41.2 130.3,35.9 132.1,29.3 134.0,28.1 135.8,26.8 137.7,24.9 139.5,26.7 141.4,25.7 143.2,29.0 145.1,29.8 146.9,28.8 148.7,29.5 150.6,30.4 152.4,27.7 154.3,26.8 156.1,27.1 158.0,25.2 159.8,21.2 161.7,25.5 163.5,24.1 165.3,17.4 167.2,18.2 169.0,18.8 170.9,16.8 172.7,21.7 174.6,24.0 176.4,24.8 178.3,21.2 180.1,15.6 181.9,11.4 183.8,11.4 185.6,9.9 187.5,5.7 189.3,4.0 191.2,6.5 193.0,4.6 194.9,7.4 196.7,9.6 198.6,17.4 200.4,12.2 202.2,17.5 204.1,17.6 205.9,16.4 207.8,16.5 209.6,13.6 211.5,18.1 213.3,19.3 215.2,17.6 217.0,16.1 217.0,44" fill="url(#g6051)"/><polyline points="3.0,26.3 4.8,24.5 6.7,22.7 8.5,23.6 10.4,23.0 12.2,23.9 14.1,22.6 15.9,24.3 17.8,22.6 19.6,25.6 21.4,22.7 23.3,22.8 25.1,24.9 27.0,24.0 28.8,25.8 30.7,29.2 32.5,27.4 34.4,27.1 36.2,29.4 38.1,32.2 39.9,33.5 41.7,33.6 43.6,36.3 45.4,40.6 47.3,36.6 49.1,36.2 51.0,36.4 52.8,37.8 54.7,39.9 56.5,37.4 58.3,38.2 60.2,38.1 62.0,38.0 63.9,39.3 65.7,40.3 67.6,39.6 69.4,37.8 71.3,31.4 73.1,33.6 74.9,33.7 76.8,34.8 78.6,34.7 80.5,35.7 82.3,36.0 84.2,35.8 86.0,36.5 87.9,37.2 89.7,38.3 91.6,38.4 93.4,38.1 95.2,38.1 97.1,38.9 98.9,39.3 100.8,39.9 102.6,38.3 104.5,38.6 106.3,39.3 108.2,41.1 110.0,43.2 111.8,44.0 113.7,42.0 115.5,42.9 117.4,41.6 119.2,41.7 121.1,42.3 122.9,41.9 124.8,42.7 126.6,42.1 128.4,41.2 130.3,35.9 132.1,29.3 134.0,28.1 135.8,26.8 137.7,24.9 139.5,26.7 141.4,25.7 143.2,29.0 145.1,29.8 146.9,28.8 148.7,29.5 150.6,30.4 152.4,27.7 154.3,26.8 156.1,27.1 158.0,25.2 159.8,21.2 161.7,25.5 163.5,24.1 165.3,17.4 167.2,18.2 169.0,18.8 170.9,16.8 172.7,21.7 174.6,24.0 176.4,24.8 178.3,21.2 180.1,15.6 181.9,11.4 183.8,11.4 185.6,9.9 187.5,5.7 189.3,4.0 191.2,6.5 193.0,4.6 194.9,7.4 196.7,9.6 198.6,17.4 200.4,12.2 202.2,17.5 204.1,17.6 205.9,16.4 207.8,16.5 209.6,13.6 211.5,18.1 213.3,19.3 215.2,17.6 217.0,16.1" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $52.43</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
@@ -333,15 +292,16 @@
           <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$10.67</div>
+          <span class="ytd-badge ytd-neg">-26.78% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6115" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,14.6 4.8,8.6 6.7,7.5 8.5,10.6 10.4,8.8 12.2,10.1 14.1,7.7 15.9,10.3 17.8,5.2 19.6,7.3 21.4,4.0 23.3,8.8 25.1,10.6 27.0,8.4 28.8,11.8 30.7,15.6 32.5,12.7 34.4,13.8 36.2,19.8 38.1,25.5 39.9,25.0 41.7,23.1 43.6,26.3 45.4,34.6 47.3,24.5 49.1,24.4 51.0,27.4 52.8,30.0 54.7,32.2 56.5,30.5 58.3,33.1 60.2,32.1 62.0,32.0 63.9,34.0 65.7,34.2 67.6,32.7 69.4,29.2 71.3,26.9 73.1,30.9 74.9,29.7 76.8,35.1 78.6,32.5 80.5,35.2 82.3,35.9 84.2,35.7 86.0,35.9 87.9,35.8 89.7,36.9 91.6,37.8 93.4,37.4 95.2,36.3 97.1,38.1 98.9,38.5 100.8,39.9 102.6,37.6 104.5,36.9 106.3,37.7 108.2,38.9 110.0,41.8 111.8,44.0 113.7,40.6 115.5,41.9 117.4,40.5 119.2,40.6 121.1,41.1 122.9,40.1 124.8,41.1 126.6,39.3 128.4,38.0 130.3,32.7 132.1,24.7 134.0,24.4 135.8,23.6 137.7,22.0 139.5,24.6 141.4,21.8 143.2,26.8 145.1,27.5 146.9,26.5 148.7,29.9 150.6,31.7 152.4,27.0 154.3,25.8 156.1,24.0 158.0,23.7 159.8,18.0 161.7,23.2 163.5,23.4 165.3,19.8 167.2,9.8 169.0,14.5 170.9,10.1 172.7,17.7 174.6,22.7 176.4,25.8 178.3,23.7 180.1,12.1 181.9,6.4 183.8,10.4 185.6,12.0 187.5,6.9 189.3,8.6 191.2,5.9 193.0,6.8 194.9,13.4 196.7,13.5 198.6,21.2 200.4,18.1 202.2,24.0 204.1,23.8 205.9,21.5 207.8,21.3 209.6,14.0 211.5,20.2 213.3,22.3 215.2,16.1 217.0,17.5 217.0,44" fill="url(#g6115)"/><polyline points="3.0,14.6 4.8,8.6 6.7,7.5 8.5,10.6 10.4,8.8 12.2,10.1 14.1,7.7 15.9,10.3 17.8,5.2 19.6,7.3 21.4,4.0 23.3,8.8 25.1,10.6 27.0,8.4 28.8,11.8 30.7,15.6 32.5,12.7 34.4,13.8 36.2,19.8 38.1,25.5 39.9,25.0 41.7,23.1 43.6,26.3 45.4,34.6 47.3,24.5 49.1,24.4 51.0,27.4 52.8,30.0 54.7,32.2 56.5,30.5 58.3,33.1 60.2,32.1 62.0,32.0 63.9,34.0 65.7,34.2 67.6,32.7 69.4,29.2 71.3,26.9 73.1,30.9 74.9,29.7 76.8,35.1 78.6,32.5 80.5,35.2 82.3,35.9 84.2,35.7 86.0,35.9 87.9,35.8 89.7,36.9 91.6,37.8 93.4,37.4 95.2,36.3 97.1,38.1 98.9,38.5 100.8,39.9 102.6,37.6 104.5,36.9 106.3,37.7 108.2,38.9 110.0,41.8 111.8,44.0 113.7,40.6 115.5,41.9 117.4,40.5 119.2,40.6 121.1,41.1 122.9,40.1 124.8,41.1 126.6,39.3 128.4,38.0 130.3,32.7 132.1,24.7 134.0,24.4 135.8,23.6 137.7,22.0 139.5,24.6 141.4,21.8 143.2,26.8 145.1,27.5 146.9,26.5 148.7,29.9 150.6,31.7 152.4,27.0 154.3,25.8 156.1,24.0 158.0,23.7 159.8,18.0 161.7,23.2 163.5,23.4 165.3,19.8 167.2,9.8 169.0,14.5 170.9,10.1 172.7,17.7 174.6,22.7 176.4,25.8 178.3,23.7 180.1,12.1 181.9,6.4 183.8,10.4 185.6,12.0 187.5,6.9 189.3,8.6 191.2,5.9 193.0,6.8 194.9,13.4 196.7,13.5 198.6,21.2 200.4,18.1 202.2,24.0 204.1,23.8 205.9,21.5 207.8,21.3 209.6,14.0 211.5,20.2 213.3,22.3 215.2,16.1 217.0,17.5" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-stop">NEAR STOP</span>
+        <span class="stop-note">Stop: $9.603</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
@@ -350,15 +310,16 @@
           <div class="sector"><span class="sector-icon">💾</span>Semiconductors</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$2,291.92</div>
+          <span class="ytd-badge ytd-pos">+19.76% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6243" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,44.0 4.8,44.0 6.7,42.5 8.5,42.4 10.4,42.8 12.2,41.9 14.1,41.7 15.9,41.7 17.8,41.7 19.6,41.3 21.4,41.2 23.3,40.4 25.1,39.5 27.0,39.4 28.8,40.0 30.7,40.1 32.5,39.9 34.4,38.9 36.2,38.7 38.1,38.0 39.9,36.2 41.7,35.6 43.6,37.8 45.4,38.0 47.3,37.5 49.1,37.8 51.0,38.6 52.8,37.5 54.7,36.9 56.5,36.9 58.3,37.7 60.2,37.5 62.0,37.1 63.9,36.5 65.7,36.2 67.6,36.7 69.4,36.8 71.3,36.4 73.1,36.8 74.9,37.1 76.8,38.2 78.6,37.5 80.5,38.2 82.3,38.9 84.2,37.7 86.0,37.1 87.9,36.4 89.7,37.1 91.6,36.2 93.4,35.4 95.2,35.1 97.1,34.4 98.9,34.0 100.8,35.3 102.6,35.4 104.5,35.4 106.3,35.9 108.2,37.4 110.0,37.2 111.8,38.0 113.7,36.8 115.5,35.6 117.4,35.4 119.2,35.0 121.1,35.3 122.9,33.9 124.8,32.4 126.6,32.4 128.4,30.4 130.3,30.6 132.1,31.6 134.0,31.1 135.8,31.1 137.7,31.2 139.5,31.4 141.4,29.9 143.2,30.8 145.1,29.7 146.9,28.1 148.7,29.4 150.6,28.2 152.4,27.5 154.3,25.7 156.1,24.4 158.0,21.4 159.8,21.3 161.7,22.7 163.5,18.2 165.3,18.5 167.2,20.4 169.0,20.5 170.9,21.8 172.7,21.3 174.6,22.8 176.4,21.8 178.3,21.6 180.1,18.6 181.9,19.9 183.8,17.7 185.6,17.7 187.5,16.6 189.3,15.6 191.2,14.2 193.0,15.1 194.9,12.8 196.7,14.3 198.6,18.3 200.4,16.6 202.2,16.5 204.1,16.6 205.9,11.8 207.8,9.9 209.6,7.3 211.5,9.6 213.3,10.3 215.2,5.8 217.0,4.0 217.0,44" fill="url(#g6243)"/><polyline points="3.0,44.0 4.8,44.0 6.7,42.5 8.5,42.4 10.4,42.8 12.2,41.9 14.1,41.7 15.9,41.7 17.8,41.7 19.6,41.3 21.4,41.2 23.3,40.4 25.1,39.5 27.0,39.4 28.8,40.0 30.7,40.1 32.5,39.9 34.4,38.9 36.2,38.7 38.1,38.0 39.9,36.2 41.7,35.6 43.6,37.8 45.4,38.0 47.3,37.5 49.1,37.8 51.0,38.6 52.8,37.5 54.7,36.9 56.5,36.9 58.3,37.7 60.2,37.5 62.0,37.1 63.9,36.5 65.7,36.2 67.6,36.7 69.4,36.8 71.3,36.4 73.1,36.8 74.9,37.1 76.8,38.2 78.6,37.5 80.5,38.2 82.3,38.9 84.2,37.7 86.0,37.1 87.9,36.4 89.7,37.1 91.6,36.2 93.4,35.4 95.2,35.1 97.1,34.4 98.9,34.0 100.8,35.3 102.6,35.4 104.5,35.4 106.3,35.9 108.2,37.4 110.0,37.2 111.8,38.0 113.7,36.8 115.5,35.6 117.4,35.4 119.2,35.0 121.1,35.3 122.9,33.9 124.8,32.4 126.6,32.4 128.4,30.4 130.3,30.6 132.1,31.6 134.0,31.1 135.8,31.1 137.7,31.2 139.5,31.4 141.4,29.9 143.2,30.8 145.1,29.7 146.9,28.1 148.7,29.4 150.6,28.2 152.4,27.5 154.3,25.7 156.1,24.4 158.0,21.4 159.8,21.3 161.7,22.7 163.5,18.2 165.3,18.5 167.2,20.4 169.0,20.5 170.9,21.8 172.7,21.3 174.6,22.8 176.4,21.8 178.3,21.6 180.1,18.6 181.9,19.9 183.8,17.7 185.6,17.7 187.5,16.6 189.3,15.6 191.2,14.2 193.0,15.1 194.9,12.8 196.7,14.3 198.6,18.3 200.4,16.6 202.2,16.5 204.1,16.6 205.9,11.8 207.8,9.9 209.6,7.3 211.5,9.6 213.3,10.3 215.2,5.8 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $2,062.73</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
@@ -367,15 +328,16 @@
           <div class="sector"><span class="sector-icon">💾</span>Semiconductors</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$1,193.82</div>
+          <span class="ytd-badge ytd-pos">+22.45% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6371" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,42.6 4.8,41.8 6.7,43.0 8.5,43.3 10.4,43.8 12.2,42.8 14.1,41.9 15.9,40.4 17.8,41.3 19.6,41.2 21.4,42.3 23.3,42.8 25.1,42.4 27.0,43.5 28.8,44.0 30.7,43.2 32.5,42.8 34.4,43.2 36.2,42.7 38.1,41.4 39.9,42.5 41.7,41.3 43.6,40.4 45.4,40.5 47.3,41.2 49.1,39.6 51.0,39.7 52.8,40.5 54.7,41.2 56.5,40.0 58.3,39.3 60.2,38.2 62.0,37.2 63.9,36.8 65.7,35.2 67.6,35.2 69.4,34.7 71.3,33.6 73.1,32.9 74.9,31.7 76.8,31.1 78.6,30.3 80.5,31.1 82.3,31.4 84.2,31.6 86.0,32.3 87.9,32.7 89.7,33.3 91.6,33.5 93.4,32.9 95.2,32.9 97.1,32.9 98.9,33.2 100.8,33.4 102.6,32.1 104.5,31.4 106.3,30.8 108.2,31.2 110.0,30.4 111.8,30.8 113.7,30.8 115.5,29.3 117.4,28.7 119.2,28.2 121.1,27.5 122.9,26.4 124.8,25.4 126.6,25.7 128.4,26.4 130.3,26.4 132.1,26.6 134.0,26.9 135.8,25.6 137.7,24.5 139.5,24.5 141.4,23.9 143.2,23.8 145.1,22.6 146.9,22.3 148.7,22.5 150.6,22.7 152.4,22.2 154.3,22.3 156.1,21.8 158.0,20.7 159.8,20.6 161.7,20.8 163.5,19.5 165.3,19.2 167.2,19.6 169.0,20.1 170.9,20.5 172.7,20.0 174.6,19.1 176.4,18.9 178.3,19.4 180.1,19.2 181.9,18.0 183.8,17.6 185.6,16.5 187.5,15.5 189.3,16.0 191.2,15.3 193.0,14.7 194.9,14.3 196.7,14.3 198.6,13.8 200.4,14.1 202.2,13.8 204.1,13.6 205.9,12.5 207.8,11.6 209.6,11.6 211.5,11.3 213.3,11.5 215.2,10.5 217.0,4.0 217.0,44" fill="url(#g6371)"/><polyline points="3.0,42.6 4.8,41.8 6.7,43.0 8.5,43.3 10.4,43.8 12.2,42.8 14.1,41.9 15.9,40.4 17.8,41.3 19.6,41.2 21.4,42.3 23.3,42.8 25.1,42.4 27.0,43.5 28.8,44.0 30.7,43.2 32.5,42.8 34.4,43.2 36.2,42.7 38.1,41.4 39.9,42.5 41.7,41.3 43.6,40.4 45.4,40.5 47.3,41.2 49.1,39.6 51.0,39.7 52.8,40.5 54.7,41.2 56.5,40.0 58.3,39.3 60.2,38.2 62.0,37.2 63.9,36.8 65.7,35.2 67.6,35.2 69.4,34.7 71.3,33.6 73.1,32.9 74.9,31.7 76.8,31.1 78.6,30.3 80.5,31.1 82.3,31.4 84.2,31.6 86.0,32.3 87.9,32.7 89.7,33.3 91.6,33.5 93.4,32.9 95.2,32.9 97.1,32.9 98.9,33.2 100.8,33.4 102.6,32.1 104.5,31.4 106.3,30.8 108.2,31.2 110.0,30.4 111.8,30.8 113.7,30.8 115.5,29.3 117.4,28.7 119.2,28.2 121.1,27.5 122.9,26.4 124.8,25.4 126.6,25.7 128.4,26.4 130.3,26.4 132.1,26.6 134.0,26.9 135.8,25.6 137.7,24.5 139.5,24.5 141.4,23.9 143.2,23.8 145.1,22.6 146.9,22.3 148.7,22.5 150.6,22.7 152.4,22.2 154.3,22.3 156.1,21.8 158.0,20.7 159.8,20.6 161.7,20.8 163.5,19.5 165.3,19.2 167.2,19.6 169.0,20.1 170.9,20.5 172.7,20.0 174.6,19.1 176.4,18.9 178.3,19.4 180.1,19.2 181.9,18.0 183.8,17.6 185.6,16.5 187.5,15.5 189.3,16.0 191.2,15.3 193.0,14.7 194.9,14.3 196.7,14.3 198.6,13.8 200.4,14.1 202.2,13.8 204.1,13.6 205.9,12.5 207.8,11.6 209.6,11.6 211.5,11.3 213.3,11.5 215.2,10.5 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $1,074.44</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
@@ -384,15 +346,16 @@
           <div class="sector"><span class="sector-icon">💾</span>Semiconductors</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$733.14</div>
+          <span class="ytd-badge ytd-pos">+27.22% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6691" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,43.8 4.8,44.0 6.7,43.3 8.5,42.7 10.4,43.2 12.2,42.2 14.1,41.8 15.9,40.7 17.8,40.3 19.6,41.2 21.4,41.3 23.3,42.2 25.1,40.8 27.0,39.5 28.8,38.3 30.7,38.4 32.5,39.2 34.4,37.9 36.2,36.5 38.1,37.1 39.9,36.8 41.7,37.5 43.6,36.6 45.4,35.6 47.3,36.1 49.1,35.8 51.0,35.4 52.8,35.6 54.7,34.4 56.5,34.2 58.3,34.5 60.2,34.1 62.0,33.2 63.9,33.6 65.7,33.6 67.6,32.2 69.4,31.5 71.3,31.3 73.1,30.9 74.9,31.4 76.8,31.7 78.6,31.7 80.5,31.1 82.3,31.4 84.2,31.6 86.0,32.2 87.9,31.6 89.7,31.8 91.6,30.6 93.4,29.5 95.2,30.1 97.1,30.3 98.9,29.6 100.8,29.8 102.6,30.2 104.5,29.0 106.3,28.5 108.2,28.2 110.0,27.3 111.8,26.4 113.7,26.6 115.5,27.1 117.4,26.8 119.2,26.7 121.1,26.4 122.9,25.6 124.8,24.9 126.6,23.7 128.4,24.1 130.3,23.9 132.1,23.9 134.0,22.9 135.8,23.0 137.7,23.2 139.5,22.9 141.4,22.7 143.2,22.8 145.1,22.9 146.9,21.8 148.7,21.6 150.6,20.6 152.4,20.2 154.3,20.6 156.1,19.4 158.0,18.5 159.8,17.4 161.7,16.3 163.5,15.4 165.3,15.6 167.2,15.3 169.0,15.4 170.9,15.2 172.7,15.6 174.6,15.4 176.4,14.3 178.3,14.3 180.1,13.6 181.9,13.3 183.8,13.1 185.6,12.0 187.5,10.9 189.3,10.5 191.2,9.8 193.0,10.0 194.9,10.0 196.7,8.9 198.6,8.5 200.4,8.1 202.2,7.4 204.1,7.7 205.9,7.2 207.8,6.9 209.6,6.0 211.5,6.1 213.3,5.2 215.2,5.4 217.0,4.0 217.0,44" fill="url(#g6691)"/><polyline points="3.0,43.8 4.8,44.0 6.7,43.3 8.5,42.7 10.4,43.2 12.2,42.2 14.1,41.8 15.9,40.7 17.8,40.3 19.6,41.2 21.4,41.3 23.3,42.2 25.1,40.8 27.0,39.5 28.8,38.3 30.7,38.4 32.5,39.2 34.4,37.9 36.2,36.5 38.1,37.1 39.9,36.8 41.7,37.5 43.6,36.6 45.4,35.6 47.3,36.1 49.1,35.8 51.0,35.4 52.8,35.6 54.7,34.4 56.5,34.2 58.3,34.5 60.2,34.1 62.0,33.2 63.9,33.6 65.7,33.6 67.6,32.2 69.4,31.5 71.3,31.3 73.1,30.9 74.9,31.4 76.8,31.7 78.6,31.7 80.5,31.1 82.3,31.4 84.2,31.6 86.0,32.2 87.9,31.6 89.7,31.8 91.6,30.6 93.4,29.5 95.2,30.1 97.1,30.3 98.9,29.6 100.8,29.8 102.6,30.2 104.5,29.0 106.3,28.5 108.2,28.2 110.0,27.3 111.8,26.4 113.7,26.6 115.5,27.1 117.4,26.8 119.2,26.7 121.1,26.4 122.9,25.6 124.8,24.9 126.6,23.7 128.4,24.1 130.3,23.9 132.1,23.9 134.0,22.9 135.8,23.0 137.7,23.2 139.5,22.9 141.4,22.7 143.2,22.8 145.1,22.9 146.9,21.8 148.7,21.6 150.6,20.6 152.4,20.2 154.3,20.6 156.1,19.4 158.0,18.5 159.8,17.4 161.7,16.3 163.5,15.4 165.3,15.6 167.2,15.3 169.0,15.4 170.9,15.2 172.7,15.6 174.6,15.4 176.4,14.3 178.3,14.3 180.1,13.6 181.9,13.3 183.8,13.1 185.6,12.0 187.5,10.9 189.3,10.5 191.2,9.8 193.0,10.0 194.9,10.0 196.7,8.9 198.6,8.5 200.4,8.1 202.2,7.4 204.1,7.7 205.9,7.2 207.8,6.9 209.6,6.0 211.5,6.1 213.3,5.2 215.2,5.4 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $659.83</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
@@ -401,15 +364,16 @@
           <div class="sector"><span class="sector-icon">💾</span>Semiconductors</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$305.77</div>
+          <span class="ytd-badge ytd-pos">+41.38% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6755" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,44.0 4.8,43.5 6.7,42.9 8.5,43.0 10.4,43.3 12.2,42.4 14.1,42.5 15.9,42.0 17.8,41.5 19.6,41.3 21.4,40.9 23.3,40.5 25.1,39.6 27.0,39.7 28.8,39.1 30.7,39.1 32.5,39.0 34.4,38.4 36.2,38.4 38.1,38.3 39.9,37.7 41.7,38.0 43.6,37.7 45.4,36.7 47.3,35.7 49.1,35.9 51.0,36.0 52.8,36.1 54.7,35.1 56.5,34.3 58.3,33.5 60.2,33.3 62.0,33.5 63.9,32.7 65.7,32.1 67.6,31.6 69.4,30.7 71.3,30.2 73.1,30.5 74.9,29.8 76.8,29.7 78.6,29.2 80.5,28.3 82.3,28.5 84.2,28.6 86.0,28.8 87.9,28.4 89.7,28.4 91.6,28.0 93.4,27.4 95.2,27.4 97.1,27.0 98.9,26.9 100.8,26.6 102.6,25.8 104.5,25.1 106.3,25.3 108.2,25.0 110.0,25.0 111.8,25.3 113.7,24.6 115.5,24.2 117.4,24.1 119.2,23.5 121.1,23.2 122.9,22.9 124.8,23.2 126.6,23.3 128.4,22.6 130.3,21.8 132.1,21.5 134.0,20.8 135.8,20.4 137.7,20.4 139.5,20.5 141.4,20.4 143.2,19.7 145.1,19.0 146.9,18.3 148.7,17.6 150.6,17.6 152.4,17.5 154.3,17.6 156.1,17.0 158.0,16.3 159.8,16.1 161.7,15.7 163.5,15.7 165.3,15.0 167.2,14.3 169.0,13.5 170.9,12.9 172.7,12.2 174.6,12.4 176.4,11.8 178.3,11.7 180.1,11.0 181.9,10.4 183.8,9.7 185.6,9.1 187.5,9.0 189.3,8.4 191.2,8.5 193.0,7.8 194.9,7.2 196.7,7.1 198.6,6.5 200.4,6.3 202.2,6.1 204.1,5.5 205.9,5.5 207.8,5.5 209.6,5.5 211.5,5.3 213.3,4.7 215.2,4.0 217.0,7.5 217.0,44" fill="url(#g6755)"/><polyline points="3.0,44.0 4.8,43.5 6.7,42.9 8.5,43.0 10.4,43.3 12.2,42.4 14.1,42.5 15.9,42.0 17.8,41.5 19.6,41.3 21.4,40.9 23.3,40.5 25.1,39.6 27.0,39.7 28.8,39.1 30.7,39.1 32.5,39.0 34.4,38.4 36.2,38.4 38.1,38.3 39.9,37.7 41.7,38.0 43.6,37.7 45.4,36.7 47.3,35.7 49.1,35.9 51.0,36.0 52.8,36.1 54.7,35.1 56.5,34.3 58.3,33.5 60.2,33.3 62.0,33.5 63.9,32.7 65.7,32.1 67.6,31.6 69.4,30.7 71.3,30.2 73.1,30.5 74.9,29.8 76.8,29.7 78.6,29.2 80.5,28.3 82.3,28.5 84.2,28.6 86.0,28.8 87.9,28.4 89.7,28.4 91.6,28.0 93.4,27.4 95.2,27.4 97.1,27.0 98.9,26.9 100.8,26.6 102.6,25.8 104.5,25.1 106.3,25.3 108.2,25.0 110.0,25.0 111.8,25.3 113.7,24.6 115.5,24.2 117.4,24.1 119.2,23.5 121.1,23.2 122.9,22.9 124.8,23.2 126.6,23.3 128.4,22.6 130.3,21.8 132.1,21.5 134.0,20.8 135.8,20.4 137.7,20.4 139.5,20.5 141.4,20.4 143.2,19.7 145.1,19.0 146.9,18.3 148.7,17.6 150.6,17.6 152.4,17.5 154.3,17.6 156.1,17.0 158.0,16.3 159.8,16.1 161.7,15.7 163.5,15.7 165.3,15.0 167.2,14.3 169.0,13.5 170.9,12.9 172.7,12.2 174.6,12.4 176.4,11.8 178.3,11.7 180.1,11.0 181.9,10.4 183.8,9.7 185.6,9.1 187.5,9.0 189.3,8.4 191.2,8.5 193.0,7.8 194.9,7.2 196.7,7.1 198.6,6.5 200.4,6.3 202.2,6.1 204.1,5.5 205.9,5.5 207.8,5.5 209.6,5.5 211.5,5.3 213.3,4.7 215.2,4.0 217.0,7.5" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $275.19</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
@@ -418,121 +382,131 @@
           <div class="sector"><span class="sector-icon">💾</span>Semiconductors</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$23.23</div>
+          <span class="ytd-badge ytd-neg">-27.83% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6819" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,4.8 4.8,4.8 6.7,5.4 8.5,4.5 10.4,4.8 12.2,4.0 14.1,5.3 15.9,4.5 17.8,5.6 19.6,4.8 21.4,5.7 23.3,7.0 25.1,7.5 27.0,7.3 28.8,8.1 30.7,8.1 32.5,8.5 34.4,9.1 36.2,9.2 38.1,10.1 39.9,10.0 41.7,11.5 43.6,10.8 45.4,11.1 47.3,10.9 49.1,10.7 51.0,10.7 52.8,11.3 54.7,12.6 56.5,12.6 58.3,13.3 60.2,14.0 62.0,13.6 63.9,13.5 65.7,14.3 67.6,15.0 69.4,15.5 71.3,16.1 73.1,16.9 74.9,18.0 76.8,18.5 78.6,17.9 80.5,17.9 82.3,17.4 84.2,17.5 86.0,18.2 87.9,18.5 89.7,19.8 91.6,20.6 93.4,21.1 95.2,21.2 97.1,21.3 98.9,21.7 100.8,22.1 102.6,23.0 104.5,23.4 106.3,23.0 108.2,22.7 110.0,23.7 111.8,24.8 113.7,25.1 115.5,25.2 117.4,25.9 119.2,25.6 121.1,25.5 122.9,25.5 124.8,26.4 126.6,27.2 128.4,28.4 130.3,29.2 132.1,29.6 134.0,29.3 135.8,30.4 137.7,30.9 139.5,31.0 141.4,31.9 143.2,31.9 145.1,32.2 146.9,33.0 148.7,33.1 150.6,34.2 152.4,34.2 154.3,34.1 156.1,35.0 158.0,35.5 159.8,36.3 161.7,36.0 163.5,36.3 165.3,37.3 167.2,38.0 169.0,37.8 170.9,38.2 172.7,38.1 174.6,38.2 176.4,37.8 178.3,38.0 180.1,37.7 181.9,37.4 183.8,37.6 185.6,37.6 187.5,38.0 189.3,37.8 191.2,38.1 193.0,37.9 194.9,37.9 196.7,38.2 198.6,38.9 200.4,39.6 202.2,39.7 204.1,39.7 205.9,40.0 207.8,40.2 209.6,40.8 211.5,41.7 213.3,42.3 215.2,43.0 217.0,44.0 217.0,44" fill="url(#g6819)"/><polyline points="3.0,4.8 4.8,4.8 6.7,5.4 8.5,4.5 10.4,4.8 12.2,4.0 14.1,5.3 15.9,4.5 17.8,5.6 19.6,4.8 21.4,5.7 23.3,7.0 25.1,7.5 27.0,7.3 28.8,8.1 30.7,8.1 32.5,8.5 34.4,9.1 36.2,9.2 38.1,10.1 39.9,10.0 41.7,11.5 43.6,10.8 45.4,11.1 47.3,10.9 49.1,10.7 51.0,10.7 52.8,11.3 54.7,12.6 56.5,12.6 58.3,13.3 60.2,14.0 62.0,13.6 63.9,13.5 65.7,14.3 67.6,15.0 69.4,15.5 71.3,16.1 73.1,16.9 74.9,18.0 76.8,18.5 78.6,17.9 80.5,17.9 82.3,17.4 84.2,17.5 86.0,18.2 87.9,18.5 89.7,19.8 91.6,20.6 93.4,21.1 95.2,21.2 97.1,21.3 98.9,21.7 100.8,22.1 102.6,23.0 104.5,23.4 106.3,23.0 108.2,22.7 110.0,23.7 111.8,24.8 113.7,25.1 115.5,25.2 117.4,25.9 119.2,25.6 121.1,25.5 122.9,25.5 124.8,26.4 126.6,27.2 128.4,28.4 130.3,29.2 132.1,29.6 134.0,29.3 135.8,30.4 137.7,30.9 139.5,31.0 141.4,31.9 143.2,31.9 145.1,32.2 146.9,33.0 148.7,33.1 150.6,34.2 152.4,34.2 154.3,34.1 156.1,35.0 158.0,35.5 159.8,36.3 161.7,36.0 163.5,36.3 165.3,37.3 167.2,38.0 169.0,37.8 170.9,38.2 172.7,38.1 174.6,38.2 176.4,37.8 178.3,38.0 180.1,37.7 181.9,37.4 183.8,37.6 185.6,37.6 187.5,38.0 189.3,37.8 191.2,38.1 193.0,37.9 194.9,37.9 196.7,38.2 198.6,38.9 200.4,39.6 202.2,39.7 204.1,39.7 205.9,40.0 207.8,40.2 209.6,40.8 211.5,41.7 213.3,42.3 215.2,43.0 217.0,44.0" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-stop">NEAR STOP</span>
+        <span class="stop-note">Stop: $20.91</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#06b6d4">
       <div class="card-header">
         <div>
           <div class="sym">IPGP</div>
           <div class="co-name">IPG Photonics</div>
-          <div class="sector"><span class="sector-icon">🔦</span>Photonics</div>
+          <div class="sector"><span class="sector-icon">🔆</span>Photonics</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$118.10</div>
+          <span class="ytd-badge ytd-pos">+14.75% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7459" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,42.3 4.8,41.7 6.7,43.1 8.5,44.0 10.4,42.8 12.2,41.5 14.1,43.2 15.9,43.2 17.8,42.7 19.6,42.8 21.4,43.8 23.3,43.8 25.1,41.7 27.0,41.0 28.8,39.8 30.7,37.9 32.5,36.4 34.4,36.6 36.2,38.4 38.1,38.7 39.9,37.3 41.7,35.4 43.6,33.2 45.4,33.2 47.3,31.8 49.1,31.3 51.0,30.6 52.8,31.4 54.7,32.2 56.5,32.1 58.3,33.7 60.2,34.1 62.0,33.0 63.9,33.1 65.7,34.1 67.6,33.9 69.4,35.0 71.3,34.2 73.1,35.7 74.9,35.8 76.8,35.2 78.6,36.7 80.5,35.8 82.3,36.9 84.2,36.7 86.0,38.1 87.9,38.2 89.7,38.9 91.6,39.2 93.4,37.9 95.2,38.1 97.1,36.8 98.9,35.3 100.8,35.8 102.6,37.0 104.5,38.4 106.3,37.9 108.2,35.8 110.0,36.0 111.8,35.2 113.7,33.9 115.5,33.0 117.4,31.8 119.2,30.0 121.1,30.6 122.9,31.9 124.8,32.8 126.6,33.7 128.4,32.8 130.3,32.2 132.1,32.8 134.0,31.9 135.8,30.7 137.7,31.4 139.5,30.7 141.4,29.6 143.2,30.5 145.1,29.2 146.9,27.4 148.7,28.3 150.6,29.4 152.4,29.6 154.3,28.8 156.1,27.1 158.0,27.1 159.8,26.1 161.7,27.0 163.5,26.1 165.3,25.4 167.2,26.2 169.0,25.1 170.9,23.8 172.7,23.2 174.6,23.9 176.4,22.2 178.3,21.1 180.1,21.2 181.9,21.1 183.8,21.1 185.6,20.8 187.5,20.9 189.3,19.6 191.2,18.4 193.0,19.1 194.9,17.6 196.7,16.9 198.6,15.8 200.4,14.9 202.2,14.7 204.1,13.8 205.9,12.4 207.8,12.6 209.6,11.5 211.5,11.1 213.3,10.8 215.2,10.6 217.0,4.0 217.0,44" fill="url(#g7459)"/><polyline points="3.0,42.3 4.8,41.7 6.7,43.1 8.5,44.0 10.4,42.8 12.2,41.5 14.1,43.2 15.9,43.2 17.8,42.7 19.6,42.8 21.4,43.8 23.3,43.8 25.1,41.7 27.0,41.0 28.8,39.8 30.7,37.9 32.5,36.4 34.4,36.6 36.2,38.4 38.1,38.7 39.9,37.3 41.7,35.4 43.6,33.2 45.4,33.2 47.3,31.8 49.1,31.3 51.0,30.6 52.8,31.4 54.7,32.2 56.5,32.1 58.3,33.7 60.2,34.1 62.0,33.0 63.9,33.1 65.7,34.1 67.6,33.9 69.4,35.0 71.3,34.2 73.1,35.7 74.9,35.8 76.8,35.2 78.6,36.7 80.5,35.8 82.3,36.9 84.2,36.7 86.0,38.1 87.9,38.2 89.7,38.9 91.6,39.2 93.4,37.9 95.2,38.1 97.1,36.8 98.9,35.3 100.8,35.8 102.6,37.0 104.5,38.4 106.3,37.9 108.2,35.8 110.0,36.0 111.8,35.2 113.7,33.9 115.5,33.0 117.4,31.8 119.2,30.0 121.1,30.6 122.9,31.9 124.8,32.8 126.6,33.7 128.4,32.8 130.3,32.2 132.1,32.8 134.0,31.9 135.8,30.7 137.7,31.4 139.5,30.7 141.4,29.6 143.2,30.5 145.1,29.2 146.9,27.4 148.7,28.3 150.6,29.4 152.4,29.6 154.3,28.8 156.1,27.1 158.0,27.1 159.8,26.1 161.7,27.0 163.5,26.1 165.3,25.4 167.2,26.2 169.0,25.1 170.9,23.8 172.7,23.2 174.6,23.9 176.4,22.2 178.3,21.1 180.1,21.2 181.9,21.1 183.8,21.1 185.6,20.8 187.5,20.9 189.3,19.6 191.2,18.4 193.0,19.1 194.9,17.6 196.7,16.9 198.6,15.8 200.4,14.9 202.2,14.7 204.1,13.8 205.9,12.4 207.8,12.6 209.6,11.5 211.5,11.1 213.3,10.8 215.2,10.6 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $106.29</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#06b6d4">
       <div class="card-header">
         <div>
           <div class="sym">POET</div>
           <div class="co-name">POET Technologies</div>
-          <div class="sector"><span class="sector-icon">🔦</span>Photonics</div>
+          <div class="sector"><span class="sector-icon">🔆</span>Photonics</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$12.10</div>
+          <span class="ytd-badge ytd-pos">+17.72% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6947" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,43.4 4.8,44.0 6.7,42.3 8.5,40.6 10.4,41.9 12.2,40.1 14.1,40.7 15.9,40.5 17.8,39.8 19.6,39.9 21.4,41.4 23.3,39.7 25.1,40.5 27.0,41.3 28.8,39.8 30.7,40.1 32.5,38.3 34.4,37.2 36.2,37.7 38.1,39.2 39.9,37.2 41.7,38.4 43.6,37.2 45.4,36.9 47.3,35.7 49.1,34.7 51.0,33.8 52.8,33.5 54.7,32.1 56.5,33.2 58.3,33.8 60.2,32.8 62.0,33.2 63.9,32.5 65.7,32.3 67.6,31.8 69.4,31.8 71.3,30.6 73.1,30.8 74.9,29.8 76.8,30.2 78.6,30.7 80.5,31.6 82.3,32.3 84.2,33.2 86.0,32.7 87.9,31.5 89.7,32.2 91.6,32.8 93.4,32.5 95.2,31.4 97.1,29.6 98.9,29.2 100.8,29.5 102.6,30.4 104.5,31.0 106.3,31.5 108.2,32.1 110.0,33.2 111.8,32.8 113.7,33.1 115.5,31.4 117.4,30.9 119.2,30.0 121.1,30.7 122.9,29.3 124.8,29.0 126.6,27.6 128.4,27.0 130.3,26.8 132.1,26.6 134.0,27.1 135.8,28.0 137.7,26.5 139.5,26.2 141.4,25.0 143.2,24.9 145.1,25.7 146.9,25.0 148.7,25.9 150.6,26.5 152.4,26.0 154.3,26.1 156.1,24.5 158.0,25.2 159.8,24.1 161.7,23.5 163.5,22.5 165.3,22.8 167.2,22.4 169.0,22.2 170.9,22.0 172.7,20.8 174.6,19.3 176.4,19.4 178.3,18.8 180.1,18.2 181.9,17.3 183.8,15.9 185.6,16.2 187.5,16.5 189.3,15.8 191.2,16.3 193.0,16.7 194.9,17.3 196.7,18.0 198.6,17.8 200.4,17.2 202.2,17.3 204.1,17.6 205.9,16.8 207.8,16.0 209.6,15.8 211.5,15.1 213.3,13.9 215.2,12.9 217.0,4.0 217.0,44" fill="url(#g6947)"/><polyline points="3.0,43.4 4.8,44.0 6.7,42.3 8.5,40.6 10.4,41.9 12.2,40.1 14.1,40.7 15.9,40.5 17.8,39.8 19.6,39.9 21.4,41.4 23.3,39.7 25.1,40.5 27.0,41.3 28.8,39.8 30.7,40.1 32.5,38.3 34.4,37.2 36.2,37.7 38.1,39.2 39.9,37.2 41.7,38.4 43.6,37.2 45.4,36.9 47.3,35.7 49.1,34.7 51.0,33.8 52.8,33.5 54.7,32.1 56.5,33.2 58.3,33.8 60.2,32.8 62.0,33.2 63.9,32.5 65.7,32.3 67.6,31.8 69.4,31.8 71.3,30.6 73.1,30.8 74.9,29.8 76.8,30.2 78.6,30.7 80.5,31.6 82.3,32.3 84.2,33.2 86.0,32.7 87.9,31.5 89.7,32.2 91.6,32.8 93.4,32.5 95.2,31.4 97.1,29.6 98.9,29.2 100.8,29.5 102.6,30.4 104.5,31.0 106.3,31.5 108.2,32.1 110.0,33.2 111.8,32.8 113.7,33.1 115.5,31.4 117.4,30.9 119.2,30.0 121.1,30.7 122.9,29.3 124.8,29.0 126.6,27.6 128.4,27.0 130.3,26.8 132.1,26.6 134.0,27.1 135.8,28.0 137.7,26.5 139.5,26.2 141.4,25.0 143.2,24.9 145.1,25.7 146.9,25.0 148.7,25.9 150.6,26.5 152.4,26.0 154.3,26.1 156.1,24.5 158.0,25.2 159.8,24.1 161.7,23.5 163.5,22.5 165.3,22.8 167.2,22.4 169.0,22.2 170.9,22.0 172.7,20.8 174.6,19.3 176.4,19.4 178.3,18.8 180.1,18.2 181.9,17.3 183.8,15.9 185.6,16.2 187.5,16.5 189.3,15.8 191.2,16.3 193.0,16.7 194.9,17.3 196.7,18.0 198.6,17.8 200.4,17.2 202.2,17.3 204.1,17.6 205.9,16.8 207.8,16.0 209.6,15.8 211.5,15.1 213.3,13.9 215.2,12.9 217.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $10.89</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#ef4444">
       <div class="card-header">
         <div>
           <div class="sym">TSLA</div>
           <div class="co-name">Tesla</div>
-          <div class="sector"><span class="sector-icon">🚗</span>EV</div>
+          <div class="sector"><span class="sector-icon">⚡</span>EV</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$404.79</div>
+          <span class="ytd-badge ytd-pos">+69.41% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3220" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,9.0 4.8,4.0 6.7,10.9 8.5,11.5 10.4,9.9 12.2,6.5 14.1,5.0 15.9,5.6 17.8,8.6 19.6,8.8 21.4,9.2 23.3,16.0 25.1,11.5 27.0,4.9 28.8,5.0 30.7,10.1 32.5,11.7 34.4,11.5 36.2,17.0 38.1,11.8 39.9,15.0 41.7,15.0 43.6,20.8 45.4,24.1 47.3,19.0 49.1,16.7 51.0,13.8 52.8,12.6 54.7,16.8 56.5,16.6 58.3,19.1 60.2,18.9 62.0,18.7 63.9,18.7 65.7,23.1 67.6,19.6 69.4,16.6 71.3,19.9 73.1,22.1 74.9,21.8 76.8,25.9 78.6,20.9 80.5,21.0 82.3,24.3 84.2,23.5 86.0,23.3 87.9,20.2 89.7,24.9 91.6,26.3 93.4,24.7 95.2,23.3 97.1,25.7 98.9,30.3 100.8,34.9 102.6,30.1 104.5,29.3 106.3,28.2 108.2,33.4 110.0,37.1 111.8,39.6 113.7,33.5 115.5,30.0 117.4,37.6 119.2,40.5 121.1,42.7 122.9,44.0 124.8,43.1 126.6,41.9 128.4,40.6 130.3,36.3 132.1,26.0 134.0,27.2 135.8,22.8 137.7,25.8 139.5,28.1 141.4,27.7 143.2,32.8 145.1,31.8 146.9,30.9 148.7,31.9 150.6,33.1 152.4,29.8 154.3,26.4 156.1,25.8 158.0,27.0 159.8,23.5 161.7,18.7 163.5,12.6 165.3,6.5 167.2,10.7 169.0,6.4 170.9,7.1 172.7,14.9 174.6,19.4 176.4,21.5 178.3,16.7 180.1,16.5 181.9,13.5 183.8,10.7 185.6,8.2 187.5,7.5 189.3,9.9 191.2,17.2 193.0,14.3 194.9,14.3 196.7,16.3 198.6,26.4 200.4,19.8 202.2,24.3 204.1,29.9 205.9,23.4 207.8,20.7 209.6,18.9 211.5,21.3 213.3,24.4 215.2,22.9 217.0,21.2 217.0,44" fill="url(#g3220)"/><polyline points="3.0,9.0 4.8,4.0 6.7,10.9 8.5,11.5 10.4,9.9 12.2,6.5 14.1,5.0 15.9,5.6 17.8,8.6 19.6,8.8 21.4,9.2 23.3,16.0 25.1,11.5 27.0,4.9 28.8,5.0 30.7,10.1 32.5,11.7 34.4,11.5 36.2,17.0 38.1,11.8 39.9,15.0 41.7,15.0 43.6,20.8 45.4,24.1 47.3,19.0 49.1,16.7 51.0,13.8 52.8,12.6 54.7,16.8 56.5,16.6 58.3,19.1 60.2,18.9 62.0,18.7 63.9,18.7 65.7,23.1 67.6,19.6 69.4,16.6 71.3,19.9 73.1,22.1 74.9,21.8 76.8,25.9 78.6,20.9 80.5,21.0 82.3,24.3 84.2,23.5 86.0,23.3 87.9,20.2 89.7,24.9 91.6,26.3 93.4,24.7 95.2,23.3 97.1,25.7 98.9,30.3 100.8,34.9 102.6,30.1 104.5,29.3 106.3,28.2 108.2,33.4 110.0,37.1 111.8,39.6 113.7,33.5 115.5,30.0 117.4,37.6 119.2,40.5 121.1,42.7 122.9,44.0 124.8,43.1 126.6,41.9 128.4,40.6 130.3,36.3 132.1,26.0 134.0,27.2 135.8,22.8 137.7,25.8 139.5,28.1 141.4,27.7 143.2,32.8 145.1,31.8 146.9,30.9 148.7,31.9 150.6,33.1 152.4,29.8 154.3,26.4 156.1,25.8 158.0,27.0 159.8,23.5 161.7,18.7 163.5,12.6 165.3,6.5 167.2,10.7 169.0,6.4 170.9,7.1 172.7,14.9 174.6,19.4 176.4,21.5 178.3,16.7 180.1,16.5 181.9,13.5 183.8,10.7 185.6,8.2 187.5,7.5 189.3,9.9 191.2,17.2 193.0,14.3 194.9,14.3 196.7,16.3 198.6,26.4 200.4,19.8 202.2,24.3 204.1,29.9 205.9,23.4 207.8,20.7 209.6,18.9 211.5,21.3 213.3,24.4 215.2,22.9 217.0,21.2" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $364.31</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#64748b">
       <div class="card-header">
         <div>
           <div class="sym">AAPL</div>
           <div class="co-name">Apple</div>
-          <div class="sector"><span class="sector-icon">🍎</span>Consumer Tech</div>
+          <div class="sector"><span class="sector-icon">◉</span>Consumer Tech</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$297.10</div>
+          <span class="ytd-badge ytd-pos">+26.85% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g6816" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,29.8 4.8,32.0 6.7,34.8 8.5,36.0 10.4,36.8 12.2,36.6 14.1,36.1 15.9,35.6 17.8,36.2 19.6,37.2 21.4,38.8 23.3,44.0 25.1,43.4 27.0,43.0 28.8,43.2 30.7,38.9 32.5,37.2 34.4,38.3 36.2,37.2 38.1,36.5 39.9,30.4 41.7,30.7 43.6,26.6 45.4,26.9 47.3,25.6 49.1,27.7 51.0,28.2 52.8,27.2 54.7,35.2 56.5,38.7 58.3,33.9 60.2,33.7 62.0,35.9 63.9,33.5 65.7,32.6 67.6,29.1 69.4,27.9 71.3,28.6 73.1,33.8 74.9,33.4 76.8,34.0 78.6,34.7 80.5,36.0 82.3,37.7 84.2,36.3 86.0,35.7 87.9,35.7 89.7,38.7 91.6,42.0 93.4,40.4 95.2,39.6 97.1,42.1 98.9,42.6 100.8,43.2 102.6,41.2 104.5,41.1 106.3,40.5 108.2,40.3 110.0,42.7 111.8,44.0 113.7,39.8 115.5,38.7 117.4,38.6 119.2,36.9 121.1,40.0 122.9,36.8 124.8,35.9 126.6,35.9 128.4,36.7 130.3,36.9 132.1,32.4 134.0,34.2 135.8,30.2 137.7,28.6 139.5,32.6 141.4,28.5 143.2,28.4 145.1,29.7 146.9,31.8 148.7,30.0 150.6,30.3 152.4,29.6 154.3,24.5 156.1,26.4 158.0,22.1 159.8,20.2 161.7,20.2 163.5,16.8 165.3,17.1 167.2,15.9 169.0,13.5 170.9,13.9 172.7,12.7 174.6,14.1 176.4,13.5 178.3,11.6 180.1,10.0 181.9,7.7 183.8,8.0 185.6,6.5 187.5,5.6 189.3,5.8 191.2,9.2 193.0,4.0 194.9,6.9 196.7,6.3 198.6,8.6 200.4,12.0 202.2,18.4 204.1,17.8 205.9,15.4 207.8,18.0 209.6,15.0 211.5,13.3 213.3,15.2 215.2,14.0 217.0,14.6 217.0,44" fill="url(#g6816)"/><polyline points="3.0,29.8 4.8,32.0 6.7,34.8 8.5,36.0 10.4,36.8 12.2,36.6 14.1,36.1 15.9,35.6 17.8,36.2 19.6,37.2 21.4,38.8 23.3,44.0 25.1,43.4 27.0,43.0 28.8,43.2 30.7,38.9 32.5,37.2 34.4,38.3 36.2,37.2 38.1,36.5 39.9,30.4 41.7,30.7 43.6,26.6 45.4,26.9 47.3,25.6 49.1,27.7 51.0,28.2 52.8,27.2 54.7,35.2 56.5,38.7 58.3,33.9 60.2,33.7 62.0,35.9 63.9,33.5 65.7,32.6 67.6,29.1 69.4,27.9 71.3,28.6 73.1,33.8 74.9,33.4 76.8,34.0 78.6,34.7 80.5,36.0 82.3,37.7 84.2,36.3 86.0,35.7 87.9,35.7 89.7,38.7 91.6,42.0 93.4,40.4 95.2,39.6 97.1,42.1 98.9,42.6 100.8,43.2 102.6,41.2 104.5,41.1 106.3,40.5 108.2,40.3 110.0,42.7 111.8,44.0 113.7,39.8 115.5,38.7 117.4,38.6 119.2,36.9 121.1,40.0 122.9,36.8 124.8,35.9 126.6,35.9 128.4,36.7 130.3,36.9 132.1,32.4 134.0,34.2 135.8,30.2 137.7,28.6 139.5,32.6 141.4,28.5 143.2,28.4 145.1,29.7 146.9,31.8 148.7,30.0 150.6,30.3 152.4,29.6 154.3,24.5 156.1,26.4 158.0,22.1 159.8,20.2 161.7,20.2 163.5,16.8 165.3,17.1 167.2,15.9 169.0,13.5 170.9,13.9 172.7,12.7 174.6,14.1 176.4,13.5 178.3,11.6 180.1,10.0 181.9,7.7 183.8,8.0 185.6,6.5 187.5,5.6 189.3,5.8 191.2,9.2 193.0,4.0 194.9,6.9 196.7,6.3 198.6,8.6 200.4,12.0 202.2,18.4 204.1,17.8 205.9,15.4 207.8,18.0 209.6,15.0 211.5,13.3 213.3,15.2 215.2,14.0 217.0,14.6" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $267.39</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#ec4899">
       <div class="card-header">
         <div>
           <div class="sym">NFLX</div>
           <div class="co-name">Netflix</div>
-          <div class="sector"><span class="sector-icon">🎬</span>Streaming</div>
+          <div class="sector"><span class="sector-icon">▶</span>Streaming</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$73.14</div>
+          <span class="ytd-badge ytd-pos">+25.92% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7011" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,44.0 4.8,43.4 6.7,42.1 8.5,42.0 10.4,41.6 12.2,41.0 14.1,39.9 15.9,38.9 17.8,39.5 19.6,40.0 21.4,40.1 23.3,39.3 25.1,38.9 27.0,39.0 28.8,39.5 30.7,38.9 32.5,38.2 34.4,37.0 36.2,36.7 38.1,36.4 39.9,37.0 41.7,37.7 43.6,37.5 45.4,37.6 47.3,37.8 49.1,38.4 51.0,37.2 52.8,36.2 54.7,35.8 56.5,34.6 58.3,33.4 60.2,32.8 62.0,32.9 63.9,33.6 65.7,32.8 67.6,32.6 69.4,32.0 71.3,30.9 73.1,31.3 74.9,30.8 76.8,30.3 78.6,30.0 80.5,30.5 82.3,30.5 84.2,30.5 86.0,29.9 87.9,29.0 89.7,29.0 91.6,28.4 93.4,28.5 95.2,27.4 97.1,26.6 98.9,26.3 100.8,26.1 102.6,26.1 104.5,26.1 106.3,25.0 108.2,24.9 110.0,24.6 111.8,23.5 113.7,23.0 115.5,22.6 117.4,22.5 119.2,22.7 121.1,22.7 122.9,22.0 124.8,21.5 126.6,20.8 128.4,21.0 130.3,20.7 132.1,19.7 134.0,19.5 135.8,18.9 137.7,19.2 139.5,18.2 141.4,17.8 143.2,17.9 145.1,18.1 146.9,17.8 148.7,17.4 150.6,17.8 152.4,16.8 154.3,15.9 156.1,15.7 158.0,15.9 159.8,15.2 161.7,14.9 163.5,14.3 165.3,14.0 167.2,14.1 169.0,13.3 170.9,12.4 172.7,12.5 174.6,12.1 176.4,12.0 178.3,11.2 180.1,10.9 181.9,10.1 183.8,9.3 185.6,9.4 187.5,8.7 189.3,8.5 191.2,7.7 193.0,7.4 194.9,6.7 196.7,6.7 198.6,6.7 200.4,6.3 202.2,5.4 204.1,5.2 205.9,5.3 207.8,5.0 209.6,4.9 211.5,4.6 213.3,4.2 215.2,4.0 217.0,11.7 217.0,44" fill="url(#g7011)"/><polyline points="3.0,44.0 4.8,43.4 6.7,42.1 8.5,42.0 10.4,41.6 12.2,41.0 14.1,39.9 15.9,38.9 17.8,39.5 19.6,40.0 21.4,40.1 23.3,39.3 25.1,38.9 27.0,39.0 28.8,39.5 30.7,38.9 32.5,38.2 34.4,37.0 36.2,36.7 38.1,36.4 39.9,37.0 41.7,37.7 43.6,37.5 45.4,37.6 47.3,37.8 49.1,38.4 51.0,37.2 52.8,36.2 54.7,35.8 56.5,34.6 58.3,33.4 60.2,32.8 62.0,32.9 63.9,33.6 65.7,32.8 67.6,32.6 69.4,32.0 71.3,30.9 73.1,31.3 74.9,30.8 76.8,30.3 78.6,30.0 80.5,30.5 82.3,30.5 84.2,30.5 86.0,29.9 87.9,29.0 89.7,29.0 91.6,28.4 93.4,28.5 95.2,27.4 97.1,26.6 98.9,26.3 100.8,26.1 102.6,26.1 104.5,26.1 106.3,25.0 108.2,24.9 110.0,24.6 111.8,23.5 113.7,23.0 115.5,22.6 117.4,22.5 119.2,22.7 121.1,22.7 122.9,22.0 124.8,21.5 126.6,20.8 128.4,21.0 130.3,20.7 132.1,19.7 134.0,19.5 135.8,18.9 137.7,19.2 139.5,18.2 141.4,17.8 143.2,17.9 145.1,18.1 146.9,17.8 148.7,17.4 150.6,17.8 152.4,16.8 154.3,15.9 156.1,15.7 158.0,15.9 159.8,15.2 161.7,14.9 163.5,14.3 165.3,14.0 167.2,14.1 169.0,13.3 170.9,12.4 172.7,12.5 174.6,12.1 176.4,12.0 178.3,11.2 180.1,10.9 181.9,10.1 183.8,9.3 185.6,9.4 187.5,8.7 189.3,8.5 191.2,7.7 193.0,7.4 194.9,6.7 196.7,6.7 198.6,6.7 200.4,6.3 202.2,5.4 204.1,5.2 205.9,5.3 207.8,5.0 209.6,4.9 211.5,4.6 213.3,4.2 215.2,4.0 217.0,11.7" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $65.83</span>
+      </div>
     </div>
-    
-
     <div class="card" style="--accent:#f59e0b">
       <div class="card-header">
         <div>
           <div class="sym">CAT</div>
           <div class="co-name">Caterpillar</div>
-          <div class="sector"><span class="sector-icon">🏗</span>Industrial</div>
+          <div class="sector"><span class="sector-icon">⚙</span>Industrial</div>
         </div>
         <div class="price-block">
-          <div class="price">—</div>
-          <span class="ytd-badge ytd-na">— YTD</span>
+          <div class="price">$1,017.70</div>
+          <span class="ytd-badge ytd-pos">+27.15% YTD</span>
         </div>
       </div>
-      <div class="sparkline"><svg width="220" height="48"><text x="50%" y="55%" text-anchor="middle" fill="#3a4460" font-size="11">no data</text></svg></div>
-      <div class="no-pos">No position</div>
+      <div class="sparkline"><svg width="220" height="48" viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7651" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><polygon points="3.0,44 3.0,43.6 4.8,44.0 6.7,43.3 8.5,42.9 10.4,43.2 12.2,42.4 14.1,43.0 15.9,42.2 17.8,41.6 19.6,40.7 21.4,40.6 23.3,40.0 25.1,39.1 27.0,37.9 28.8,37.7 30.7,38.3 32.5,38.0 34.4,37.6 36.2,36.6 38.1,35.6 39.9,35.5 41.7,35.2 43.6,35.0 45.4,34.3 47.3,34.2 49.1,33.6 51.0,34.0 52.8,33.8 54.7,32.7 56.5,32.7 58.3,32.1 60.2,31.5 62.0,30.6 63.9,29.7 65.7,28.8 67.6,28.8 69.4,28.8 71.3,28.2 73.1,27.5 74.9,26.5 76.8,27.1 78.6,27.5 80.5,27.0 82.3,26.1 84.2,25.0 86.0,24.3 87.9,24.1 89.7,24.5 91.6,24.0 93.4,23.2 95.2,23.0 97.1,22.4 98.9,21.5 100.8,21.9 102.6,21.2 104.5,21.2 106.3,21.2 108.2,21.5 110.0,21.1 111.8,20.8 113.7,20.1 115.5,20.3 117.4,20.7 119.2,19.8 121.1,19.4 122.9,19.5 124.8,18.6 126.6,18.9 128.4,18.7 130.3,18.7 132.1,18.8 134.0,19.3 135.8,18.6 137.7,17.7 139.5,17.2 141.4,17.4 143.2,17.2 145.1,17.2 146.9,16.8 148.7,16.3 150.6,16.2 152.4,16.2 154.3,15.5 156.1,15.6 158.0,15.5 159.8,15.3 161.7,15.3 163.5,15.0 165.3,14.6 167.2,13.7 169.0,13.7 170.9,12.8 172.7,12.4 174.6,12.4 176.4,12.0 178.3,11.5 180.1,11.0 181.9,11.2 183.8,10.8 185.6,10.6 187.5,9.8 189.3,9.8 191.2,9.2 193.0,8.8 194.9,8.7 196.7,8.3 198.6,7.9 200.4,7.4 202.2,6.9 204.1,6.4 205.9,5.8 207.8,5.4 209.6,4.7 211.5,4.3 213.3,4.2 215.2,4.0 217.0,12.4 217.0,44" fill="url(#g7651)"/><polyline points="3.0,43.6 4.8,44.0 6.7,43.3 8.5,42.9 10.4,43.2 12.2,42.4 14.1,43.0 15.9,42.2 17.8,41.6 19.6,40.7 21.4,40.6 23.3,40.0 25.1,39.1 27.0,37.9 28.8,37.7 30.7,38.3 32.5,38.0 34.4,37.6 36.2,36.6 38.1,35.6 39.9,35.5 41.7,35.2 43.6,35.0 45.4,34.3 47.3,34.2 49.1,33.6 51.0,34.0 52.8,33.8 54.7,32.7 56.5,32.7 58.3,32.1 60.2,31.5 62.0,30.6 63.9,29.7 65.7,28.8 67.6,28.8 69.4,28.8 71.3,28.2 73.1,27.5 74.9,26.5 76.8,27.1 78.6,27.5 80.5,27.0 82.3,26.1 84.2,25.0 86.0,24.3 87.9,24.1 89.7,24.5 91.6,24.0 93.4,23.2 95.2,23.0 97.1,22.4 98.9,21.5 100.8,21.9 102.6,21.2 104.5,21.2 106.3,21.2 108.2,21.5 110.0,21.1 111.8,20.8 113.7,20.1 115.5,20.3 117.4,20.7 119.2,19.8 121.1,19.4 122.9,19.5 124.8,18.6 126.6,18.9 128.4,18.7 130.3,18.7 132.1,18.8 134.0,19.3 135.8,18.6 137.7,17.7 139.5,17.2 141.4,17.4 143.2,17.2 145.1,17.2 146.9,16.8 148.7,16.3 150.6,16.2 152.4,16.2 154.3,15.5 156.1,15.6 158.0,15.5 159.8,15.3 161.7,15.3 163.5,15.0 165.3,14.6 167.2,13.7 169.0,13.7 170.9,12.8 172.7,12.4 174.6,12.4 176.4,12.0 178.3,11.5 180.1,11.0 181.9,11.2 183.8,10.8 185.6,10.6 187.5,9.8 189.3,9.8 191.2,9.2 193.0,8.8 194.9,8.7 196.7,8.3 198.6,7.9 200.4,7.4 202.2,6.9 204.1,6.4 205.9,5.8 207.8,5.4 209.6,4.7 211.5,4.3 213.3,4.2 215.2,4.0 217.0,12.4" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+      <div class="card-footer">
+        <span class="badge badge-trailing">TRAILING STOP</span>
+        <span class="stop-note">Stop: $915.93</span>
+      </div>
     </div>
-    
   </div>
 
-  <div class="footer">
-    DCA Portfolio Dashboard &nbsp;·&nbsp; Powered by Alpaca Markets &nbsp;·&nbsp; 2026-06-22 17:04 UTC
-  </div>
+  <footer>
+    DCA Portfolio Dashboard &nbsp;·&nbsp; Prices from Yahoo Finance &amp; Finviz &nbsp;·&nbsp; 2026-06-22 20:17 UTC<br>
+    Position data: <span style="color:#ef4444;">Unavailable</span> (Alpaca egress blocked) &nbsp;·&nbsp;
+    Sparklines: real YTD daily closes (Yahoo Finance chart API)
+  </footer>
 
 </body>
 </html>
