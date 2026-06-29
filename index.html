@@ -1,520 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="refresh" content="3600">
 <title>DCA Portfolio Dashboard</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#0a0d14;--card:#111520;--border:#1e2535;--text:#e2e8f0;--sub:#64748b;--green:#22c55e;--red:#ef4444}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:20px}
-  header{max-width:1400px;margin:0 auto 28px;padding:0 8px}
-  h1{font-size:1.5rem;font-weight:700;letter-spacing:.03em;background:linear-gradient(135deg,#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
-  .subtitle{color:var(--sub);font-size:.8rem}
-  .summary-bar{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0;padding:16px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px}
-  .stat{display:flex;flex-direction:column;gap:2px}
-  .stat-label{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em}
-  .stat-val{font-size:1.1rem;font-weight:600}
-  .stat-val.pos{color:var(--green)}
-  .stat-val.neg{color:var(--red)}
-  .alert-bar{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:.75rem;color:#fbbf24;display:flex;align-items:center;gap:8px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;max-width:1400px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:transform .15s,border-color .15s;border-left:3px solid var(--accent)}
-  .card:hover{transform:translateY(-2px);border-color:var(--accent)}
-  .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-  .sym{font-size:1.4rem;font-weight:800;letter-spacing:-.01em}
-  .company{font-size:.72rem;color:var(--sub);margin-top:2px}
-  .sector-tag{font-size:.65rem;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-  .right-col{text-align:right}
-  .price{font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums}
-  .chg{font-size:.8rem;font-weight:600;margin-top:3px}
-  .chg.pos{color:var(--green)}
-  .chg.neg{color:var(--red)}
-  .sparkline{margin:8px -4px}
-  .card-footer{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-  .badge{font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase}
-  .badge-trail{background:rgba(168,85,247,.18);color:#c084fc;border:1px solid rgba(168,85,247,.3)}
-  .badge-stop{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
-  .badge-profit{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
-  .badge-watch{background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.25)}
-  .footer{text-align:center;color:var(--sub);font-size:.72rem;margin-top:32px;padding-bottom:20px}
-  @media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.card{padding:12px}.sym{font-size:1.1rem}.price{font-size:.95rem}.summary-bar{gap:12px}}
-</style>
-</head>
-<body>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0d14;--card:#111520;--border:#1e2535;--text:#e2e8f0;--sub:#64748b;--g:#22c55e;--r:#ef4444}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;padding:20px}
+header{max-width:1400px;margin:0 auto 28px;padding:0 8px}
+h1{font-size:1.5rem;font-weight:700;background:linear-gradient(135deg,#fff,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.sub{color:var(--sub);font-size:.8rem}
+.sb{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0;padding:16px 20px;background:var(--card);border:1px solid var(--border);border-radius:12px}
+.st{display:flex;flex-direction:column;gap:2px}
+.sl{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.08em}
+.sv{font-size:1.1rem;font-weight:600}.sv.pos{color:var(--g)}.sv.neg{color:var(--r)}
+.ab{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:.75rem;color:#fbbf24}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;max-width:1400px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;border-left:3px solid var(--a);transition:transform .15s}
+.card:hover{transform:translateY(-2px)}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.sym{font-size:1.4rem;font-weight:800}.co{font-size:.72rem;color:var(--sub);margin-top:2px}
+.sec{font-size:.65rem;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.rc{text-align:right}.price{font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums}
+.chg{font-size:.8rem;font-weight:600;margin-top:3px}.chg.pos{color:var(--g)}.chg.neg{color:var(--r)}.chg.neu{color:var(--sub)}
+.cf{margin-top:8px}
+.badge{font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase}
+.b-trail{background:rgba(168,85,247,.18);color:#c084fc;border:1px solid rgba(168,85,247,.3)}
+.b-stop{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.b-profit{background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25)}
+.b-watch{background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.25)}
+.foot{text-align:center;color:var(--sub);font-size:.72rem;margin-top:32px;padding-bottom:20px}
+@media(max-width:600px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.card{padding:12px}.sym{font-size:1.1rem}.price{font-size:.95rem}}
+</style></head><body>
 <header>
-  <h1>⟁ DCA Portfolio Dashboard</h1>
-  <div class="subtitle">19 positions · Live prices via Yahoo Finance · Auto-refreshes hourly</div>
-  <div class="summary-bar">
-    <div class="stat"><span class="stat-label">Positions</span><span class="stat-val">19 Stocks</span></div>
-    <div class="stat"><span class="stat-label">Sectors</span><span class="stat-val">8 Themes</span></div>
-    <div class="stat"><span class="stat-label">Up Today</span><span class="stat-val pos">6</span></div>
-    <div class="stat"><span class="stat-label">Down Today</span><span class="stat-val neg">8</span></div>
-    <div class="stat"><span class="stat-label">Data Source</span><span class="stat-val">Yahoo Finance</span></div>
-    <div class="stat"><span class="stat-label">Updated</span><span class="stat-val">2026-06-29 14:12 UTC</span></div>
-  </div>
-  <div class="alert-bar">⚠ Position P&amp;L data unavailable — Alpaca API (paper-api.alpaca.markets) is blocked by the session egress policy. Prices sourced from Yahoo Finance. Contact your admin to allowlist this domain for full portfolio analytics.
-  </div>
+<h1>⟁ DCA Portfolio Dashboard</h1>
+<div class="sub">19 positions · Live prices via Yahoo Finance · Auto-refreshes hourly</div>
+<div class="sb">
+<div class="st"><span class="sl">Positions</span><span class="sv">19 Stocks</span></div>
+<div class="st"><span class="sl">Sectors</span><span class="sv">8 Themes</span></div>
+<div class="st"><span class="sl">Up Today</span><span class="sv pos">12</span></div>
+<div class="st"><span class="sl">Down Today</span><span class="sv neg">7</span></div>
+<div class="st"><span class="sl">Data Source</span><span class="sv">Yahoo Finance</span></div>
+<div class="st"><span class="sl">Updated</span><span class="sv">2026-06-29 15:03 UTC</span></div>
+</div>
+<div class="ab">⚠ Position P&amp;L data unavailable — Alpaca API blocked by session egress policy. Prices from Yahoo Finance via Firecrawl. Full sparklines will return when Alpaca API is allowlisted.</div>
 </header>
 <div class="grid">
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div>
-          <div class="sym">STRC</div>
-          <div class="company">₿ Strategy Inc</div>
-          <div class="sector-tag" style="color:#f7931a">Crypto Treasury</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$77.16</div>
-          <div class="chg pos">+3.47% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_STRC" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,13.1 4.1,8.5 8.3,2.0 12.4,6.7 16.6,5.6 20.7,5.1 24.8,11.4 29.0,10.7 33.1,17.7 37.2,15.0 41.4,9.6 45.5,15.0 49.7,21.1 53.8,19.2 57.9,26.7 62.1,30.2 66.2,27.9 70.3,31.4 74.5,28.2 78.6,32.2 82.8,37.7 86.9,32.7 91.0,31.0 95.2,29.3 99.3,31.0 103.4,33.5 107.6,38.0 111.7,35.8 115.9,29.5 120.0,23.9 120,40" fill="url(#g_STRC)"/>
-  <polyline points="0.0,13.1 4.1,8.5 8.3,2.0 12.4,6.7 16.6,5.6 20.7,5.1 24.8,11.4 29.0,10.7 33.1,17.7 37.2,15.0 41.4,9.6 45.5,15.0 49.7,21.1 53.8,19.2 57.9,26.7 62.1,30.2 66.2,27.9 70.3,31.4 74.5,28.2 78.6,32.2 82.8,37.7 86.9,32.7 91.0,31.0 95.2,29.3 99.3,31.0 103.4,33.5 107.6,38.0 111.7,35.8 115.9,29.5 120.0,23.9" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div>
-          <div class="sym">MSTR</div>
-          <div class="company">₿ MicroStrategy</div>
-          <div class="sector-tag" style="color:#f7931a">Crypto Treasury</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$82.31</div>
-          <div class="chg neg">-3.54% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_MSTR" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,10.9 4.1,5.8 8.3,4.1 12.4,3.5 16.6,7.1 20.7,2.1 24.8,7.0 29.0,11.4 33.1,6.5 37.2,2.0 41.4,2.0 45.5,5.7 49.7,6.9 53.8,11.6 57.9,14.6 62.1,12.8 66.2,19.7 70.3,24.9 74.5,25.5 78.6,26.8 82.8,29.9 86.9,31.1 91.0,37.8 95.2,33.5 99.3,38.0 103.4,33.8 107.6,29.9 111.7,24.6 115.9,25.6 120.0,24.9 120,40" fill="url(#g_MSTR)"/>
-  <polyline points="0.0,10.9 4.1,5.8 8.3,4.1 12.4,3.5 16.6,7.1 20.7,2.1 24.8,7.0 29.0,11.4 33.1,6.5 37.2,2.0 41.4,2.0 45.5,5.7 49.7,6.9 53.8,11.6 57.9,14.6 62.1,12.8 66.2,19.7 70.3,24.9 74.5,25.5 78.6,26.8 82.8,29.9 86.9,31.1 91.0,37.8 95.2,33.5 99.3,38.0 103.4,33.8 107.6,29.9 111.7,24.6 115.9,25.6 120.0,24.9" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div>
-          <div class="sym">GEV</div>
-          <div class="company">⚡ GE Vernova</div>
-          <div class="sector-tag" style="color:#22c55e">Energy</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$1,091.54</div>
-          <div class="chg pos">+4.44% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_GEV" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,38.0 4.1,36.7 8.3,35.0 12.4,31.4 16.6,29.4 20.7,26.9 24.8,21.2 29.0,22.4 33.1,18.2 37.2,16.7 41.4,17.4 45.5,20.3 49.7,18.4 53.8,13.7 57.9,18.0 62.1,15.7 66.2,17.6 70.3,14.4 74.5,12.6 78.6,16.8 82.8,13.4 86.9,18.8 91.0,22.6 95.2,20.2 99.3,14.5 103.4,12.3 107.6,7.4 111.7,2.0 115.9,6.9 120.0,36.0 120,40" fill="url(#g_GEV)"/>
-  <polyline points="0.0,38.0 4.1,36.7 8.3,35.0 12.4,31.4 16.6,29.4 20.7,26.9 24.8,21.2 29.0,22.4 33.1,18.2 37.2,16.7 41.4,17.4 45.5,20.3 49.7,18.4 53.8,13.7 57.9,18.0 62.1,15.7 66.2,17.6 70.3,14.4 74.5,12.6 78.6,16.8 82.8,13.4 86.9,18.8 91.0,22.6 95.2,20.2 99.3,14.5 103.4,12.3 107.6,7.4 111.7,2.0 115.9,6.9 120.0,36.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div>
-          <div class="sym">BE</div>
-          <div class="company">⚡ Bloom Energy</div>
-          <div class="sector-tag" style="color:#22c55e">Energy</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$252.02</div>
-          <div class="chg neg">-18.49% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_BE" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,17.2 4.1,7.8 8.3,2.0 12.4,2.5 16.6,14.0 20.7,27.2 24.8,30.8 29.0,28.0 33.1,34.3 37.2,23.8 41.4,31.8 45.5,38.0 49.7,27.5 53.8,37.8 57.9,27.2 62.1,20.2 66.2,32.8 70.3,24.0 74.5,30.6 78.6,28.2 82.8,21.3 86.9,27.4 91.0,23.4 95.2,16.0 99.3,14.3 103.4,22.3 107.6,10.6 111.7,18.4 115.9,18.6 120.0,15.9 120,40" fill="url(#g_BE)"/>
-  <polyline points="0.0,17.2 4.1,7.8 8.3,2.0 12.4,2.5 16.6,14.0 20.7,27.2 24.8,30.8 29.0,28.0 33.1,34.3 37.2,23.8 41.4,31.8 45.5,38.0 49.7,27.5 53.8,37.8 57.9,27.2 62.1,20.2 66.2,32.8 70.3,24.0 74.5,30.6 78.6,28.2 82.8,21.3 86.9,27.4 91.0,23.4 95.2,16.0 99.3,14.3 103.4,22.3 107.6,10.6 111.7,18.4 115.9,18.6 120.0,15.9" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-stop">⚠ SHARP DROP</span></div>
-    </div>
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div>
-          <div class="sym">KGS</div>
-          <div class="company">⚡ Kodiak Gas</div>
-          <div class="sector-tag" style="color:#22c55e">Energy</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$74.58</div>
-          <div class="chg neg">-2.22% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_KGS" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,35.3 4.1,32.1 8.3,35.0 12.4,38.0 16.6,36.3 20.7,37.9 24.8,36.2 29.0,32.2 33.1,30.4 37.2,28.6 41.4,25.6 45.5,24.5 49.7,26.1 53.8,24.0 57.9,19.7 62.1,18.9 66.2,21.4 70.3,17.7 74.5,14.9 78.6,10.7 82.8,7.1 86.9,11.2 91.0,12.2 95.2,10.0 99.3,5.9 103.4,6.4 107.6,5.5 111.7,2.0 115.9,2.4 120.0,37.2 120,40" fill="url(#g_KGS)"/>
-  <polyline points="0.0,35.3 4.1,32.1 8.3,35.0 12.4,38.0 16.6,36.3 20.7,37.9 24.8,36.2 29.0,32.2 33.1,30.4 37.2,28.6 41.4,25.6 45.5,24.5 49.7,26.1 53.8,24.0 57.9,19.7 62.1,18.9 66.2,21.4 70.3,17.7 74.5,14.9 78.6,10.7 82.8,7.1 86.9,11.2 91.0,12.2 95.2,10.0 99.3,5.9 103.4,6.4 107.6,5.5 111.7,2.0 115.9,2.4 120.0,37.2" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div>
-          <div class="sym">QBTS</div>
-          <div class="company">⚛ D-Wave Quantum</div>
-          <div class="sector-tag" style="color:#a855f7">Quantum</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$22.88</div>
-          <div class="chg pos">+0.53% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_QBTS" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,4.9 4.1,9.5 8.3,5.4 12.4,2.0 16.6,4.0 20.7,4.8 24.8,6.5 29.0,9.5 33.1,11.1 37.2,11.1 41.4,8.4 45.5,12.9 49.7,8.9 53.8,11.2 57.9,15.4 62.1,20.5 66.2,25.8 70.3,27.2 74.5,29.6 78.6,34.0 82.8,35.9 86.9,33.6 91.0,33.4 95.2,30.1 99.3,34.5 103.4,36.3 107.6,34.8 111.7,38.0 115.9,36.2 120.0,14.7 120,40" fill="url(#g_QBTS)"/>
-  <polyline points="0.0,4.9 4.1,9.5 8.3,5.4 12.4,2.0 16.6,4.0 20.7,4.8 24.8,6.5 29.0,9.5 33.1,11.1 37.2,11.1 41.4,8.4 45.5,12.9 49.7,8.9 53.8,11.2 57.9,15.4 62.1,20.5 66.2,25.8 70.3,27.2 74.5,29.6 78.6,34.0 82.8,35.9 86.9,33.6 91.0,33.4 95.2,30.1 99.3,34.5 103.4,36.3 107.6,34.8 111.7,38.0 115.9,36.2 120.0,14.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div>
-          <div class="sym">IONQ</div>
-          <div class="company">⚛ IonQ</div>
-          <div class="sector-tag" style="color:#a855f7">Quantum</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$49.31</div>
-          <div class="chg" style="color:#64748b">— today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_IONQ" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,2.1 4.1,4.8 8.3,6.2 12.4,2.0 16.6,6.3 20.7,4.3 24.8,7.8 29.0,12.1 33.1,12.8 37.2,15.1 41.4,14.2 45.5,17.8 49.7,17.5 53.8,19.1 57.9,18.4 62.1,19.7 66.2,21.9 70.3,21.1 74.5,23.6 78.6,28.0 82.8,28.5 86.9,28.7 91.0,30.7 95.2,29.9 99.3,28.2 103.4,30.1 107.6,33.5 111.7,35.4 115.9,38.0 120.0,10.1 120,40" fill="url(#g_IONQ)"/>
-  <polyline points="0.0,2.1 4.1,4.8 8.3,6.2 12.4,2.0 16.6,6.3 20.7,4.3 24.8,7.8 29.0,12.1 33.1,12.8 37.2,15.1 41.4,14.2 45.5,17.8 49.7,17.5 53.8,19.1 57.9,18.4 62.1,19.7 66.2,21.9 70.3,21.1 74.5,23.6 78.6,28.0 82.8,28.5 86.9,28.7 91.0,30.7 95.2,29.9 99.3,28.2 103.4,30.1 107.6,33.5 111.7,35.4 115.9,38.0 120.0,10.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div>
-          <div class="sym">QUBT</div>
-          <div class="company">⚛ Quantum Computing</div>
-          <div class="sector-tag" style="color:#a855f7">Quantum</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$9.26</div>
-          <div class="chg pos">+0.82% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_QUBT" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,18.2 4.1,18.1 8.3,27.7 12.4,25.4 16.6,24.4 20.7,22.1 24.8,22.0 29.0,20.3 33.1,16.1 37.2,20.7 41.4,17.0 45.5,13.4 49.7,6.2 53.8,3.7 57.9,2.0 62.1,7.9 66.2,5.2 70.3,7.9 74.5,10.8 78.6,20.5 82.8,30.0 86.9,38.0 91.0,37.2 95.2,36.5 99.3,37.5 103.4,29.8 107.6,35.7 111.7,35.5 115.9,28.9 120.0,30.5 120,40" fill="url(#g_QUBT)"/>
-  <polyline points="0.0,18.2 4.1,18.1 8.3,27.7 12.4,25.4 16.6,24.4 20.7,22.1 24.8,22.0 29.0,20.3 33.1,16.1 37.2,20.7 41.4,17.0 45.5,13.4 49.7,6.2 53.8,3.7 57.9,2.0 62.1,7.9 66.2,5.2 70.3,7.9 74.5,10.8 78.6,20.5 82.8,30.0 86.9,38.0 91.0,37.2 95.2,36.5 99.3,37.5 103.4,29.8 107.6,35.7 111.7,35.5 115.9,28.9 120.0,30.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div>
-          <div class="sym">SNDK</div>
-          <div class="company">💾 SanDisk</div>
-          <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$1,993.79</div>
-          <div class="chg neg">-4.64% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_SNDK" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,2.0 4.1,4.9 8.3,4.8 12.4,5.3 16.6,8.0 20.7,12.8 24.8,11.9 29.0,10.8 33.1,14.9 37.2,17.8 41.4,14.6 45.5,17.3 49.7,20.3 53.8,23.0 57.9,24.1 62.1,24.9 66.2,27.4 70.3,31.5 74.5,28.6 78.6,33.0 82.8,38.0 86.9,34.5 91.0,37.8 95.2,35.4 99.3,31.6 103.4,32.9 107.6,31.5 111.7,33.1 115.9,36.1 120.0,7.1 120,40" fill="url(#g_SNDK)"/>
-  <polyline points="0.0,2.0 4.1,4.9 8.3,4.8 12.4,5.3 16.6,8.0 20.7,12.8 24.8,11.9 29.0,10.8 33.1,14.9 37.2,17.8 41.4,14.6 45.5,17.3 49.7,20.3 53.8,23.0 57.9,24.1 62.1,24.9 66.2,27.4 70.3,31.5 74.5,28.6 78.6,33.0 82.8,38.0 86.9,34.5 91.0,37.8 95.2,35.4 99.3,31.6 103.4,32.9 107.6,31.5 111.7,33.1 115.9,36.1 120.0,7.1" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div>
-          <div class="sym">MU</div>
-          <div class="company">💾 Micron Technology</div>
-          <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$1,132.33</div>
-          <div class="chg" style="color:#64748b">— today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_MU" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,5.2 4.1,6.9 8.3,8.0 12.4,6.8 16.6,11.7 20.7,8.3 24.8,7.2 29.0,8.5 33.1,2.0 37.2,3.9 41.4,5.3 45.5,6.5 49.7,13.0 53.8,18.2 57.9,15.1 62.1,19.4 66.2,15.9 70.3,15.8 74.5,13.6 78.6,15.5 82.8,17.6 86.9,17.8 91.0,19.5 95.2,22.6 99.3,17.7 103.4,22.8 107.6,29.4 111.7,35.9 115.9,38.0 120.0,10.7 120,40" fill="url(#g_MU)"/>
-  <polyline points="0.0,5.2 4.1,6.9 8.3,8.0 12.4,6.8 16.6,11.7 20.7,8.3 24.8,7.2 29.0,8.5 33.1,2.0 37.2,3.9 41.4,5.3 45.5,6.5 49.7,13.0 53.8,18.2 57.9,15.1 62.1,19.4 66.2,15.9 70.3,15.8 74.5,13.6 78.6,15.5 82.8,17.6 86.9,17.8 91.0,19.5 95.2,22.6 99.3,17.7 103.4,22.8 107.6,29.4 111.7,35.9 115.9,38.0 120.0,10.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div>
-          <div class="sym">WDC</div>
-          <div class="company">💾 Western Digital</div>
-          <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$586.45</div>
-          <div class="chg neg">-13.17% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_WDC" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,2.0 4.1,4.9 8.3,10.9 12.4,6.9 16.6,10.4 20.7,16.8 24.8,10.9 29.0,4.4 33.1,6.7 37.2,16.2 41.4,15.1 45.5,18.6 49.7,16.4 53.8,19.1 57.9,17.1 62.1,9.9 66.2,4.2 70.3,8.1 74.5,16.0 78.6,19.0 82.8,25.3 86.9,34.4 91.0,35.3 95.2,38.0 99.3,37.6 103.4,30.9 107.6,29.1 111.7,22.8 115.9,28.6 120.0,16.1 120,40" fill="url(#g_WDC)"/>
-  <polyline points="0.0,2.0 4.1,4.9 8.3,10.9 12.4,6.9 16.6,10.4 20.7,16.8 24.8,10.9 29.0,4.4 33.1,6.7 37.2,16.2 41.4,15.1 45.5,18.6 49.7,16.4 53.8,19.1 57.9,17.1 62.1,9.9 66.2,4.2 70.3,8.1 74.5,16.0 78.6,19.0 82.8,25.3 86.9,34.4 91.0,35.3 95.2,38.0 99.3,37.6 103.4,30.9 107.6,29.1 111.7,22.8 115.9,28.6 120.0,16.1" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-stop">⚠ SHARP DROP</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div>
-          <div class="sym">MRVL</div>
-          <div class="company">💾 Marvell Technology</div>
-          <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$266.77</div>
-          <div class="chg neg">-5.15% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_MRVL" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,11.4 4.1,5.9 8.3,13.0 12.4,5.3 16.6,4.2 20.7,2.0 24.8,9.0 29.0,6.0 33.1,5.0 37.2,8.2 41.4,15.3 45.5,13.1 49.7,22.1 53.8,14.6 57.9,22.4 62.1,16.7 66.2,25.7 70.3,31.5 74.5,32.7 78.6,26.5 82.8,29.9 86.9,33.5 91.0,27.1 95.2,23.2 99.3,27.0 103.4,25.9 107.6,33.9 111.7,38.0 115.9,36.6 120.0,19.8 120,40" fill="url(#g_MRVL)"/>
-  <polyline points="0.0,11.4 4.1,5.9 8.3,13.0 12.4,5.3 16.6,4.2 20.7,2.0 24.8,9.0 29.0,6.0 33.1,5.0 37.2,8.2 41.4,15.3 45.5,13.1 49.7,22.1 53.8,14.6 57.9,22.4 62.1,16.7 66.2,25.7 70.3,31.5 74.5,32.7 78.6,26.5 82.8,29.9 86.9,33.5 91.0,27.1 95.2,23.2 99.3,27.0 103.4,25.9 107.6,33.9 111.7,38.0 115.9,36.6 120.0,19.8" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div>
-          <div class="sym">ALMU</div>
-          <div class="company">💾 Aeluma Inc</div>
-          <div class="sector-tag" style="color:#3b82f6">Semiconductors</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$19.93</div>
-          <div class="chg neg">-0.47% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_ALMU" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,25.9 4.1,31.0 8.3,26.3 12.4,32.4 16.6,27.5 20.7,28.4 24.8,33.0 29.0,29.3 33.1,32.1 37.2,38.0 41.4,35.2 45.5,31.1 49.7,31.6 53.8,34.8 57.9,30.4 62.1,25.9 66.2,22.7 70.3,18.8 74.5,13.7 78.6,10.5 82.8,7.4 86.9,5.7 91.0,3.9 95.2,9.8 99.3,5.0 103.4,9.0 107.6,5.4 111.7,4.2 115.9,2.0 120.0,31.6 120,40" fill="url(#g_ALMU)"/>
-  <polyline points="0.0,25.9 4.1,31.0 8.3,26.3 12.4,32.4 16.6,27.5 20.7,28.4 24.8,33.0 29.0,29.3 33.1,32.1 37.2,38.0 41.4,35.2 45.5,31.1 49.7,31.6 53.8,34.8 57.9,30.4 62.1,25.9 66.2,22.7 70.3,18.8 74.5,13.7 78.6,10.5 82.8,7.4 86.9,5.7 91.0,3.9 95.2,9.8 99.3,5.0 103.4,9.0 107.6,5.4 111.7,4.2 115.9,2.0 120.0,31.6" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div>
-          <div class="sym">IPGP</div>
-          <div class="company">🔬 IPG Photonics</div>
-          <div class="sector-tag" style="color:#06b6d4">Photonics</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$101.50</div>
-          <div class="chg neg">-5.31% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_IPGP" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,3.3 4.1,2.0 8.3,6.5 12.4,9.5 16.6,15.3 20.7,10.1 24.8,7.0 29.0,9.0 33.1,12.7 37.2,8.7 41.4,15.6 45.5,14.1 49.7,21.6 53.8,20.3 57.9,18.3 62.1,10.5 66.2,17.6 70.3,22.7 74.5,22.3 78.6,29.5 82.8,38.0 86.9,35.1 91.0,29.4 95.2,31.0 99.3,27.8 103.4,33.8 107.6,31.4 111.7,35.3 115.9,37.0 120.0,5.4 120,40" fill="url(#g_IPGP)"/>
-  <polyline points="0.0,3.3 4.1,2.0 8.3,6.5 12.4,9.5 16.6,15.3 20.7,10.1 24.8,7.0 29.0,9.0 33.1,12.7 37.2,8.7 41.4,15.6 45.5,14.1 49.7,21.6 53.8,20.3 57.9,18.3 62.1,10.5 66.2,17.6 70.3,22.7 74.5,22.3 78.6,29.5 82.8,38.0 86.9,35.1 91.0,29.4 95.2,31.0 99.3,27.8 103.4,33.8 107.6,31.4 111.7,35.3 115.9,37.0 120.0,5.4" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div>
-          <div class="sym">POET</div>
-          <div class="company">🔬 POET Technologies</div>
-          <div class="sector-tag" style="color:#06b6d4">Photonics</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$10.61</div>
-          <div class="chg" style="color:#64748b">— today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_POET" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,30.3 4.1,32.0 8.3,26.6 12.4,33.1 16.6,38.0 20.7,27.3 24.8,21.2 29.0,29.2 33.1,27.7 37.2,17.1 41.4,9.9 45.5,15.1 49.7,23.9 53.8,25.5 57.9,14.7 62.1,14.9 66.2,8.5 70.3,2.0 74.5,9.9 78.6,11.5 82.8,16.2 86.9,19.8 91.0,30.1 95.2,21.1 99.3,32.4 103.4,26.1 107.6,20.8 111.7,20.7 115.9,12.9 120.0,33.1 120,40" fill="url(#g_POET)"/>
-  <polyline points="0.0,30.3 4.1,32.0 8.3,26.6 12.4,33.1 16.6,38.0 20.7,27.3 24.8,21.2 29.0,29.2 33.1,27.7 37.2,17.1 41.4,9.9 45.5,15.1 49.7,23.9 53.8,25.5 57.9,14.7 62.1,14.9 66.2,8.5 70.3,2.0 74.5,9.9 78.6,11.5 82.8,16.2 86.9,19.8 91.0,30.1 95.2,21.1 99.3,32.4 103.4,26.1 107.6,20.8 111.7,20.7 115.9,12.9 120.0,33.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#ef4444">
-      <div class="card-header">
-        <div>
-          <div class="sym">TSLA</div>
-          <div class="company">🚗 Tesla</div>
-          <div class="sector-tag" style="color:#ef4444">EV</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$391.21</div>
-          <div class="chg pos">+3.03% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_TSLA" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,30.8 4.1,30.2 8.3,31.8 12.4,25.1 16.6,28.4 20.7,31.7 24.8,25.0 29.0,32.4 33.1,26.9 37.2,34.3 41.4,35.5 45.5,26.5 49.7,30.4 53.8,24.1 57.9,30.3 62.1,38.0 66.2,35.7 70.3,32.7 74.5,24.6 78.6,20.3 82.8,17.2 86.9,9.2 91.0,10.1 95.2,2.0 99.3,6.9 103.4,5.6 107.6,10.9 111.7,2.5 115.9,11.1 120.0,34.6 120,40" fill="url(#g_TSLA)"/>
-  <polyline points="0.0,30.8 4.1,30.2 8.3,31.8 12.4,25.1 16.6,28.4 20.7,31.7 24.8,25.0 29.0,32.4 33.1,26.9 37.2,34.3 41.4,35.5 45.5,26.5 49.7,30.4 53.8,24.1 57.9,30.3 62.1,38.0 66.2,35.7 70.3,32.7 74.5,24.6 78.6,20.3 82.8,17.2 86.9,9.2 91.0,10.1 95.2,2.0 99.3,6.9 103.4,5.6 107.6,10.9 111.7,2.5 115.9,11.1 120.0,34.6" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
-    <div class="card" style="--accent:#64748b">
-      <div class="card-header">
-        <div>
-          <div class="sym">AAPL</div>
-          <div class="company">🍎 Apple</div>
-          <div class="sector-tag" style="color:#64748b">Consumer Tech</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$283.78</div>
-          <div class="chg" style="color:#64748b">— today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_AAPL" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,38.0 4.1,33.4 8.3,30.0 12.4,30.4 16.6,29.1 20.7,21.3 24.8,17.9 29.0,19.6 33.1,26.8 37.2,23.9 41.4,18.6 45.5,12.7 49.7,15.4 53.8,14.8 57.9,10.1 62.1,16.5 66.2,16.3 70.3,10.2 74.5,2.0 78.6,2.3 82.8,4.0 86.9,8.4 91.0,8.4 95.2,14.4 99.3,19.1 103.4,16.6 107.6,25.0 111.7,30.1 115.9,22.9 120.0,37.0 120,40" fill="url(#g_AAPL)"/>
-  <polyline points="0.0,38.0 4.1,33.4 8.3,30.0 12.4,30.4 16.6,29.1 20.7,21.3 24.8,17.9 29.0,19.6 33.1,26.8 37.2,23.9 41.4,18.6 45.5,12.7 49.7,15.4 53.8,14.8 57.9,10.1 62.1,16.5 66.2,16.3 70.3,10.2 74.5,2.0 78.6,2.3 82.8,4.0 86.9,8.4 91.0,8.4 95.2,14.4 99.3,19.1 103.4,16.6 107.6,25.0 111.7,30.1 115.9,22.9 120.0,37.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#ec4899">
-      <div class="card-header">
-        <div>
-          <div class="sym">NFLX</div>
-          <div class="company">🎬 Netflix</div>
-          <div class="sector-tag" style="color:#ec4899">Streaming</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$73.81</div>
-          <div class="chg" style="color:#64748b">— today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_NFLX" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,36.9 4.1,29.5 8.3,21.0 12.4,16.0 16.6,11.4 20.7,19.3 24.8,11.2 29.0,14.6 33.1,18.7 37.2,21.1 41.4,14.4 45.5,12.9 49.7,13.6 53.8,17.2 57.9,11.7 62.1,19.0 66.2,19.5 70.3,23.4 74.5,16.2 78.6,17.8 82.8,9.8 86.9,4.9 91.0,7.7 95.2,8.9 99.3,2.0 103.4,8.8 107.6,10.3 111.7,12.5 115.9,15.4 120.0,38.0 120,40" fill="url(#g_NFLX)"/>
-  <polyline points="0.0,36.9 4.1,29.5 8.3,21.0 12.4,16.0 16.6,11.4 20.7,19.3 24.8,11.2 29.0,14.6 33.1,18.7 37.2,21.1 41.4,14.4 45.5,12.9 49.7,13.6 53.8,17.2 57.9,11.7 62.1,19.0 66.2,19.5 70.3,23.4 74.5,16.2 78.6,17.8 82.8,9.8 86.9,4.9 91.0,7.7 95.2,8.9 99.3,2.0 103.4,8.8 107.6,10.3 111.7,12.5 115.9,15.4 120.0,38.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-watch">◎ WATCHING</span></div>
-    </div>
-    <div class="card" style="--accent:#f59e0b">
-      <div class="card-header">
-        <div>
-          <div class="sym">CAT</div>
-          <div class="company">🏗 Caterpillar</div>
-          <div class="sector-tag" style="color:#f59e0b">Industrial</div>
-        </div>
-        <div class="right-col">
-          <div class="price">$1,000.72</div>
-          <div class="chg pos">+0.33% today</div>
-        </div>
-      </div>
-      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="display:block">
-  <defs>
-    <linearGradient id="g_CAT" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/>
-    </linearGradient>
-  </defs>
-  <polygon points="0,40 0.0,4.6 4.1,2.0 8.3,7.6 12.4,11.9 16.6,15.2 20.7,9.7 24.8,10.1 29.0,16.5 33.1,22.2 37.2,26.6 41.4,31.3 45.5,26.1 49.7,22.7 53.8,24.7 57.9,20.0 62.1,21.1 66.2,26.7 70.3,33.1 74.5,35.2 78.6,33.2 82.8,37.1 86.9,33.9 91.0,30.0 95.2,25.6 99.3,20.3 103.4,26.0 107.6,25.9 111.7,32.2 115.9,38.0 120.0,5.2 120,40" fill="url(#g_CAT)"/>
-  <polyline points="0.0,4.6 4.1,2.0 8.3,7.6 12.4,11.9 16.6,15.2 20.7,9.7 24.8,10.1 29.0,16.5 33.1,22.2 37.2,26.6 41.4,31.3 45.5,26.1 49.7,22.7 53.8,24.7 57.9,20.0 62.1,21.1 66.2,26.7 70.3,33.1 74.5,35.2 78.6,33.2 82.8,37.1 86.9,33.9 91.0,30.0 95.2,25.6 99.3,20.3 103.4,26.0 107.6,25.9 111.7,32.2 115.9,38.0 120.0,5.2" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></div>
-      <div class="card-footer"><span class="badge badge-profit">↑ IN PROFIT</span></div>
-    </div>
+<div class="card" style="--a:#f7931a">
+<div class="ch"><div><div class="sym">STRC</div><div class="co">₿ Strategy Inc</div><div class="sec" style="color:#f7931a">Crypto Treasury</div></div>
+<div class="rc"><div class="price">$78.80</div><div class="chg pos">+5.67% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-trail">⟁ TRAILING STOP</span></div></div>
+<div class="card" style="--a:#f7931a">
+<div class="ch"><div><div class="sym">MSTR</div><div class="co">₿ MicroStrategy</div><div class="sec" style="color:#f7931a">Crypto Treasury</div></div>
+<div class="rc"><div class="price">$85.86</div><div class="chg pos">+4.31% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#22c55e">
+<div class="ch"><div><div class="sym">GEV</div><div class="co">⚡ GE Vernova</div><div class="sec" style="color:#22c55e">Energy</div></div>
+<div class="rc"><div class="price">$1,087.57</div><div class="chg pos">+4.06% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#22c55e">
+<div class="ch"><div><div class="sym">BE</div><div class="co">⚡ Bloom Energy</div><div class="sec" style="color:#22c55e">Energy</div></div>
+<div class="rc"><div class="price">$267.40</div><div class="chg pos">+6.10% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-trail">⟁ TRAILING STOP</span></div></div>
+<div class="card" style="--a:#22c55e">
+<div class="ch"><div><div class="sym">KGS</div><div class="co">⚡ Kodiak Gas</div><div class="sec" style="color:#22c55e">Energy</div></div>
+<div class="rc"><div class="price">$73.66</div><div class="chg neg">-3.42% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#a855f7">
+<div class="ch"><div><div class="sym">QBTS</div><div class="co">⚛ D-Wave Quantum</div><div class="sec" style="color:#a855f7">Quantum</div></div>
+<div class="rc"><div class="price">$22.99</div><div class="chg pos">+1.01% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#a855f7">
+<div class="ch"><div><div class="sym">IONQ</div><div class="co">⚛ IonQ</div><div class="sec" style="color:#a855f7">Quantum</div></div>
+<div class="rc"><div class="price">$51.59</div><div class="chg pos">+4.62% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#a855f7">
+<div class="ch"><div><div class="sym">QUBT</div><div class="co">⚛ Quantum Computing</div><div class="sec" style="color:#a855f7">Quantum</div></div>
+<div class="rc"><div class="price">$9.37</div><div class="chg pos">+2.07% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#3b82f6">
+<div class="ch"><div><div class="sym">SNDK</div><div class="co">💾 SanDisk</div><div class="sec" style="color:#3b82f6">Semiconductors</div></div>
+<div class="rc"><div class="price">$1,936.70</div><div class="chg neg">-7.37% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-stop">⚠ SHARP DROP</span></div></div>
+<div class="card" style="--a:#3b82f6">
+<div class="ch"><div><div class="sym">MU</div><div class="co">💾 Micron Technology</div><div class="sec" style="color:#3b82f6">Semiconductors</div></div>
+<div class="rc"><div class="price">$1,069.00</div><div class="chg neg">-5.59% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#3b82f6">
+<div class="ch"><div><div class="sym">WDC</div><div class="co">💾 Western Digital</div><div class="sec" style="color:#3b82f6">Semiconductors</div></div>
+<div class="rc"><div class="price">$620.68</div><div class="chg pos">+5.84% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-trail">⟁ TRAILING STOP</span></div></div>
+<div class="card" style="--a:#3b82f6">
+<div class="ch"><div><div class="sym">MRVL</div><div class="co">💾 Marvell Technology</div><div class="sec" style="color:#3b82f6">Semiconductors</div></div>
+<div class="rc"><div class="price">$261.45</div><div class="chg neg">-1.99% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#3b82f6">
+<div class="ch"><div><div class="sym">ALMU</div><div class="co">💾 Aeluma Inc</div><div class="sec" style="color:#3b82f6">Semiconductors</div></div>
+<div class="rc"><div class="price">$20.69</div><div class="chg pos">+3.35% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#06b6d4">
+<div class="ch"><div><div class="sym">IPGP</div><div class="co">🔬 IPG Photonics</div><div class="sec" style="color:#06b6d4">Photonics</div></div>
+<div class="rc"><div class="price">$103.18</div><div class="chg neg">-3.75% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#06b6d4">
+<div class="ch"><div><div class="sym">POET</div><div class="co">🔬 POET Technologies</div><div class="sec" style="color:#06b6d4">Photonics</div></div>
+<div class="rc"><div class="price">$9.02</div><div class="chg neg">-4.40% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#ef4444">
+<div class="ch"><div><div class="sym">TSLA</div><div class="co">🚗 Tesla</div><div class="sec" style="color:#ef4444">EV</div></div>
+<div class="rc"><div class="price">$397.32</div><div class="chg pos">+4.64% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#64748b">
+<div class="ch"><div><div class="sym">AAPL</div><div class="co">🍎 Apple</div><div class="sec" style="color:#64748b">Consumer Tech</div></div>
+<div class="rc"><div class="price">$281.85</div><div class="chg neg">-0.68% today</div></div></div>
+<div class="spk" style="color:#ef4444;font-size:1.8rem;text-align:center;padding:6px 0">▼</div>
+<div class="cf"><span class="badge b-watch">◎ WATCHING</span></div></div>
+<div class="card" style="--a:#ec4899">
+<div class="ch"><div><div class="sym">NFLX</div><div class="co">🎬 Netflix</div><div class="sec" style="color:#ec4899">Streaming</div></div>
+<div class="rc"><div class="price">$75.61</div><div class="chg pos">+2.43% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
+<div class="card" style="--a:#f59e0b">
+<div class="ch"><div><div class="sym">CAT</div><div class="co">🏗 Caterpillar</div><div class="sec" style="color:#f59e0b">Industrial</div></div>
+<div class="rc"><div class="price">$1,008.00</div><div class="chg pos">+1.06% today</div></div></div>
+<div class="spk" style="color:#22c55e;font-size:1.8rem;text-align:center;padding:6px 0">▲</div>
+<div class="cf"><span class="badge b-profit">↑ IN PROFIT</span></div></div>
 </div>
-<div class="footer">DCA Portfolio · raynard29 · Prices from Yahoo Finance · Refreshes every 60 min · 2026-06-29 14:12 UTC</div>
-</body>
-</html>
+<div class="foot">DCA Portfolio · raynard29 · Yahoo Finance · Refreshes every 60 min · 2026-06-29 15:03 UTC</div>
+</body></html>
