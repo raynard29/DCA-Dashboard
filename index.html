@@ -1,511 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="3600">
-  <title>DCA Portfolio Dashboard</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0a0d14;
-      --card: #111520;
-      --border: #1e2535;
-      --text: #e2e8f0;
-      --muted: #64748b;
-      --warn: #f59e0b;
-      --error: #ef4444;
-      --success: #22c55e;
-    }
-    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
-    header { background: #0d1117; border-bottom: 1px solid var(--border); padding: 20px 24px; }
-    .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-    h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em; color: #f1f5f9; }
-    .timestamp { font-size: 0.75rem; color: var(--muted); }
-    .banner {
-      background: linear-gradient(135deg, #1a0a0a 0%, #1c1008 100%);
-      border: 1px solid #7c2d12;
-      border-left: 4px solid var(--error);
-      border-radius: 8px;
-      margin: 20px 24px;
-      padding: 16px 20px;
-      display: flex; align-items: flex-start; gap: 14px;
-    }
-    .banner-icon { font-size: 1.5rem; flex-shrink: 0; }
-    .banner-title { font-size: 1rem; font-weight: 700; color: var(--error); margin-bottom: 6px; }
-    .banner-body { font-size: 0.85rem; color: #fca5a5; line-height: 1.6; }
-    .banner-body code { background: #2d1010; border: 1px solid #7c2d12; border-radius: 4px; padding: 1px 5px; font-family: monospace; font-size: 0.8rem; }
-    .stats { display: flex; gap: 12px; padding: 0 24px 20px; flex-wrap: wrap; }
-    .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; flex: 1; min-width: 150px; }
-    .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
-    .stat-val { font-size: 1.3rem; font-weight: 700; color: var(--muted); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; padding: 0 24px 40px; }
-    @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 12px 40px; } .stats { padding: 0 12px 16px; } header { padding: 14px; } .banner { margin: 12px; } }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; opacity: 0.7; }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-    .sym { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.04em; color: #f1f5f9; margin-right: 6px; }
-    .badge-unavailable { font-size: 0.58rem; background: #1f1209; color: var(--warn); border: 1px solid #78350f; border-radius: 3px; padding: 1px 5px; text-transform: uppercase; font-weight: 700; vertical-align: middle; }
-    .sector-icon { font-size: 1.1rem; }
-    .company-name { font-size: 0.72rem; color: var(--muted); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sector-tag { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-    .sparkline-placeholder { border-radius: 6px; background: #0d111c; border: 1px solid var(--border); margin-bottom: 10px; overflow: hidden; }
-    .position-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; font-size: 0.68rem; }
-    .label { color: var(--muted); }
-    .val { color: #475569; font-weight: 600; }
-    footer { text-align: center; padding: 20px; font-size: 0.72rem; color: #334155; border-top: 1px solid var(--border); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="3600">
+<title>DCA Portfolio Dashboard</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --card: #111520;
+    --card2: #161b2e;
+    --border: #1e2540;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --purple: #a855f7;
+    --blue: #3b82f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0f1629 0%, #111520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 24px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-title h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .header-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stat-value { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+  .stat-value.green { color: var(--green); }
+  .stat-value.red { color: var(--red); }
+  /* Timestamp bar */
+  .timestamp-bar {
+    max-width: 1400px;
+    margin: 12px auto 0;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  /* Loading */
+  #loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+  }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { color: var(--muted); font-size: 0.9rem; }
+  /* Error */
+  #error {
+    display: none;
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid #ef444440;
+    border-radius: 12px;
+    text-align: center;
+  }
+  #error h2 { color: var(--red); margin-bottom: 12px; }
+  #error p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  /* Grid */
+  .grid-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    display: none;
+  }
+  .sector-group { margin-bottom: 32px; }
+  .sector-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sector-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  /* Card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover { border-color: #2e3a5e; transform: translateY(-2px); }
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+  }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .card-left {}
+  .symbol { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: #fff; line-height: 1; }
+  .company-name { font-size: 0.72rem; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+  .sector-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 100px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .current-price { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.03em; color: #fff; }
+  .ytd-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 100px;
+  }
+  .ytd-badge.pos { background: #22c55e20; color: var(--green); border: 1px solid #22c55e40; }
+  .ytd-badge.neg { background: #ef444420; color: var(--red); border: 1px solid #ef444440; }
+  .ytd-badge.flat { background: #64748b20; color: var(--muted); border: 1px solid #64748b40; }
+  /* Sparkline */
+  .sparkline-wrap {
+    margin: 10px -2px;
+    height: 52px;
+    position: relative;
+  }
+  .sparkline-wrap svg { width: 100%; height: 100%; }
+  /* Position row */
+  .position-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 6px 4px;
+    margin-bottom: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .pos-item { display: flex; flex-direction: column; }
+  .pos-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .pos-val { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-top: 2px; }
+  .pos-val.stop { color: var(--red); }
+  /* Status badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-top: 4px;
+  }
+  .status-badge.trailing { background: #a855f720; color: #a855f7; border: 1px solid #a855f740; }
+  .status-badge.near-stop { background: #ef444420; color: var(--red); border: 1px solid #ef444440; }
+  .status-badge.in-profit { background: #22c55e20; color: var(--green); border: 1px solid #22c55e40; }
+  .status-badge.watching { background: #3b82f620; color: var(--blue); border: 1px solid #3b82f640; }
+  /* No-position card */
+  .no-position { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 12px 0; }
+  /* Summary bar */
+  .summary-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px 20px 4px;
+    display: none;
+  }
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sum-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .sum-card .label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .sum-card .value { font-size: 1.05rem; font-weight: 700; }
+  .sum-card .value.green { color: var(--green); }
+  .sum-card .value.red { color: var(--red); }
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header-stats { gap: 14px; }
+    .stat-value { font-size: 0.9rem; }
+    .cards-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .card { padding: 13px; }
+    .symbol { font-size: 1.1rem; }
+    .current-price { font-size: 1.2rem; }
+    .position-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 380px) {
+    .cards-row { grid-template-columns: 1fr; }
+  }
+  /* Refresh btn */
+  .refresh-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .refresh-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+</style>
 </head>
 <body>
-  <header>
-    <div class="header-top">
-      <h1>📊 DCA Portfolio Dashboard</h1>
-      <span class="timestamp">Last attempted: 2026-07-09 16:05 UTC</span>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">
+      <div class="dot"></div>
+      <h1>DCA Portfolio</h1>
     </div>
-  </header>
-
-  <div class="banner">
-    <div class="banner-icon">🚫</div>
-    <div>
-      <div class="banner-title">Alpaca API Unreachable — Network Policy Restriction</div>
-      <div class="banner-body">
-        The scheduled routine could not fetch live data because the egress proxy blocked outbound HTTPS to
-        <code>paper-api.alpaca.markets</code> and <code>data.alpaca.markets</code> with a <strong>403 Forbidden</strong>
-        response.<br><br>
-        <strong>To fix:</strong> Ask your administrator or Anthropic support to add these two hosts to the
-        allowed-egress allowlist for this Claude Code on the Web environment.  Once unblocked, the next
-        scheduled run will fetch live positions, prices, and YTD bars and publish a fully live dashboard.
+    <div class="header-stats" id="header-stats">
+      <div class="stat">
+        <span class="stat-label">Portfolio Value</span>
+        <span class="stat-value" id="hdr-portfolio">—</span>
       </div>
+      <div class="stat">
+        <span class="stat-label">Cash</span>
+        <span class="stat-value" id="hdr-cash">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Invested</span>
+        <span class="stat-value" id="hdr-invested">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Unrealized P&amp;L</span>
+        <span class="stat-value" id="hdr-pnl">—</span>
+      </div>
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
     </div>
   </div>
+</div>
 
-  <div class="stats">
-    <div class="stat-box"><div class="stat-label">Portfolio Value</div><div class="stat-val">—</div></div>
-    <div class="stat-box"><div class="stat-label">Cash</div><div class="stat-val">—</div></div>
-    <div class="stat-box"><div class="stat-label">Invested</div><div class="stat-val">—</div></div>
-    <div class="stat-box"><div class="stat-label">Unrealized P&amp;L</div><div class="stat-val">—</div></div>
-  </div>
+<div class="timestamp-bar">
+  <span id="timestamp-text">Loading...</span>
+</div>
 
-  <div class="grid">
+<div id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">Fetching live portfolio data...</div>
+</div>
 
-      <div class="card" style="border-top: 3px solid #f7931a;">
-        <div class="card-header">
-          <div>
-            <span class="sym">STRC</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Crypto Treasury">₿</span>
-        </div>
-        <div class="company-name">Strategy Inc</div>
-        <div class="sector-tag" style="color:#f7931a;">Crypto Treasury</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
+<div id="error">
+  <h2>⚠ Unable to Load Data</h2>
+  <p id="error-msg">Could not connect to Alpaca. Check your network connection and API credentials.</p>
+</div>
+
+<div class="summary-section" id="summary-section">
+  <div class="summary-cards" id="summary-cards"></div>
+</div>
+
+<div class="grid-container" id="grid"></div>
+
+<script>
+const ALPACA_KEY    = "PKVSKGUO3BBBBYYOX2TL5L7RPC";
+const ALPACA_SECRET = "7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X";
+const ALPACA_BASE   = "https://paper-api.alpaca.markets/v2";
+const ALPACA_DATA   = "https://data.alpaca.markets";
+
+const STOCKS = [
+  {symbol:"STRC",name:"Strategy Inc",sector:"Crypto Treasury",color:"#f7931a",icon:"₿"},
+  {symbol:"MSTR",name:"MicroStrategy",sector:"Crypto Treasury",color:"#f7931a",icon:"₿"},
+  {symbol:"GEV",name:"GE Vernova",sector:"Energy",color:"#22c55e",icon:"⚡"},
+  {symbol:"BE",name:"Bloom Energy",sector:"Energy",color:"#22c55e",icon:"⚡"},
+  {symbol:"KGS",name:"Kodiak Gas",sector:"Energy",color:"#22c55e",icon:"⚡"},
+  {symbol:"QBTS",name:"D-Wave Quantum",sector:"Quantum",color:"#a855f7",icon:"⚛"},
+  {symbol:"IONQ",name:"IonQ",sector:"Quantum",color:"#a855f7",icon:"⚛"},
+  {symbol:"QUBT",name:"Quantum Computing",sector:"Quantum",color:"#a855f7",icon:"⚛"},
+  {symbol:"SNDK",name:"SanDisk",sector:"Semiconductors",color:"#3b82f6",icon:"💾"},
+  {symbol:"MU",name:"Micron Technology",sector:"Semiconductors",color:"#3b82f6",icon:"💾"},
+  {symbol:"WDC",name:"Western Digital",sector:"Semiconductors",color:"#3b82f6",icon:"💾"},
+  {symbol:"MRVL",name:"Marvell Technology",sector:"Semiconductors",color:"#3b82f6",icon:"💾"},
+  {symbol:"ALMU",name:"Aeluma Inc",sector:"Semiconductors",color:"#3b82f6",icon:"💾"},
+  {symbol:"IPGP",name:"IPG Photonics",sector:"Photonics",color:"#06b6d4",icon:"🔬"},
+  {symbol:"POET",name:"POET Technologies",sector:"Photonics",color:"#06b6d4",icon:"🔬"},
+  {symbol:"TSLA",name:"Tesla",sector:"EV",color:"#ef4444",icon:"🚗"},
+  {symbol:"AAPL",name:"Apple",sector:"Consumer Tech",color:"#64748b",icon:"🍎"},
+  {symbol:"NFLX",name:"Netflix",sector:"Streaming",color:"#ec4899",icon:"🎬"},
+  {symbol:"CAT",name:"Caterpillar",sector:"Industrial",color:"#f59e0b",icon:"🏗"},
+];
+
+const HEADERS = {
+  'APCA-API-KEY-ID': ALPACA_KEY,
+  'APCA-API-SECRET-KEY': ALPACA_SECRET,
+};
+
+function fmt$(v) {
+  if (v == null || isNaN(v)) return '—';
+  return '$' + Number(v).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function fmtPct(v) {
+  if (v == null || isNaN(v)) return '—';
+  return (v >= 0 ? '+' : '') + Number(v).toFixed(2) + '%';
+}
+function fmtShares(v) {
+  if (!v) return '—';
+  const n = Number(v);
+  return n % 1 === 0 ? n.toLocaleString() : n.toFixed(4);
+}
+
+function makeSVGSparkline(prices, color, w=260, h=48) {
+  if (!prices || prices.length < 2) return '<svg width="100%" height="'+h+'"><text x="50%" y="50%" text-anchor="middle" fill="#334" font-size="11">No data</text></svg>';
+  const mn = Math.min(...prices), mx = Math.max(...prices);
+  const range = mx - mn || 1;
+  const pad = 3;
+  const xs = prices.map((_,i) => pad + (i/(prices.length-1)) * (w - 2*pad));
+  const ys = prices.map(p => h - pad - ((p - mn) / range) * (h - 2*pad));
+  const poly = xs.map((x,i) => `${x.toFixed(1)},${ys[i].toFixed(1)}`).join(' ');
+  const area = `${xs[0].toFixed(1)},${h} ` + poly + ` ${xs[xs.length-1].toFixed(1)},${h}`;
+  const gradId = 'g' + Math.random().toString(36).slice(2,7);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="${gradId}" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polygon points="${area}" fill="url(#${gradId})"/>
+    <polyline points="${poly}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function statusBadge(plpc) {
+  const p = Number(plpc);
+  if (p >= 10) return '<span class="status-badge trailing">⬆ Trailing</span>';
+  if (p <= -8) return '<span class="status-badge near-stop">⚠ Near Stop</span>';
+  if (p > 0)  return '<span class="status-badge in-profit">✓ In Profit</span>';
+  return '<span class="status-badge watching">◉ Watching</span>';
+}
+
+function ytdBadge(ytdPct) {
+  if (ytdPct == null) return '';
+  const cls = ytdPct > 0.5 ? 'pos' : ytdPct < -0.5 ? 'neg' : 'flat';
+  return `<span class="ytd-badge ${cls}">${fmtPct(ytdPct)} YTD</span>`;
+}
+
+function buildCard(stock, position, prices) {
+  const posExists = position != null;
+  const ytdFirst = prices && prices.length > 0 ? prices[0] : null;
+  const ytdLast  = prices && prices.length > 0 ? prices[prices.length-1] : null;
+  const ytdPct   = (ytdFirst && ytdLast && ytdFirst !== 0) ? ((ytdLast - ytdFirst) / ytdFirst) * 100 : null;
+  const sparkColor = ytdPct == null ? '#64748b' : ytdPct >= 0 ? '#22c55e' : '#ef4444';
+  const curPrice = posExists ? Number(position.current_price) : ytdLast;
+  const plpc = posExists ? Number(position.unrealized_plpc) * 100 : null;
+  const avgCost = posExists ? Number(position.avg_entry_price) : null;
+  const stopPrice = avgCost ? avgCost * 0.9 : null;
+  const qty = posExists ? Number(position.qty) : null;
+
+  return `<div class="card" style="--card-color:${stock.color}">
+    <div class="card-accent" style="background:${stock.color}20; border-top:3px solid ${stock.color}60"></div>
+    <div class="card-header">
+      <div class="card-left">
+        <div class="symbol">${stock.symbol}</div>
+        <div class="company-name">${stock.name}</div>
       </div>
-
-      <div class="card" style="border-top: 3px solid #f7931a;">
-        <div class="card-header">
-          <div>
-            <span class="sym">MSTR</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Crypto Treasury">₿</span>
-        </div>
-        <div class="company-name">MicroStrategy</div>
-        <div class="sector-tag" style="color:#f7931a;">Crypto Treasury</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
+      <div class="sector-badge" style="color:${stock.color};border-color:${stock.color}60;background:${stock.color}15">
+        <span>${stock.icon}</span><span>${stock.sector}</span>
       </div>
+    </div>
+    <div class="price-row">
+      <div class="current-price">${curPrice != null ? fmt$(curPrice) : '—'}</div>
+      ${ytdBadge(ytdPct)}
+    </div>
+    <div class="sparkline-wrap">${makeSVGSparkline(prices, sparkColor)}</div>
+    ${posExists ? `
+    <div class="position-grid">
+      <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">${fmtShares(qty)}</span></div>
+      <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">${fmt$(avgCost)}</span></div>
+      <div class="pos-item"><span class="pos-label">P&L%</span><span class="pos-val" style="color:${plpc >= 0 ? '#22c55e' : '#ef4444'}">${fmtPct(plpc)}</span></div>
+      <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">${fmt$(stopPrice)}</span></div>
+    </div>
+    ${statusBadge(plpc)}
+    ` : '<div class="no-position">No position</div>'}
+  </div>`;
+}
 
-      <div class="card" style="border-top: 3px solid #22c55e;">
-        <div class="card-header">
-          <div>
-            <span class="sym">GEV</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Energy">⚡</span>
-        </div>
-        <div class="company-name">GE Vernova</div>
-        <div class="sector-tag" style="color:#22c55e;">Energy</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+async function loadData() {
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('error').style.display = 'none';
+  document.getElementById('grid').style.display = 'none';
+  document.getElementById('summary-section').style.display = 'none';
+  document.getElementById('timestamp-text').textContent = 'Loading...';
 
-      <div class="card" style="border-top: 3px solid #22c55e;">
-        <div class="card-header">
-          <div>
-            <span class="sym">BE</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Energy">⚡</span>
-        </div>
-        <div class="company-name">Bloom Energy</div>
-        <div class="sector-tag" style="color:#22c55e;">Energy</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+  try {
+    const now = new Date();
+    const ytdStart = new Date(now.getFullYear(), 0, 2).toISOString().split('T')[0] + 'T00:00:00Z';
+    const symbols = STOCKS.map(s => s.symbol).join(',');
 
-      <div class="card" style="border-top: 3px solid #22c55e;">
-        <div class="card-header">
-          <div>
-            <span class="sym">KGS</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Energy">⚡</span>
-        </div>
-        <div class="company-name">Kodiak Gas</div>
-        <div class="sector-tag" style="color:#22c55e;">Energy</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    const [accountRes, positionsRes, barsRes] = await Promise.all([
+      fetch(`${ALPACA_BASE}/account`, {headers: HEADERS}),
+      fetch(`${ALPACA_BASE}/positions`, {headers: HEADERS}),
+      fetch(`${ALPACA_DATA}/v2/stocks/bars?symbols=${symbols}&timeframe=1Day&start=${ytdStart}&limit=10000&feed=iex&adjustment=raw`, {headers: HEADERS}),
+    ]);
 
-      <div class="card" style="border-top: 3px solid #a855f7;">
-        <div class="card-header">
-          <div>
-            <span class="sym">QBTS</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Quantum">⚛</span>
-        </div>
-        <div class="company-name">D-Wave Quantum</div>
-        <div class="sector-tag" style="color:#a855f7;">Quantum</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    if (!accountRes.ok) throw new Error(`Account API error: ${accountRes.status}`);
+    if (!positionsRes.ok) throw new Error(`Positions API error: ${positionsRes.status}`);
 
-      <div class="card" style="border-top: 3px solid #a855f7;">
-        <div class="card-header">
-          <div>
-            <span class="sym">IONQ</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Quantum">⚛</span>
-        </div>
-        <div class="company-name">IonQ</div>
-        <div class="sector-tag" style="color:#a855f7;">Quantum</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    const account   = await accountRes.json();
+    const positions = await positionsRes.json();
+    const barsData  = barsRes.ok ? await barsRes.json() : {};
 
-      <div class="card" style="border-top: 3px solid #a855f7;">
-        <div class="card-header">
-          <div>
-            <span class="sym">QUBT</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Quantum">⚛</span>
-        </div>
-        <div class="company-name">Quantum Computing</div>
-        <div class="sector-tag" style="color:#a855f7;">Quantum</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Build position map
+    const posMap = {};
+    if (Array.isArray(positions)) {
+      positions.forEach(p => { posMap[p.symbol] = p; });
+    }
 
-      <div class="card" style="border-top: 3px solid #3b82f6;">
-        <div class="card-header">
-          <div>
-            <span class="sym">SNDK</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Semiconductors">💾</span>
-        </div>
-        <div class="company-name">SanDisk</div>
-        <div class="sector-tag" style="color:#3b82f6;">Semiconductors</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Build bars map: symbol -> [close prices]
+    const barsMap = {};
+    const bars = barsData.bars || {};
+    Object.entries(bars).forEach(([sym, barArr]) => {
+      if (Array.isArray(barArr)) {
+        barsMap[sym] = barArr.map(b => b.c);
+      }
+    });
 
-      <div class="card" style="border-top: 3px solid #3b82f6;">
-        <div class="card-header">
-          <div>
-            <span class="sym">MU</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Semiconductors">💾</span>
-        </div>
-        <div class="company-name">Micron Technology</div>
-        <div class="sector-tag" style="color:#3b82f6;">Semiconductors</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Header stats
+    const portfolioVal = Number(account.portfolio_value || account.equity || 0);
+    const cash = Number(account.cash || 0);
+    const invested = portfolioVal - cash;
+    const totalPnl = Array.isArray(positions)
+      ? positions.reduce((s,p) => s + Number(p.unrealized_pl||0), 0)
+      : 0;
+    const pnlPct = invested > 0 ? (totalPnl / invested) * 100 : 0;
 
-      <div class="card" style="border-top: 3px solid #3b82f6;">
-        <div class="card-header">
-          <div>
-            <span class="sym">WDC</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Semiconductors">💾</span>
-        </div>
-        <div class="company-name">Western Digital</div>
-        <div class="sector-tag" style="color:#3b82f6;">Semiconductors</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    document.getElementById('hdr-portfolio').textContent = fmt$(portfolioVal);
+    document.getElementById('hdr-cash').textContent = fmt$(cash);
+    document.getElementById('hdr-invested').textContent = fmt$(invested);
+    const pnlEl = document.getElementById('hdr-pnl');
+    pnlEl.textContent = fmt$(totalPnl) + ' (' + fmtPct(pnlPct) + ')';
+    pnlEl.className = 'stat-value ' + (totalPnl >= 0 ? 'green' : 'red');
 
-      <div class="card" style="border-top: 3px solid #3b82f6;">
-        <div class="card-header">
-          <div>
-            <span class="sym">MRVL</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Semiconductors">💾</span>
-        </div>
-        <div class="company-name">Marvell Technology</div>
-        <div class="sector-tag" style="color:#3b82f6;">Semiconductors</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Summary cards
+    const posCount = Array.isArray(positions) ? positions.length : 0;
+    const winners = Array.isArray(positions) ? positions.filter(p => Number(p.unrealized_plpc) > 0).length : 0;
+    const trailing = Array.isArray(positions) ? positions.filter(p => Number(p.unrealized_plpc)*100 >= 10).length : 0;
+    const nearStop = Array.isArray(positions) ? positions.filter(p => Number(p.unrealized_plpc)*100 <= -8).length : 0;
 
-      <div class="card" style="border-top: 3px solid #3b82f6;">
-        <div class="card-header">
-          <div>
-            <span class="sym">ALMU</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Semiconductors">💾</span>
-        </div>
-        <div class="company-name">Aeluma Inc</div>
-        <div class="sector-tag" style="color:#3b82f6;">Semiconductors</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    document.getElementById('summary-cards').innerHTML = `
+      <div class="sum-card"><div class="label">Open Positions</div><div class="value">${posCount}</div></div>
+      <div class="sum-card"><div class="label">Winners</div><div class="value green">${winners}</div></div>
+      <div class="sum-card"><div class="label">Trailing ≥10%</div><div class="value" style="color:#a855f7">${trailing}</div></div>
+      <div class="sum-card"><div class="label">Near Stop</div><div class="value red">${nearStop}</div></div>
+      <div class="sum-card"><div class="label">Buying Power</div><div class="value">${fmt$(account.buying_power)}</div></div>
+      <div class="sum-card"><div class="label">Day P&L</div><div class="value ${Number(account.unrealized_intraday_pl||0)>=0?'green':'red'}">${fmt$(account.unrealized_intraday_pl||0)}</div></div>
+    `;
 
-      <div class="card" style="border-top: 3px solid #06b6d4;">
-        <div class="card-header">
-          <div>
-            <span class="sym">IPGP</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Photonics">🔆</span>
-        </div>
-        <div class="company-name">IPG Photonics</div>
-        <div class="sector-tag" style="color:#06b6d4;">Photonics</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Group stocks by sector
+    const sectorMap = {};
+    STOCKS.forEach(s => {
+      if (!sectorMap[s.sector]) sectorMap[s.sector] = [];
+      sectorMap[s.sector].push(s);
+    });
 
-      <div class="card" style="border-top: 3px solid #06b6d4;">
-        <div class="card-header">
-          <div>
-            <span class="sym">POET</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Photonics">🔆</span>
-        </div>
-        <div class="company-name">POET Technologies</div>
-        <div class="sector-tag" style="color:#06b6d4;">Photonics</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    let gridHTML = '';
+    Object.entries(sectorMap).forEach(([sector, stocks]) => {
+      const icon = stocks[0].icon;
+      gridHTML += `<div class="sector-group">
+        <div class="sector-label">${icon} ${sector}</div>
+        <div class="cards-row">`;
+      stocks.forEach(stock => {
+        const position = posMap[stock.symbol] || null;
+        const prices = barsMap[stock.symbol] || [];
+        gridHTML += buildCard(stock, position, prices);
+      });
+      gridHTML += '</div></div>';
+    });
 
-      <div class="card" style="border-top: 3px solid #ef4444;">
-        <div class="card-header">
-          <div>
-            <span class="sym">TSLA</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="EV">🚗</span>
-        </div>
-        <div class="company-name">Tesla</div>
-        <div class="sector-tag" style="color:#ef4444;">EV</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    document.getElementById('grid').innerHTML = gridHTML;
 
-      <div class="card" style="border-top: 3px solid #64748b;">
-        <div class="card-header">
-          <div>
-            <span class="sym">AAPL</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Consumer Tech">📱</span>
-        </div>
-        <div class="company-name">Apple</div>
-        <div class="sector-tag" style="color:#64748b;">Consumer Tech</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    // Show everything
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('grid').style.display = 'block';
+    document.getElementById('summary-section').style.display = 'block';
 
-      <div class="card" style="border-top: 3px solid #ec4899;">
-        <div class="card-header">
-          <div>
-            <span class="sym">NFLX</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Streaming">🎬</span>
-        </div>
-        <div class="company-name">Netflix</div>
-        <div class="sector-tag" style="color:#ec4899;">Streaming</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
+    const ts = now.toLocaleString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+    });
+    document.getElementById('timestamp-text').textContent = `Last updated: ${ts} · Auto-refreshes every hour`;
 
-      <div class="card" style="border-top: 3px solid #f59e0b;">
-        <div class="card-header">
-          <div>
-            <span class="sym">CAT</span>
-            <span class="badge-unavailable">DATA UNAVAILABLE</span>
-          </div>
-          <span class="sector-icon" title="Industrial">🔧</span>
-        </div>
-        <div class="company-name">Caterpillar</div>
-        <div class="sector-tag" style="color:#f59e0b;">Industrial</div>
-        <div class="sparkline-placeholder">
-          <svg width="100%" height="48" viewBox="0 0 200 48">
-            <text x="100" y="28" text-anchor="middle" fill="#4b5563" font-size="11" font-family="monospace">⚠ API blocked</text>
-          </svg>
-        </div>
-        <div class="position-row">
-          <span class="label">Price</span><span class="val">—</span>
-          <span class="label">YTD</span><span class="val">—</span>
-          <span class="label">P&amp;L</span><span class="val">—</span>
-        </div>
-      </div>
-  </div>
+  } catch(err) {
+    console.error(err);
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error-msg').textContent = err.message || 'Unknown error. Check console for details.';
+    document.getElementById('timestamp-text').textContent = 'Error loading data';
+  }
+}
 
-  <footer>DCA Dashboard · 2026-07-09 16:05 UTC · Data unavailable — API blocked by egress policy</footer>
+// Start on load
+loadData();
+</script>
 </body>
 </html>
