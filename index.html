@@ -17,7 +17,7 @@
   --muted2:#475569;
 }
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:0 0 48px}
-/* Header */
+/* ── Header ── */
 .header{background:linear-gradient(135deg,#0d1220 0%,#111827 100%);border-bottom:1px solid var(--border);padding:24px 20px 20px}
 .header-inner{max-width:1400px;margin:0 auto}
 .header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -26,54 +26,56 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .brand-name{font-size:20px;font-weight:700;letter-spacing:-0.3px}
 .brand-sub{font-size:12px;color:var(--muted);margin-top:1px}
 .ts{font-size:12px;color:var(--muted);text-align:right;line-height:1.6}
-/* Stats row */
+.live-dot{display:inline-block;width:6px;height:6px;background:#22c55e;border-radius:50%;margin-right:4px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+/* ── Stats row ── */
 .stats-row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
 .stat-pill{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:120px}
 .stat-pill .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
 .stat-pill .val{font-size:15px;font-weight:600}
-/* Sector summary */
-.sector-bar{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-top:16px;max-width:1400px;margin-left:auto;margin-right:auto}
-.sector-bar-inner{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center}
-.sector-bar-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;width:100%;margin-bottom:4px}
-.sector-item{display:flex;gap:8px;align-items:center}
-.sector-label{font-size:12px;color:var(--muted)}
-.sector-val{font-size:13px;font-weight:600}
-/* Grid */
+.val-pos{color:#22c55e}
+.val-neg{color:#ef4444}
+/* ── Sector bar ── */
+.sector-bar{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin:16px auto 0;max-width:1400px}
+.sb-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.sb-inner{display:flex;flex-wrap:wrap;gap:8px 20px}
+.si{display:flex;align-items:center;gap:6px}
+.si-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.si-name{font-size:12px;color:var(--muted)}
+.si-val{font-size:12px;font-weight:600}
+/* ── Grid ── */
 .main{max-width:1400px;margin:24px auto 0;padding:0 16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-/* Card */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;transition:border-color .15s,box-shadow .15s;overflow:hidden}
-.card:hover{box-shadow:0 0 0 1px rgba(255,255,255,.06),0 8px 24px rgba(0,0,0,.4)}
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.symbol{font-size:22px;font-weight:800;letter-spacing:-0.5px;line-height:1}
-.company{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500}
-.sector{font-size:11px;color:var(--muted2);margin-top:4px;display:flex;align-items:center;gap:4px}
-.sector-icon{font-size:11px}
-.price-block{text-align:right;flex-shrink:0}
-.price{font-size:20px;font-weight:700;letter-spacing:-0.3px;line-height:1}
-.today-badge{font-size:12px;font-weight:600;margin-top:3px;display:block}
-.spark{margin:12px -4px 8px;line-height:0}
-.spark svg{width:100%;height:44px}
-.badges-row{margin-top:6px}
-.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid transparent;letter-spacing:0.2px}
-.badge-neutral{background:#1e253544;color:var(--muted);border-color:#1e2535}
-.status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
-.status-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid transparent;text-transform:uppercase;letter-spacing:0.5px}
-.pos-note{font-size:10px;color:var(--muted2)}
-/* Status summary */
-.summary-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.s-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px}
-.s-pill .dot{width:7px;height:7px;border-radius:50%}
-.s-count{font-weight:700;font-size:14px}
-/* Footer */
-.footer{text-align:center;font-size:11px;color:var(--muted2);margin-top:40px;padding:0 16px}
-@media(max-width:640px){
-  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .card{padding:12px}
-  .symbol{font-size:17px}
-  .price{font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+/* ── Card ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;transition:border-color .15s,box-shadow .15s;overflow:hidden;position:relative}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent,#3b82f6);opacity:0.6}
+.card:hover{box-shadow:0 0 0 1px rgba(255,255,255,.06),0 8px 24px rgba(0,0,0,.4);border-color:rgba(255,255,255,.08)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-top:4px}
+.sym{font-size:22px;font-weight:800;letter-spacing:-0.5px;line-height:1}
+.co-name{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500}
+.sector-tag{font-size:11px;margin-top:4px;font-weight:500}
+.price{font-size:18px;font-weight:700;letter-spacing:-0.3px;white-space:nowrap}
+.day-chg{font-size:11px;margin-top:2px;text-align:right}
+.ytd-row{display:flex;gap:6px;margin:10px 0 0;flex-wrap:wrap}
+.ytd-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.3px}
+.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.5px;text-transform:uppercase}
+.spark-wrap{margin:8px -2px 0;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.2)}
+.card-foot{display:flex;gap:0;margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.foot-item{flex:1;text-align:center}
+.foot-item+.foot-item{border-left:1px solid var(--border)}
+.foot-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px}
+.foot-val{font-size:12px;font-weight:600;margin-top:2px}
+/* ── Notice banner ── */
+.notice{background:#1a1f2e;border:1px solid #2a3040;border-radius:8px;padding:10px 16px;margin:0 auto 0;max-width:1400px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.notice-icon{color:#f59e0b;font-size:14px}
+/* ── Responsive ── */
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .main{padding:0 10px}
+  .price{font-size:14px}
+  .sym{font-size:18px}
   .stats-row{gap:8px}
-  .stat-pill{min-width:90px;padding:8px 12px}
+  .stat-pill{min-width:100px;padding:8px 12px}
 }
 @media(max-width:380px){
   .grid{grid-template-columns:1fr}
@@ -87,454 +89,849 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
       <div class="brand">
         <div class="brand-icon">📈</div>
         <div>
-          <div class="brand-name">DCA Portfolio Dashboard</div>
-          <div class="brand-sub">19 positions · Live market data · July 13, 2026</div>
+          <div class="brand-name">DCA Portfolio</div>
+          <div class="brand-sub">19 positions · Live market data</div>
         </div>
       </div>
       <div class="ts">
-        <div>Last updated</div>
-        <div style="color:#e2e8f0;font-weight:600">2026-07-13 18:07 UTC</div>
-        <div style="margin-top:3px;color:#f59e0b;font-size:11px">⚠ Position data unavailable (Alpaca restricted)</div>
+        <span class="live-dot"></span>Live via Yahoo Finance<br>
+        Updated 2026-07-13 19:05 UTC<br>
+        Data: YTD weekly closes
       </div>
     </div>
-    <div class="summary-pills">
-      <div class="s-pill"><span class="dot" style="background:#f59e0b"></span><span class="s-count" style="color:#f59e0b">8</span><span style="color:#94a3b8">Trailing Stop</span></div>
-      <div class="s-pill"><span class="dot" style="background:#22c55e"></span><span class="s-count" style="color:#22c55e">0</span><span style="color:#94a3b8">In Profit</span></div>
-      <div class="s-pill"><span class="dot" style="background:#ef4444"></span><span class="s-count" style="color:#ef4444">3</span><span style="color:#94a3b8">Near Stop</span></div>
-      <div class="s-pill"><span class="dot" style="background:#64748b"></span><span class="s-count" style="color:#64748b">8</span><span style="color:#94a3b8">Watching</span></div>
+    <div class="stats-row">
+      <div class="stat-pill">
+        <div class="label">Positions</div>
+        <div class="val">19</div>
+      </div>
+      <div class="stat-pill">
+        <div class="label">Gainers YTD</div>
+        <div class="val val-pos">11</div>
+      </div>
+      <div class="stat-pill">
+        <div class="label">Losers YTD</div>
+        <div class="val val-neg">8</div>
+      </div>
+      <div class="stat-pill">
+        <div class="label">Avg YTD</div>
+        <div class="val val-pos">+79.1%</div>
+      </div>
+      <div class="stat-pill">
+        <div class="label">Best YTD</div>
+        <div class="val val-pos">SNDK +603%</div>
+      </div>
+      <div class="stat-pill">
+        <div class="label">Worst YTD</div>
+        <div class="val val-neg">MSTR -39%</div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="main" style="margin-top:16px;padding:0 16px">
-  <div class="sector-bar">
-    <div class="sector-bar-inner">
-      <div class="sector-bar-title">Avg YTD by Sector</div>
-      
-        <div class="sector-item">
-          <span class="sector-label">₿ Crypto Treasury</span>
-          <span class="sector-val" style="color:#ef4444">-68.8%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">⚡ Energy</span>
-          <span class="sector-val" style="color:#22c55e">+107.8%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">⚛ Quantum</span>
-          <span class="sector-val" style="color:#22c55e">+60.5%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">🔲 Semiconductors</span>
-          <span class="sector-val" style="color:#22c55e">+313.8%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">💡 Photonics</span>
-          <span class="sector-val" style="color:#22c55e">+221.8%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">🔋 EV</span>
-          <span class="sector-val" style="color:#22c55e">+45.2%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">🎬 Streaming</span>
-          <span class="sector-val" style="color:#ef4444">-20.0%</span>
-        </div>
-        <div class="sector-item">
-          <span class="sector-label">🏗 Industrial</span>
-          <span class="sector-val" style="color:#22c55e">+150.6%</span>
-        </div>
-    </div>
+<div style="padding:0 20px">
+  <div class="notice" style="margin-top:12px">
+    <span class="notice-icon">⚠</span>
+    Position data (shares, avg cost, P&amp;L) unavailable — Alpaca API blocked by session egress policy. Showing live market prices and YTD performance from Yahoo Finance.
+  </div>
+</div>
+
+<div class="sector-bar" style="margin-left:20px;margin-right:20px">
+  <div class="sb-title">Sector YTD Performance (avg)</div>
+  <div class="sb-inner">
+    <div class="si"><span class="si-dot" style="background:#f7931a"></span><span class="si-name">Crypto Treasury</span><span class="si-val" style="color:#ef4444">-25.6%</span></div>
+<div class="si"><span class="si-dot" style="background:#22c55e"></span><span class="si-name">Energy</span><span class="si-val" style="color:#22c55e">+102.1%</span></div>
+<div class="si"><span class="si-dot" style="background:#a855f7"></span><span class="si-name">Quantum</span><span class="si-val" style="color:#ef4444">-22.7%</span></div>
+<div class="si"><span class="si-dot" style="background:#3b82f6"></span><span class="si-name">Semiconductors</span><span class="si-val" style="color:#22c55e">+239.9%</span></div>
+<div class="si"><span class="si-dot" style="background:#06b6d4"></span><span class="si-name">Photonics</span><span class="si-val" style="color:#22c55e">+35.9%</span></div>
+<div class="si"><span class="si-dot" style="background:#ef4444"></span><span class="si-name">EV</span><span class="si-val" style="color:#ef4444">-12.7%</span></div>
+<div class="si"><span class="si-dot" style="background:#64748b"></span><span class="si-name">Consumer Tech</span><span class="si-val" style="color:#22c55e">+16.7%</span></div>
+<div class="si"><span class="si-dot" style="background:#ec4899"></span><span class="si-name">Streaming</span><span class="si-val" style="color:#ef4444">-21.0%</span></div>
+<div class="si"><span class="si-dot" style="background:#f59e0b"></span><span class="si-name">Industrial</span><span class="si-val" style="color:#22c55e">+62.6%</span></div>
   </div>
 </div>
 
 <div class="main">
   <div class="grid">
-    
-    <div class="card" style="border-color:#f7931a44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#f7931a">STRC</div>
-          <div class="company">Strategy Inc</div>
-          <div class="sector"><span class="sector-icon">₿</span>Crypto Treasury</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$86.84</div>
-          <span class="today-badge" style="color:#ef4444">-0.73% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g56897" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><path d="M0.0,14.1 L3.3,14.3 L6.5,12.8 L9.8,13.1 L13.1,12.3 L16.3,10.4 L19.6,9.0 L22.9,9.3 L26.1,8.4 L29.4,7.9 L32.7,8.2 L35.9,6.8 L39.2,6.2 L42.4,7.1 L45.7,8.3 L49.0,8.5 L52.2,7.1 L55.5,8.2 L58.8,7.8 L62.0,8.4 L65.3,8.6 L68.6,7.6 L71.8,8.2 L75.1,6.9 L78.4,6.7 L81.6,5.4 L84.9,5.2 L88.2,5.1 L91.4,5.7 L94.7,5.1 L98.0,4.4 L101.2,5.3 L104.5,5.0 L107.8,5.5 L111.0,4.0 L114.3,6.4 L117.6,9.1 L120.8,11.2 L124.1,13.1 L127.3,13.3 L130.6,13.5 L133.9,15.5 L137.1,13.4 L140.4,15.9 L143.7,14.8 L146.9,14.9 L150.2,16.7 L153.5,18.7 L156.7,18.5 L160.0,40.0 L160.0,44 L0.0,44 Z" fill="url(#g56897)"/><path d="M0.0,14.1 L3.3,14.3 L6.5,12.8 L9.8,13.1 L13.1,12.3 L16.3,10.4 L19.6,9.0 L22.9,9.3 L26.1,8.4 L29.4,7.9 L32.7,8.2 L35.9,6.8 L39.2,6.2 L42.4,7.1 L45.7,8.3 L49.0,8.5 L52.2,7.1 L55.5,8.2 L58.8,7.8 L62.0,8.4 L65.3,8.6 L68.6,7.6 L71.8,8.2 L75.1,6.9 L78.4,6.7 L81.6,5.4 L84.9,5.2 L88.2,5.1 L91.4,5.7 L94.7,5.1 L98.0,4.4 L101.2,5.3 L104.5,5.0 L107.8,5.5 L111.0,4.0 L114.3,6.4 L117.6,9.1 L120.8,11.2 L124.1,13.1 L127.3,13.3 L130.6,13.5 L133.9,15.5 L137.1,13.4 L140.4,15.9 L143.7,14.8 L146.9,14.9 L150.2,16.7 L153.5,18.7 L156.7,18.5 L160.0,40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#ef444422;color:#ef4444;border-color:#ef444444">-68.1% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#ef444422;color:#ef4444;border-color:#ef444455">NEAR STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
+<div class="card" style="--accent:#f7931a">
+  <div class="card-top">
+    <div>
+      <div class="sym">STRC</div>
+      <div class="co-name">Strategy Inc</div>
+      <div class="sector-tag" style="color:#f7931a">₿ Crypto Treasury</div>
     </div>
-
-    <div class="card" style="border-color:#f7931a44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#f7931a">MSTR</div>
-          <div class="company">MicroStrategy</div>
-          <div class="sector"><span class="sector-icon">₿</span>Crypto Treasury</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$91.88</div>
-          <span class="today-badge" style="color:#ef4444">-2.92% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g69972" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><path d="M0.0,4.0 L3.3,7.9 L6.5,6.7 L9.8,8.3 L13.1,12.8 L16.3,14.5 L19.6,12.6 L22.9,13.9 L26.1,17.2 L29.4,20.1 L32.7,17.8 L35.9,18.2 L39.2,19.3 L42.4,20.0 L45.7,18.8 L49.0,20.2 L52.2,17.4 L55.5,18.4 L58.8,20.7 L62.0,22.0 L65.3,24.0 L68.6,22.3 L71.8,23.1 L75.1,21.8 L78.4,23.4 L81.6,25.3 L84.9,21.5 L88.2,23.4 L91.4,24.8 L94.7,26.0 L98.0,26.2 L101.2,25.0 L104.5,22.3 L107.8,22.5 L111.0,25.9 L114.3,29.0 L117.6,29.8 L120.8,28.8 L124.1,28.8 L127.3,26.4 L130.6,26.3 L133.9,29.1 L137.1,27.8 L140.4,28.6 L143.7,29.6 L146.9,29.1 L150.2,30.2 L153.5,32.7 L156.7,33.2 L160.0,40.0 L160.0,44 L0.0,44 Z" fill="url(#g69972)"/><path d="M0.0,4.0 L3.3,7.9 L6.5,6.7 L9.8,8.3 L13.1,12.8 L16.3,14.5 L19.6,12.6 L22.9,13.9 L26.1,17.2 L29.4,20.1 L32.7,17.8 L35.9,18.2 L39.2,19.3 L42.4,20.0 L45.7,18.8 L49.0,20.2 L52.2,17.4 L55.5,18.4 L58.8,20.7 L62.0,22.0 L65.3,24.0 L68.6,22.3 L71.8,23.1 L75.1,21.8 L78.4,23.4 L81.6,25.3 L84.9,21.5 L88.2,23.4 L91.4,24.8 L94.7,26.0 L98.0,26.2 L101.2,25.0 L104.5,22.3 L107.8,22.5 L111.0,25.9 L114.3,29.0 L117.6,29.8 L120.8,28.8 L124.1,28.8 L127.3,26.4 L130.6,26.3 L133.9,29.1 L137.1,27.8 L140.4,28.6 L143.7,29.6 L146.9,29.1 L150.2,30.2 L153.5,32.7 L156.7,33.2 L160.0,40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#ef444422;color:#ef4444;border-color:#ef444444">-69.6% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#ef444422;color:#ef4444;border-color:#ef444455">NEAR STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
+    <div style="text-align:right">
+      <div class="price">$87.21</div>
+      <div class="day-chg" style="color:#ef4444">-0.31% today</div>
     </div>
-
-    <div class="card" style="border-color:#22c55e44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#22c55e">GEV</div>
-          <div class="company">GE Vernova</div>
-          <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$1,048.41</div>
-          <span class="today-badge" style="color:#ef4444">-3.95% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g18719" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><path d="M0.0,12.9 L3.3,13.9 L6.5,12.1 L9.8,11.5 L13.1,9.0 L16.3,16.1 L19.6,18.1 L22.9,13.3 L26.1,21.1 L29.4,17.3 L32.7,12.5 L35.9,14.1 L39.2,12.9 L42.4,8.1 L45.7,7.4 L49.0,4.0 L52.2,11.5 L55.5,17.7 L58.8,14.6 L62.0,18.6 L65.3,20.8 L68.6,17.8 L71.8,20.6 L75.1,19.9 L78.4,19.5 L81.6,18.4 L84.9,13.6 L88.2,24.1 L91.4,20.4 L94.7,18.1 L98.0,21.5 L101.2,26.4 L104.5,24.3 L107.8,16.9 L111.0,16.4 L114.3,16.1 L117.6,19.0 L120.8,20.5 L124.1,27.5 L127.3,27.7 L130.6,32.4 L133.9,27.4 L137.1,27.9 L140.4,27.4 L143.7,36.9 L146.9,32.9 L150.2,30.8 L153.5,40.0 L156.7,36.9 L160.0,25.8 L160.0,44 L0.0,44 Z" fill="url(#g18719)"/><path d="M0.0,12.9 L3.3,13.9 L6.5,12.1 L9.8,11.5 L13.1,9.0 L16.3,16.1 L19.6,18.1 L22.9,13.3 L26.1,21.1 L29.4,17.3 L32.7,12.5 L35.9,14.1 L39.2,12.9 L42.4,8.1 L45.7,7.4 L49.0,4.0 L52.2,11.5 L55.5,17.7 L58.8,14.6 L62.0,18.6 L65.3,20.8 L68.6,17.8 L71.8,20.6 L75.1,19.9 L78.4,19.5 L81.6,18.4 L84.9,13.6 L88.2,24.1 L91.4,20.4 L94.7,18.1 L98.0,21.5 L101.2,26.4 L104.5,24.3 L107.8,16.9 L111.0,16.4 L114.3,16.1 L117.6,19.0 L120.8,20.5 L124.1,27.5 L127.3,27.7 L130.6,32.4 L133.9,27.4 L137.1,27.9 L140.4,27.4 L143.7,36.9 L146.9,32.9 L150.2,30.8 L153.5,40.0 L156.7,36.9 L160.0,25.8" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#ef444422;color:#ef4444;border-color:#ef444444">-4.0% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -11.7%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg29567" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,4.1 L 10.9,4.0 L 17.7,5.0 L 24.6,6.2 L 31.4,8.3 L 38.3,4.1 L 45.1,5.1 L 52.0,4.2 L 58.9,4.0 L 65.7,4.0 L 72.6,5.0 L 79.4,4.2 L 86.3,4.1 L 93.1,4.1 L 100.0,5.5 L 106.9,5.3 L 113.7,5.2 L 120.6,4.2 L 127.4,4.1 L 134.3,5.9 L 141.1,5.8 L 148.0,15.2 L 154.9,12.8 L 161.7,27.0 L 168.6,44.0 L 175.4,30.2 L 182.3,32.9 L 189.1,30.2 L 196.0,30.7 L 196.0,44 Z" fill="url(#sg29567)"/>
+  <polyline points="4.0,4.1 10.9,4.0 17.7,5.0 24.6,6.2 31.4,8.3 38.3,4.1 45.1,5.1 52.0,4.2 58.9,4.0 65.7,4.0 72.6,5.0 79.4,4.2 86.3,4.1 93.1,4.1 100.0,5.5 106.9,5.3 113.7,5.2 120.6,4.2 127.4,4.1 134.3,5.9 141.1,5.8 148.0,15.2 154.9,12.8 161.7,27.0 168.6,44.0 175.4,30.2 182.3,32.9 189.1,30.2 196.0,30.7" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$100.05</div>
     </div>
-
-    <div class="card" style="border-color:#22c55e44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#22c55e">BE</div>
-          <div class="company">Bloom Energy</div>
-          <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$233.29</div>
-          <span class="today-badge" style="color:#ef4444">-4.63% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g25709" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,35.9 L3.3,36.8 L6.5,37.7 L9.8,35.9 L13.1,36.4 L16.3,35.6 L19.6,36.0 L22.9,35.6 L26.1,35.7 L29.4,35.1 L32.7,38.6 L35.9,38.2 L39.2,40.0 L42.4,38.2 L45.7,38.1 L49.0,37.0 L52.2,35.2 L55.5,36.9 L58.8,37.0 L62.0,37.4 L65.3,35.7 L68.6,35.1 L71.8,34.3 L75.1,33.6 L78.4,33.5 L81.6,35.1 L84.9,33.9 L88.2,33.1 L91.4,32.3 L94.7,32.1 L98.0,32.2 L101.2,32.3 L104.5,33.1 L107.8,31.8 L111.0,32.5 L114.3,31.0 L117.6,29.6 L120.8,30.3 L124.1,30.9 L127.3,30.6 L130.6,28.7 L133.9,29.5 L137.1,28.0 L140.4,25.6 L143.7,25.3 L146.9,25.2 L150.2,25.6 L153.5,29.7 L156.7,30.4 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g25709)"/><path d="M0.0,35.9 L3.3,36.8 L6.5,37.7 L9.8,35.9 L13.1,36.4 L16.3,35.6 L19.6,36.0 L22.9,35.6 L26.1,35.7 L29.4,35.1 L32.7,38.6 L35.9,38.2 L39.2,40.0 L42.4,38.2 L45.7,38.1 L49.0,37.0 L52.2,35.2 L55.5,36.9 L58.8,37.0 L62.0,37.4 L65.3,35.7 L68.6,35.1 L71.8,34.3 L75.1,33.6 L78.4,33.5 L81.6,35.1 L84.9,33.9 L88.2,33.1 L91.4,32.3 L94.7,32.1 L98.0,32.2 L101.2,32.3 L104.5,33.1 L107.8,31.8 L111.0,32.5 L114.3,31.0 L117.6,29.6 L120.8,30.3 L124.1,30.9 L127.3,30.6 L130.6,28.7 L133.9,29.5 L137.1,28.0 L140.4,25.6 L143.7,25.3 L146.9,25.2 L150.2,25.6 L153.5,29.7 L156.7,30.4 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+200.0% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$80.84</div>
     </div>
-
-    <div class="card" style="border-color:#22c55e44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#22c55e">KGS</div>
-          <div class="company">Kodiak Gas</div>
-          <div class="sector"><span class="sector-icon">⚡</span>Energy</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$67.84</div>
-          <span class="today-badge" style="color:#22c55e">+0.98% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g86018" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,38.0 L3.3,39.1 L6.5,37.8 L9.8,35.3 L13.1,36.9 L16.3,36.8 L19.6,36.6 L22.9,34.9 L26.1,34.9 L29.4,35.2 L32.7,36.8 L35.9,35.7 L39.2,36.4 L42.4,37.4 L45.7,38.9 L49.0,40.0 L52.2,38.6 L55.5,39.8 L58.8,38.9 L62.0,37.9 L65.3,37.2 L68.6,36.3 L71.8,36.7 L75.1,36.0 L78.4,36.5 L81.6,37.2 L84.9,34.8 L88.2,34.5 L91.4,32.2 L94.7,31.4 L98.0,28.7 L101.2,29.6 L104.5,28.5 L107.8,29.4 L111.0,28.5 L114.3,27.1 L117.6,26.6 L120.8,26.5 L124.1,28.7 L127.3,28.3 L130.6,28.0 L133.9,28.3 L137.1,27.3 L140.4,26.7 L143.7,26.1 L146.9,25.9 L150.2,25.1 L153.5,23.8 L156.7,24.1 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g86018)"/><path d="M0.0,38.0 L3.3,39.1 L6.5,37.8 L9.8,35.3 L13.1,36.9 L16.3,36.8 L19.6,36.6 L22.9,34.9 L26.1,34.9 L29.4,35.2 L32.7,36.8 L35.9,35.7 L39.2,36.4 L42.4,37.4 L45.7,38.9 L49.0,40.0 L52.2,38.6 L55.5,39.8 L58.8,38.9 L62.0,37.9 L65.3,37.2 L68.6,36.3 L71.8,36.7 L75.1,36.0 L78.4,36.5 L81.6,37.2 L84.9,34.8 L88.2,34.5 L91.4,32.2 L94.7,31.4 L98.0,28.7 L101.2,29.6 L104.5,28.5 L107.8,29.4 L111.0,28.5 L114.3,27.1 L117.6,26.6 L120.8,26.5 L124.1,28.7 L127.3,28.3 L130.6,28.0 L133.9,28.3 L137.1,27.3 L140.4,26.7 L143.7,26.1 L146.9,25.9 L150.2,25.1 L153.5,23.8 L156.7,24.1 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+127.2% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#a855f744">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#a855f7">QBTS</div>
-          <div class="company">D-Wave Quantum</div>
-          <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$20.09</div>
-          <span class="today-badge" style="color:#ef4444">-5.06% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g99843" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,12.9 L3.3,8.0 L6.5,7.3 L9.8,5.3 L13.1,4.7 L16.3,4.2 L19.6,7.7 L22.9,7.5 L26.1,4.0 L29.4,11.1 L32.7,11.4 L35.9,13.8 L39.2,20.9 L42.4,20.6 L45.7,21.3 L49.0,23.8 L52.2,22.9 L55.5,25.0 L58.8,24.3 L62.0,27.7 L65.3,28.1 L68.6,21.2 L71.8,21.4 L75.1,20.9 L78.4,19.3 L81.6,23.9 L84.9,21.6 L88.2,22.9 L91.4,24.5 L94.7,20.0 L98.0,21.9 L101.2,23.7 L104.5,25.1 L107.8,21.3 L111.0,24.7 L114.3,21.9 L117.6,23.8 L120.8,31.1 L124.1,34.5 L127.3,31.5 L130.6,32.1 L133.9,35.3 L137.1,37.2 L140.4,39.5 L143.7,36.5 L146.9,38.3 L150.2,40.0 L153.5,33.0 L156.7,29.8 L160.0,29.1 L160.0,44 L0.0,44 Z" fill="url(#g99843)"/><path d="M0.0,12.9 L3.3,8.0 L6.5,7.3 L9.8,5.3 L13.1,4.7 L16.3,4.2 L19.6,7.7 L22.9,7.5 L26.1,4.0 L29.4,11.1 L32.7,11.4 L35.9,13.8 L39.2,20.9 L42.4,20.6 L45.7,21.3 L49.0,23.8 L52.2,22.9 L55.5,25.0 L58.8,24.3 L62.0,27.7 L65.3,28.1 L68.6,21.2 L71.8,21.4 L75.1,20.9 L78.4,19.3 L81.6,23.9 L84.9,21.6 L88.2,22.9 L91.4,24.5 L94.7,20.0 L98.0,21.9 L101.2,23.7 L104.5,25.1 L107.8,21.3 L111.0,24.7 L114.3,21.9 L117.6,23.8 L120.8,31.1 L124.1,34.5 L127.3,31.5 L130.6,32.1 L133.9,35.3 L137.1,37.2 L140.4,39.5 L143.7,36.5 L146.9,38.3 L150.2,40.0 L153.5,33.0 L156.7,29.8 L160.0,29.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#a855f744">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#a855f7">IONQ</div>
-          <div class="company">IonQ</div>
-          <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$42.86</div>
-          <span class="today-badge" style="color:#ef4444">-4.27% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g90864" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,33.6 L3.3,34.8 L6.5,34.9 L9.8,34.6 L13.1,37.0 L16.3,37.3 L19.6,37.4 L22.9,39.2 L26.1,40.0 L29.4,38.4 L32.7,36.7 L35.9,37.3 L39.2,35.9 L42.4,36.6 L45.7,35.9 L49.0,35.0 L52.2,36.3 L55.5,35.5 L58.8,34.2 L62.0,34.4 L65.3,35.0 L68.6,33.8 L71.8,32.2 L75.1,34.4 L78.4,33.6 L81.6,34.0 L84.9,34.3 L88.2,32.4 L91.4,29.8 L94.7,27.0 L98.0,25.7 L101.2,24.8 L104.5,26.9 L107.8,27.8 L111.0,27.9 L114.3,26.3 L117.6,23.0 L120.8,21.5 L124.1,21.6 L127.3,20.8 L130.6,22.9 L133.9,22.3 L137.1,21.4 L140.4,20.6 L143.7,21.1 L146.9,20.5 L150.2,21.3 L153.5,24.8 L156.7,24.2 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g90864)"/><path d="M0.0,33.6 L3.3,34.8 L6.5,34.9 L9.8,34.6 L13.1,37.0 L16.3,37.3 L19.6,37.4 L22.9,39.2 L26.1,40.0 L29.4,38.4 L32.7,36.7 L35.9,37.3 L39.2,35.9 L42.4,36.6 L45.7,35.9 L49.0,35.0 L52.2,36.3 L55.5,35.5 L58.8,34.2 L62.0,34.4 L65.3,35.0 L68.6,33.8 L71.8,32.2 L75.1,34.4 L78.4,33.6 L81.6,34.0 L84.9,34.3 L88.2,32.4 L91.4,29.8 L94.7,27.0 L98.0,25.7 L101.2,24.8 L104.5,26.9 L107.8,27.8 L111.0,27.9 L114.3,26.3 L117.6,23.0 L120.8,21.5 L124.1,21.6 L127.3,20.8 L130.6,22.9 L133.9,22.3 L137.1,21.4 L140.4,20.6 L143.7,21.1 L146.9,20.5 L150.2,21.3 L153.5,24.8 L156.7,24.2 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+60.5% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#a855f744">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#a855f7">QUBT</div>
-          <div class="company">Quantum Computing</div>
-          <div class="sector"><span class="sector-icon">⚛</span>Quantum</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$8.66</div>
-          <span class="today-badge" style="color:#ef4444">-5.36% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g91911" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,39.6 L3.3,40.0 L6.5,36.8 L9.8,37.4 L13.1,35.5 L16.3,31.4 L19.6,28.3 L22.9,28.7 L26.1,26.7 L29.4,25.5 L32.7,25.7 L35.9,22.6 L39.2,21.1 L42.4,22.6 L45.7,24.9 L49.0,24.9 L52.2,21.5 L55.5,23.4 L58.8,22.2 L62.0,23.0 L65.3,23.0 L68.6,20.4 L71.8,21.0 L75.1,17.9 L78.4,16.8 L81.6,13.4 L84.9,12.4 L88.2,11.4 L91.4,12.2 L94.7,10.2 L98.0,8.0 L101.2,9.2 L104.5,7.6 L107.8,8.1 L111.0,4.0 L114.3,8.2 L117.6,13.1 L120.8,16.8 L124.1,19.8 L127.3,19.3 L130.6,18.7 L133.9,22.1 L137.1,16.6 L140.4,21.0 L143.7,17.6 L146.9,16.7 L150.2,19.4 L153.5,22.6 L156.7,21.0 L160.0,23.6 L160.0,44 L0.0,44 Z" fill="url(#g91911)"/><path d="M0.0,39.6 L3.3,40.0 L6.5,36.8 L9.8,37.4 L13.1,35.5 L16.3,31.4 L19.6,28.3 L22.9,28.7 L26.1,26.7 L29.4,25.5 L32.7,25.7 L35.9,22.6 L39.2,21.1 L42.4,22.6 L45.7,24.9 L49.0,24.9 L52.2,21.5 L55.5,23.4 L58.8,22.2 L62.0,23.0 L65.3,23.0 L68.6,20.4 L71.8,21.0 L75.1,17.9 L78.4,16.8 L81.6,13.4 L84.9,12.4 L88.2,11.4 L91.4,12.2 L94.7,10.2 L98.0,8.0 L101.2,9.2 L104.5,7.6 L107.8,8.1 L111.0,4.0 L114.3,8.2 L117.6,13.1 L120.8,16.8 L124.1,19.8 L127.3,19.3 L130.6,18.7 L133.9,22.1 L137.1,16.6 L140.4,21.0 L143.7,17.6 L146.9,16.7 L150.2,19.4 L153.5,22.6 L156.7,21.0 L160.0,23.6" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#3b82f644">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#3b82f6">SNDK</div>
-          <div class="company">SanDisk</div>
-          <div class="sector"><span class="sector-icon">🔲</span>Semiconductors</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$1,672.54</div>
-          <span class="today-badge" style="color:#ef4444">-12.70% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g43256" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,34.6 L3.3,33.3 L6.5,34.0 L9.8,35.2 L13.1,34.4 L16.3,37.2 L19.6,38.7 L22.9,38.8 L26.1,39.7 L29.4,40.0 L32.7,38.6 L35.9,35.9 L39.2,37.3 L42.4,37.3 L45.7,35.4 L49.0,34.2 L52.2,33.5 L55.5,32.3 L58.8,33.6 L62.0,32.9 L65.3,32.7 L68.6,32.5 L71.8,30.0 L75.1,30.0 L78.4,31.8 L81.6,32.2 L84.9,32.6 L88.2,30.9 L91.4,33.8 L94.7,33.4 L98.0,32.9 L101.2,33.4 L104.5,33.6 L107.8,32.0 L111.0,32.0 L114.3,30.6 L117.6,28.2 L120.8,26.8 L124.1,28.5 L127.3,29.1 L130.6,29.1 L133.9,31.4 L137.1,31.9 L140.4,30.8 L143.7,30.5 L146.9,28.9 L150.2,26.8 L153.5,23.7 L156.7,24.8 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g43256)"/><path d="M0.0,34.6 L3.3,33.3 L6.5,34.0 L9.8,35.2 L13.1,34.4 L16.3,37.2 L19.6,38.7 L22.9,38.8 L26.1,39.7 L29.4,40.0 L32.7,38.6 L35.9,35.9 L39.2,37.3 L42.4,37.3 L45.7,35.4 L49.0,34.2 L52.2,33.5 L55.5,32.3 L58.8,33.6 L62.0,32.9 L65.3,32.7 L68.6,32.5 L71.8,30.0 L75.1,30.0 L78.4,31.8 L81.6,32.2 L84.9,32.6 L88.2,30.9 L91.4,33.8 L94.7,33.4 L98.0,32.9 L101.2,33.4 L104.5,33.6 L107.8,32.0 L111.0,32.0 L114.3,30.6 L117.6,28.2 L120.8,26.8 L124.1,28.5 L127.3,29.1 L130.6,29.1 L133.9,31.4 L137.1,31.9 L140.4,30.8 L143.7,30.5 L146.9,28.9 L150.2,26.8 L153.5,23.7 L156.7,24.8 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+683.0% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#3b82f644">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#3b82f6">MU</div>
-          <div class="company">Micron Technology</div>
-          <div class="sector"><span class="sector-icon">🔲</span>Semiconductors</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$924.27</div>
-          <span class="today-badge" style="color:#ef4444">-5.62% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g12876" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><path d="M0.0,5.1 L3.3,4.0 L6.5,5.7 L9.8,7.6 L13.1,8.6 L16.3,12.0 L19.6,12.7 L22.9,10.3 L26.1,11.8 L29.4,11.9 L32.7,12.6 L35.9,13.0 L39.2,14.7 L42.4,14.4 L45.7,12.1 L49.0,13.7 L52.2,19.8 L55.5,18.7 L58.8,14.7 L62.0,18.1 L65.3,16.2 L68.6,16.1 L71.8,15.3 L75.1,16.7 L78.4,14.9 L81.6,14.1 L84.9,17.7 L88.2,18.4 L91.4,16.9 L94.7,17.1 L98.0,20.7 L101.2,22.5 L104.5,16.2 L107.8,22.2 L111.0,22.5 L114.3,22.7 L117.6,27.9 L120.8,30.3 L124.1,35.2 L127.3,34.3 L130.6,35.5 L133.9,37.8 L137.1,40.0 L140.4,35.6 L143.7,36.9 L146.9,31.8 L150.2,28.7 L153.5,23.4 L156.7,26.9 L160.0,16.6 L160.0,44 L0.0,44 Z" fill="url(#g12876)"/><path d="M0.0,5.1 L3.3,4.0 L6.5,5.7 L9.8,7.6 L13.1,8.6 L16.3,12.0 L19.6,12.7 L22.9,10.3 L26.1,11.8 L29.4,11.9 L32.7,12.6 L35.9,13.0 L39.2,14.7 L42.4,14.4 L45.7,12.1 L49.0,13.7 L52.2,19.8 L55.5,18.7 L58.8,14.7 L62.0,18.1 L65.3,16.2 L68.6,16.1 L71.8,15.3 L75.1,16.7 L78.4,14.9 L81.6,14.1 L84.9,17.7 L88.2,18.4 L91.4,16.9 L94.7,17.1 L98.0,20.7 L101.2,22.5 L104.5,16.2 L107.8,22.2 L111.0,22.5 L114.3,22.7 L117.6,27.9 L120.8,30.3 L124.1,35.2 L127.3,34.3 L130.6,35.5 L133.9,37.8 L137.1,40.0 L140.4,35.6 L143.7,36.9 L146.9,31.8 L150.2,28.7 L153.5,23.4 L156.7,26.9 L160.0,16.6" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#ef444422;color:#ef4444;border-color:#ef444444">-5.6% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#3b82f644">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#3b82f6">WDC</div>
-          <div class="company">Western Digital</div>
-          <div class="sector"><span class="sector-icon">🔲</span>Semiconductors</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$540.46</div>
-          <span class="today-badge" style="color:#ef4444">-7.23% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g55635" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,34.2 L3.3,33.9 L6.5,34.4 L9.8,32.9 L13.1,34.3 L16.3,36.8 L19.6,38.4 L22.9,39.1 L26.1,40.0 L29.4,39.2 L32.7,39.4 L35.9,38.7 L39.2,38.1 L42.4,37.7 L45.7,35.2 L49.0,34.3 L52.2,33.1 L55.5,32.4 L58.8,30.6 L62.0,31.4 L65.3,33.7 L68.6,32.5 L71.8,29.2 L75.1,27.7 L78.4,26.3 L81.6,24.3 L84.9,24.9 L88.2,24.6 L91.4,24.6 L94.7,21.9 L98.0,22.9 L101.2,21.2 L104.5,22.1 L107.8,21.9 L111.0,21.7 L114.3,20.3 L117.6,22.1 L120.8,24.0 L124.1,23.2 L127.3,23.6 L130.6,21.3 L133.9,22.1 L137.1,18.9 L140.4,19.7 L143.7,19.5 L146.9,19.5 L150.2,22.3 L153.5,21.3 L156.7,19.8 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g55635)"/><path d="M0.0,34.2 L3.3,33.9 L6.5,34.4 L9.8,32.9 L13.1,34.3 L16.3,36.8 L19.6,38.4 L22.9,39.1 L26.1,40.0 L29.4,39.2 L32.7,39.4 L35.9,38.7 L39.2,38.1 L42.4,37.7 L45.7,35.2 L49.0,34.3 L52.2,33.1 L55.5,32.4 L58.8,30.6 L62.0,31.4 L65.3,33.7 L68.6,32.5 L71.8,29.2 L75.1,27.7 L78.4,26.3 L81.6,24.3 L84.9,24.9 L88.2,24.6 L91.4,24.6 L94.7,21.9 L98.0,22.9 L101.2,21.2 L104.5,22.1 L107.8,21.9 L111.0,21.7 L114.3,20.3 L117.6,22.1 L120.8,24.0 L124.1,23.2 L127.3,23.6 L130.6,21.3 L133.9,22.1 L137.1,18.9 L140.4,19.7 L143.7,19.5 L146.9,19.5 L150.2,22.3 L153.5,21.3 L156.7,19.8 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+264.0% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#3b82f644">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#3b82f6">MRVL</div>
-          <div class="company">Marvell Technology</div>
-          <div class="sector"><span class="sector-icon">🔲</span>Semiconductors</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$216.79</div>
-          <span class="today-badge" style="color:#ef4444">-8.07% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g69417" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,24.7 L3.3,22.2 L6.5,30.2 L9.8,21.5 L13.1,19.7 L16.3,14.9 L19.6,16.0 L22.9,16.3 L26.1,14.2 L29.4,19.6 L32.7,17.3 L35.9,10.3 L39.2,9.2 L42.4,4.0 L45.7,8.2 L49.0,5.8 L52.2,15.2 L55.5,16.4 L58.8,22.6 L62.0,33.5 L65.3,31.2 L68.6,28.6 L71.8,28.7 L75.1,22.6 L78.4,19.2 L81.6,24.0 L84.9,27.1 L88.2,27.3 L91.4,35.0 L94.7,34.4 L98.0,31.4 L101.2,21.2 L104.5,18.1 L107.8,26.3 L111.0,30.2 L114.3,26.0 L117.6,30.3 L120.8,34.4 L124.1,35.0 L127.3,25.4 L130.6,19.0 L133.9,20.2 L137.1,16.1 L140.4,20.5 L143.7,27.0 L146.9,34.4 L150.2,36.0 L153.5,40.0 L156.7,31.9 L160.0,30.3 L160.0,44 L0.0,44 Z" fill="url(#g69417)"/><path d="M0.0,24.7 L3.3,22.2 L6.5,30.2 L9.8,21.5 L13.1,19.7 L16.3,14.9 L19.6,16.0 L22.9,16.3 L26.1,14.2 L29.4,19.6 L32.7,17.3 L35.9,10.3 L39.2,9.2 L42.4,4.0 L45.7,8.2 L49.0,5.8 L52.2,15.2 L55.5,16.4 L58.8,22.6 L62.0,33.5 L65.3,31.2 L68.6,28.6 L71.8,28.7 L75.1,22.6 L78.4,19.2 L81.6,24.0 L84.9,27.1 L88.2,27.3 L91.4,35.0 L94.7,34.4 L98.0,31.4 L101.2,21.2 L104.5,18.1 L107.8,26.3 L111.0,30.2 L114.3,26.0 L117.6,30.3 L120.8,34.4 L124.1,35.0 L127.3,25.4 L130.6,19.0 L133.9,20.2 L137.1,16.1 L140.4,20.5 L143.7,27.0 L146.9,34.4 L150.2,36.0 L153.5,40.0 L156.7,31.9 L160.0,30.3" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#3b82f644">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#3b82f6">ALMU</div>
-          <div class="company">Aeluma Inc</div>
-          <div class="sector"><span class="sector-icon">🔲</span>Semiconductors</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$16.11</div>
-          <span class="today-badge" style="color:#ef4444">-8.49% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g36110" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,6.5 L3.3,4.0 L6.5,5.4 L9.8,7.7 L13.1,8.2 L16.3,6.6 L19.6,8.3 L22.9,14.7 L26.1,17.8 L29.4,18.4 L32.7,14.4 L35.9,13.0 L39.2,11.6 L42.4,15.0 L45.7,14.6 L49.0,18.4 L52.2,18.2 L55.5,18.1 L58.8,15.8 L62.0,17.7 L65.3,21.3 L68.6,22.8 L71.8,20.4 L75.1,21.1 L78.4,22.2 L81.6,21.4 L84.9,22.9 L88.2,24.8 L91.4,26.7 L94.7,26.7 L98.0,27.5 L101.2,30.4 L104.5,32.6 L107.8,33.4 L111.0,33.1 L114.3,37.6 L117.6,37.6 L120.8,32.4 L124.1,36.9 L127.3,38.1 L130.6,34.7 L133.9,37.6 L137.1,40.0 L140.4,38.3 L143.7,38.6 L146.9,37.2 L150.2,34.0 L153.5,30.9 L156.7,33.4 L160.0,36.1 L160.0,44 L0.0,44 Z" fill="url(#g36110)"/><path d="M0.0,6.5 L3.3,4.0 L6.5,5.4 L9.8,7.7 L13.1,8.2 L16.3,6.6 L19.6,8.3 L22.9,14.7 L26.1,17.8 L29.4,18.4 L32.7,14.4 L35.9,13.0 L39.2,11.6 L42.4,15.0 L45.7,14.6 L49.0,18.4 L52.2,18.2 L55.5,18.1 L58.8,15.8 L62.0,17.7 L65.3,21.3 L68.6,22.8 L71.8,20.4 L75.1,21.1 L78.4,22.2 L81.6,21.4 L84.9,22.9 L88.2,24.8 L91.4,26.7 L94.7,26.7 L98.0,27.5 L101.2,30.4 L104.5,32.6 L107.8,33.4 L111.0,33.1 L114.3,37.6 L117.6,37.6 L120.8,32.4 L124.1,36.9 L127.3,38.1 L130.6,34.7 L133.9,37.6 L137.1,40.0 L140.4,38.3 L143.7,38.6 L146.9,37.2 L150.2,34.0 L153.5,30.9 L156.7,33.4 L160.0,36.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#06b6d444">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#06b6d4">IPGP</div>
-          <div class="company">IPG Photonics</div>
-          <div class="sector"><span class="sector-icon">💡</span>Photonics</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$104.84</div>
-          <span class="today-badge" style="color:#ef4444">-2.69% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g77018" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,9.0 L3.3,4.4 L6.5,7.0 L9.8,11.4 L13.1,8.5 L16.3,18.7 L19.6,24.2 L22.9,25.0 L26.1,28.8 L29.4,30.1 L32.7,25.6 L35.9,16.5 L39.2,22.1 L42.4,22.6 L45.7,16.6 L49.0,13.0 L52.2,11.0 L55.5,7.7 L58.8,13.1 L62.0,11.4 L65.3,11.5 L68.6,11.9 L71.8,4.0 L75.1,5.1 L78.4,12.4 L81.6,15.0 L84.9,17.4 L88.2,12.7 L91.4,24.4 L94.7,24.0 L98.0,23.7 L101.2,26.9 L104.5,28.9 L107.8,24.9 L111.0,26.5 L114.3,23.1 L117.6,16.2 L120.8,12.9 L124.1,20.6 L127.3,24.3 L130.6,26.1 L133.9,36.3 L137.1,40.0 L140.4,37.8 L143.7,38.7 L146.9,35.1 L150.2,29.6 L153.5,20.9 L156.7,26.9 L160.0,24.0 L160.0,44 L0.0,44 Z" fill="url(#g77018)"/><path d="M0.0,9.0 L3.3,4.4 L6.5,7.0 L9.8,11.4 L13.1,8.5 L16.3,18.7 L19.6,24.2 L22.9,25.0 L26.1,28.8 L29.4,30.1 L32.7,25.6 L35.9,16.5 L39.2,22.1 L42.4,22.6 L45.7,16.6 L49.0,13.0 L52.2,11.0 L55.5,7.7 L58.8,13.1 L62.0,11.4 L65.3,11.5 L68.6,11.9 L71.8,4.0 L75.1,5.1 L78.4,12.4 L81.6,15.0 L84.9,17.4 L88.2,12.7 L91.4,24.4 L94.7,24.0 L98.0,23.7 L101.2,26.9 L104.5,28.9 L107.8,24.9 L111.0,26.5 L114.3,23.1 L117.6,16.2 L120.8,12.9 L124.1,20.6 L127.3,24.3 L130.6,26.1 L133.9,36.3 L137.1,40.0 L140.4,37.8 L143.7,38.7 L146.9,35.1 L150.2,29.6 L153.5,20.9 L156.7,26.9 L160.0,24.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#06b6d444">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#06b6d4">POET</div>
-          <div class="company">POET Technologies</div>
-          <div class="sector"><span class="sector-icon">💡</span>Photonics</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$7.98</div>
-          <span class="today-badge" style="color:#ef4444">-4.03% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g90834" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,40.0 L3.3,38.9 L6.5,38.1 L9.8,36.0 L13.1,35.6 L16.3,35.9 L19.6,34.7 L22.9,35.4 L26.1,34.0 L29.4,32.2 L32.7,31.2 L35.9,30.2 L39.2,31.8 L42.4,30.1 L45.7,28.4 L49.0,29.2 L52.2,26.0 L55.5,24.1 L58.8,20.7 L62.0,20.8 L65.3,18.6 L68.6,17.8 L71.8,17.2 L75.1,16.8 L78.4,19.5 L81.6,17.5 L84.9,17.4 L88.2,17.0 L91.4,17.3 L94.7,15.7 L98.0,17.1 L101.2,16.3 L104.5,15.6 L107.8,13.6 L111.0,13.4 L114.3,13.4 L117.6,13.4 L120.8,11.0 L124.1,9.6 L127.3,8.3 L130.6,6.6 L133.9,6.4 L137.1,7.2 L140.4,6.8 L143.7,7.2 L146.9,7.0 L150.2,6.9 L153.5,6.4 L156.7,4.0 L160.0,6.3 L160.0,44 L0.0,44 Z" fill="url(#g90834)"/><path d="M0.0,40.0 L3.3,38.9 L6.5,38.1 L9.8,36.0 L13.1,35.6 L16.3,35.9 L19.6,34.7 L22.9,35.4 L26.1,34.0 L29.4,32.2 L32.7,31.2 L35.9,30.2 L39.2,31.8 L42.4,30.1 L45.7,28.4 L49.0,29.2 L52.2,26.0 L55.5,24.1 L58.8,20.7 L62.0,20.8 L65.3,18.6 L68.6,17.8 L71.8,17.2 L75.1,16.8 L78.4,19.5 L81.6,17.5 L84.9,17.4 L88.2,17.0 L91.4,17.3 L94.7,15.7 L98.0,17.1 L101.2,16.3 L104.5,15.6 L107.8,13.6 L111.0,13.4 L114.3,13.4 L117.6,13.4 L120.8,11.0 L124.1,9.6 L127.3,8.3 L130.6,6.6 L133.9,6.4 L137.1,7.2 L140.4,6.8 L143.7,7.2 L146.9,7.0 L150.2,6.9 L153.5,6.4 L156.7,4.0 L160.0,6.3" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+221.8% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#ef444444">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#ef4444">TSLA</div>
-          <div class="company">Tesla</div>
-          <div class="sector"><span class="sector-icon">🔋</span>EV</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$407.76</div>
-          <span class="today-badge" style="color:#22c55e">+0.30% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g56326" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,35.0 L3.3,35.4 L6.5,35.2 L9.8,35.3 L13.1,36.2 L16.3,35.3 L19.6,36.3 L22.9,37.5 L26.1,40.0 L29.4,38.2 L32.7,35.9 L35.9,35.5 L39.2,35.9 L42.4,36.0 L45.7,36.5 L49.0,36.2 L52.2,37.0 L55.5,34.2 L58.8,34.1 L62.0,33.0 L65.3,30.6 L68.6,27.2 L71.8,27.4 L75.1,27.7 L78.4,24.5 L81.6,23.3 L84.9,21.8 L88.2,19.5 L91.4,17.3 L94.7,16.9 L98.0,17.7 L101.2,16.1 L104.5,15.1 L107.8,13.7 L111.0,16.1 L114.3,15.1 L117.6,13.9 L120.8,12.9 L124.1,13.0 L127.3,12.2 L130.6,10.3 L133.9,10.2 L137.1,9.7 L140.4,9.0 L143.7,9.6 L146.9,7.2 L150.2,7.0 L153.5,4.2 L156.7,4.0 L160.0,8.8 L160.0,44 L0.0,44 Z" fill="url(#g56326)"/><path d="M0.0,35.0 L3.3,35.4 L6.5,35.2 L9.8,35.3 L13.1,36.2 L16.3,35.3 L19.6,36.3 L22.9,37.5 L26.1,40.0 L29.4,38.2 L32.7,35.9 L35.9,35.5 L39.2,35.9 L42.4,36.0 L45.7,36.5 L49.0,36.2 L52.2,37.0 L55.5,34.2 L58.8,34.1 L62.0,33.0 L65.3,30.6 L68.6,27.2 L71.8,27.4 L75.1,27.7 L78.4,24.5 L81.6,23.3 L84.9,21.8 L88.2,19.5 L91.4,17.3 L94.7,16.9 L98.0,17.7 L101.2,16.1 L104.5,15.1 L107.8,13.7 L111.0,16.1 L114.3,15.1 L117.6,13.9 L120.8,12.9 L124.1,13.0 L127.3,12.2 L130.6,10.3 L133.9,10.2 L137.1,9.7 L140.4,9.0 L143.7,9.6 L146.9,7.2 L150.2,7.0 L153.5,4.2 L156.7,4.0 L160.0,8.8" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+45.2% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#64748b44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#64748b">AAPL</div>
-          <div class="company">Apple</div>
-          <div class="sector"><span class="sector-icon">📱</span>Consumer Tech</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$315.32</div>
-          <span class="today-badge" style="color:#ef4444">-0.28% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g8379" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,22.6 L3.3,20.7 L6.5,22.7 L9.8,27.7 L13.1,22.4 L16.3,19.1 L19.6,19.7 L22.9,21.6 L26.1,19.0 L29.4,20.6 L32.7,26.1 L35.9,27.3 L39.2,29.7 L42.4,29.1 L45.7,30.8 L49.0,33.1 L52.2,36.7 L55.5,36.9 L58.8,36.3 L62.0,40.0 L65.3,38.4 L68.6,34.8 L71.8,34.3 L75.1,29.5 L78.4,31.9 L81.6,28.6 L84.9,28.2 L88.2,20.0 L91.4,17.9 L94.7,15.9 L98.0,15.6 L101.2,12.3 L104.5,15.4 L107.8,13.9 L111.0,10.6 L114.3,4.1 L117.6,5.8 L120.8,6.1 L124.1,6.2 L127.3,7.6 L130.6,4.0 L133.9,7.0 L137.1,5.2 L140.4,9.0 L143.7,8.9 L146.9,13.8 L150.2,20.4 L153.5,25.4 L156.7,22.4 L160.0,21.8 L160.0,44 L0.0,44 Z" fill="url(#g8379)"/><path d="M0.0,22.6 L3.3,20.7 L6.5,22.7 L9.8,27.7 L13.1,22.4 L16.3,19.1 L19.6,19.7 L22.9,21.6 L26.1,19.0 L29.4,20.6 L32.7,26.1 L35.9,27.3 L39.2,29.7 L42.4,29.1 L45.7,30.8 L49.0,33.1 L52.2,36.7 L55.5,36.9 L58.8,36.3 L62.0,40.0 L65.3,38.4 L68.6,34.8 L71.8,34.3 L75.1,29.5 L78.4,31.9 L81.6,28.6 L84.9,28.2 L88.2,20.0 L91.4,17.9 L94.7,15.9 L98.0,15.6 L101.2,12.3 L104.5,15.4 L107.8,13.9 L111.0,10.6 L114.3,4.1 L117.6,5.8 L120.8,6.1 L124.1,6.2 L127.3,7.6 L130.6,4.0 L133.9,7.0 L137.1,5.2 L140.4,9.0 L143.7,8.9 L146.9,13.8 L150.2,20.4 L153.5,25.4 L156.7,22.4 L160.0,21.8" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge badge-neutral">YTD N/A</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#64748b22;color:#64748b;border-color:#64748b55">WATCHING</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#ec489944">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#ec4899">NFLX</div>
-          <div class="company">Netflix</div>
-          <div class="sector"><span class="sector-icon">🎬</span>Streaming</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$73.37</div>
-          <span class="today-badge" style="color:#ef4444">-2.78% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g15453" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0"/></linearGradient></defs><path d="M0.0,23.4 L3.3,22.2 L6.5,21.4 L9.8,19.2 L13.1,18.8 L16.3,19.2 L19.6,18.1 L22.9,19.0 L26.1,17.6 L29.4,15.8 L32.7,15.0 L35.9,14.1 L39.2,16.1 L42.4,14.6 L45.7,13.0 L49.0,14.2 L52.2,11.1 L55.5,9.3 L58.8,6.0 L62.0,6.5 L65.3,4.6 L68.6,4.2 L71.8,4.0 L75.1,4.0 L78.4,7.6 L81.6,5.9 L84.9,6.4 L88.2,6.6 L91.4,7.5 L94.7,6.4 L98.0,8.6 L101.2,8.4 L104.5,8.4 L107.8,6.9 L111.0,7.5 L114.3,8.2 L117.6,9.0 L120.8,7.2 L124.1,6.6 L127.3,6.0 L130.6,5.0 L133.9,5.6 L137.1,7.5 L140.4,8.0 L143.7,9.5 L146.9,10.2 L150.2,11.1 L153.5,11.6 L156.7,10.1 L160.0,40.0 L160.0,44 L0.0,44 Z" fill="url(#g15453)"/><path d="M0.0,23.4 L3.3,22.2 L6.5,21.4 L9.8,19.2 L13.1,18.8 L16.3,19.2 L19.6,18.1 L22.9,19.0 L26.1,17.6 L29.4,15.8 L32.7,15.0 L35.9,14.1 L39.2,16.1 L42.4,14.6 L45.7,13.0 L49.0,14.2 L52.2,11.1 L55.5,9.3 L58.8,6.0 L62.0,6.5 L65.3,4.6 L68.6,4.2 L71.8,4.0 L75.1,4.0 L78.4,7.6 L81.6,5.9 L84.9,6.4 L88.2,6.6 L91.4,7.5 L94.7,6.4 L98.0,8.6 L101.2,8.4 L104.5,8.4 L107.8,6.9 L111.0,7.5 L114.3,8.2 L117.6,9.0 L120.8,7.2 L124.1,6.6 L127.3,6.0 L130.6,5.0 L133.9,5.6 L137.1,7.5 L140.4,8.0 L143.7,9.5 L146.9,10.2 L150.2,11.1 L153.5,11.6 L156.7,10.1 L160.0,40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#ef444422;color:#ef4444;border-color:#ef444444">-20.0% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#ef444422;color:#ef4444;border-color:#ef444455">NEAR STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:#f59e0b44">
-      <div class="card-top">
-        <div>
-          <div class="symbol" style="color:#f59e0b">CAT</div>
-          <div class="company">Caterpillar</div>
-          <div class="sector"><span class="sector-icon">🏗</span>Industrial</div>
-        </div>
-        <div class="price-block">
-          <div class="price">$952.41</div>
-          <span class="today-badge" style="color:#22c55e">+1.49% today</span>
-        </div>
-      </div>
-      <div class="spark"><svg width="160" height="44" viewBox="0 0 160 44" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g90834" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0"/></linearGradient></defs><path d="M0.0,40.0 L3.3,38.3 L6.5,38.7 L9.8,39.4 L13.1,39.2 L16.3,37.7 L19.6,36.8 L22.9,38.4 L26.1,39.1 L29.4,37.1 L32.7,38.4 L35.9,37.5 L39.2,35.5 L42.4,35.4 L45.7,36.8 L49.0,39.7 L52.2,39.7 L55.5,39.9 L58.8,39.0 L62.0,37.2 L65.3,36.1 L68.6,33.8 L71.8,34.3 L75.1,34.0 L78.4,31.8 L81.6,31.3 L84.9,33.8 L88.2,34.2 L91.4,34.6 L94.7,36.4 L98.0,36.0 L101.2,36.6 L104.5,38.3 L107.8,36.9 L111.0,36.7 L114.3,36.4 L117.6,36.0 L120.8,33.6 L124.1,32.7 L127.3,33.3 L130.6,35.2 L133.9,33.6 L137.1,37.1 L140.4,36.2 L143.7,33.9 L146.9,28.2 L150.2,26.5 L153.5,25.8 L156.7,23.8 L160.0,4.0 L160.0,44 L0.0,44 Z" fill="url(#g90834)"/><path d="M0.0,40.0 L3.3,38.3 L6.5,38.7 L9.8,39.4 L13.1,39.2 L16.3,37.7 L19.6,36.8 L22.9,38.4 L26.1,39.1 L29.4,37.1 L32.7,38.4 L35.9,37.5 L39.2,35.5 L42.4,35.4 L45.7,36.8 L49.0,39.7 L52.2,39.7 L55.5,39.9 L58.8,39.0 L62.0,37.2 L65.3,36.1 L68.6,33.8 L71.8,34.3 L75.1,34.0 L78.4,31.8 L81.6,31.3 L84.9,33.8 L88.2,34.2 L91.4,34.6 L94.7,36.4 L98.0,36.0 L101.2,36.6 L104.5,38.3 L107.8,36.9 L111.0,36.7 L114.3,36.4 L117.6,36.0 L120.8,33.6 L124.1,32.7 L127.3,33.3 L130.6,35.2 L133.9,33.6 L137.1,37.1 L140.4,36.2 L143.7,33.9 L146.9,28.2 L150.2,26.5 L153.5,25.8 L156.7,23.8 L160.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="badges-row"><span class="badge" style="background:#22c55e22;color:#22c55e;border-color:#22c55e44">+150.6% YTD</span></div>
-      <div class="status-row">
-        <span class="status-badge" style="background:#f59e0b22;color:#f59e0b;border-color:#f59e0b55">TRAILING STOP</span>
-        <span class="pos-note">Position data via Alpaca</span>
-      </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$78.49</div>
     </div>
   </div>
 </div>
-
-<div class="footer">
-  <p>Market data via StockAnalysis.com · Refreshes hourly · DCA Portfolio Tracker</p>
-  <p style="margin-top:4px">⚠ Alpaca API restricted in this environment — position data (shares, avg cost, P&L) not available this run</p>
+<div class="card" style="--accent:#f7931a">
+  <div class="card-top">
+    <div>
+      <div class="sym">MSTR</div>
+      <div class="co-name">MicroStrategy</div>
+      <div class="sector-tag" style="color:#f7931a">₿ Crypto Treasury</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$92.12</div>
+      <div class="day-chg" style="color:#ef4444">-2.66% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -39.4%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg26942" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,14.6 L 10.9,7.2 L 17.7,13.7 L 24.6,16.0 L 31.4,28.4 L 38.3,29.7 L 45.1,30.1 L 52.0,25.6 L 58.9,21.1 L 65.7,24.5 L 72.6,23.6 L 79.4,24.2 L 86.3,31.1 L 93.1,28.7 L 100.0,22.3 L 106.9,7.2 L 113.7,16.1 L 120.6,4.0 L 127.4,7.7 L 134.3,12.9 L 141.1,17.8 L 148.0,29.5 L 154.9,34.2 L 161.7,33.7 L 168.6,43.2 L 175.4,43.5 L 182.3,43.3 L 189.1,43.0 L 196.0,44.0 L 196.0,44 Z" fill="url(#sg26942)"/>
+  <polyline points="4.0,14.6 10.9,7.2 17.7,13.7 24.6,16.0 31.4,28.4 38.3,29.7 45.1,30.1 52.0,25.6 58.9,21.1 65.7,24.5 72.6,23.6 79.4,24.2 86.3,31.1 93.1,28.7 100.0,22.3 106.9,7.2 113.7,16.1 120.6,4.0 127.4,7.7 134.3,12.9 141.1,17.8 148.0,29.5 154.9,34.2 161.7,33.7 168.6,43.2 175.4,43.5 182.3,43.3 189.1,43.0 196.0,44.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$186.82</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$92.21</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$82.91</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div>
+      <div class="sym">GEV</div>
+      <div class="co-name">GE Vernova</div>
+      <div class="sector-tag" style="color:#22c55e">⚡ Energy</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$1,042.92</div>
+      <div class="day-chg" style="color:#ef4444">-4.46% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +59.6%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg45870" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,42.5 L 10.9,44.0 L 17.7,42.1 L 24.6,38.5 L 31.4,35.7 L 38.3,29.4 L 45.1,29.9 L 52.0,25.1 L 58.9,27.9 L 65.7,27.4 L 72.6,26.5 L 79.4,21.2 L 86.3,23.5 L 93.1,20.2 L 100.0,16.1 L 106.9,4.6 L 113.7,9.8 L 120.6,5.3 L 127.4,9.9 L 134.3,13.0 L 141.1,12.4 L 148.0,18.3 L 154.9,25.8 L 161.7,11.0 L 168.6,10.3 L 175.4,4.0 L 182.3,9.2 L 189.1,7.5 L 196.0,11.5 L 196.0,44 Z" fill="url(#sg45870)"/>
+  <polyline points="4.0,42.5 10.9,44.0 17.7,42.1 24.6,38.5 31.4,35.7 38.3,29.4 45.1,29.9 52.0,25.1 58.9,27.9 65.7,27.4 72.6,26.5 79.4,21.2 86.3,23.5 93.1,20.2 100.0,16.1 106.9,4.6 113.7,9.8 120.6,5.3 127.4,9.9 134.3,13.0 141.1,12.4 148.0,18.3 154.9,25.8 161.7,11.0 168.6,10.3 175.4,4.0 182.3,9.2 189.1,7.5 196.0,11.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$1,134.35</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$644.18</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$938.63</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div>
+      <div class="sym">BE</div>
+      <div class="co-name">Bloom Energy</div>
+      <div class="sector-tag" style="color:#22c55e">⚡ Energy</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$232.71</div>
+      <div class="day-chg" style="color:#ef4444">-4.87% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +167.8%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg38321" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,39.3 L 17.7,36.2 L 24.6,33.5 L 31.4,36.8 L 38.3,35.3 L 45.1,35.0 L 52.0,31.8 L 58.9,33.6 L 65.7,34.6 L 72.6,35.1 L 79.4,36.3 L 86.3,39.5 L 93.1,36.9 L 100.0,24.6 L 106.9,21.7 L 113.7,11.0 L 120.6,11.5 L 127.4,10.7 L 134.3,12.0 L 141.1,9.9 L 148.0,11.1 L 154.9,20.9 L 161.7,11.6 L 168.6,4.0 L 175.4,10.7 L 182.3,17.2 L 189.1,19.0 L 196.0,21.1 L 196.0,44 Z" fill="url(#sg38321)"/>
+  <polyline points="4.0,44.0 10.9,39.3 17.7,36.2 24.6,33.5 31.4,36.8 38.3,35.3 45.1,35.0 52.0,31.8 58.9,33.6 65.7,34.6 72.6,35.1 79.4,36.3 86.3,39.5 93.1,36.9 100.0,24.6 106.9,21.7 113.7,11.0 120.6,11.5 127.4,10.7 134.3,12.0 141.1,9.9 148.0,11.1 154.9,20.9 161.7,11.6 168.6,4.0 175.4,10.7 182.3,17.2 189.1,19.0 196.0,21.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$326.19</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$108.00</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$209.44</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div>
+      <div class="sym">KGS</div>
+      <div class="co-name">Kodiak Gas</div>
+      <div class="sector-tag" style="color:#22c55e">⚡ Energy</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$66.94</div>
+      <div class="day-chg" style="color:#ef4444">-1.33% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +79.0%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg4642" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,43.7 L 17.7,40.2 L 24.6,39.4 L 31.4,37.5 L 38.3,27.7 L 45.1,29.4 L 52.0,27.1 L 58.9,21.7 L 65.7,23.1 L 72.6,24.3 L 79.4,20.7 L 86.3,21.9 L 93.1,19.6 L 100.0,18.2 L 106.9,15.9 L 113.7,13.0 L 120.6,8.4 L 127.4,4.0 L 134.3,6.4 L 141.1,9.3 L 148.0,12.4 L 154.9,13.3 L 161.7,13.2 L 168.6,9.1 L 175.4,7.4 L 182.3,9.9 L 189.1,11.9 L 196.0,12.8 L 196.0,44 Z" fill="url(#sg4642)"/>
+  <polyline points="4.0,44.0 10.9,43.7 17.7,40.2 24.6,39.4 31.4,37.5 38.3,27.7 45.1,29.4 52.0,27.1 58.9,21.7 65.7,23.1 72.6,24.3 79.4,20.7 86.3,21.9 93.1,19.6 100.0,18.2 106.9,15.9 113.7,13.0 120.6,8.4 127.4,4.0 134.3,6.4 141.1,9.3 148.0,12.4 154.9,13.3 161.7,13.2 168.6,9.1 175.4,7.4 182.3,9.9 189.1,11.9 196.0,12.8" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$75.74</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$35.92</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$60.25</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div>
+      <div class="sym">QBTS</div>
+      <div class="co-name">D-Wave Quantum</div>
+      <div class="sector-tag" style="color:#a855f7">⚛ Quantum</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$18.75</div>
+      <div class="day-chg" style="color:#ef4444">-6.69% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -33.3%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg65322" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,4.0 L 10.9,4.1 L 17.7,14.1 L 24.6,16.7 L 31.4,28.5 L 38.3,29.6 L 45.1,31.0 L 52.0,29.6 L 58.9,31.4 L 65.7,31.4 L 72.6,37.2 L 79.4,38.0 L 86.3,44.0 L 93.1,41.9 L 100.0,26.8 L 106.9,25.7 L 113.7,32.9 L 120.6,19.4 L 127.4,25.2 L 134.3,30.4 L 141.1,10.6 L 148.0,10.4 L 154.9,20.8 L 161.7,21.6 L 168.6,21.5 L 175.4,20.2 L 182.3,27.2 L 189.1,28.5 L 196.0,31.8 L 196.0,44 Z" fill="url(#sg65322)"/>
+  <polyline points="4.0,4.0 10.9,4.1 17.7,14.1 24.6,16.7 31.4,28.5 38.3,29.6 45.1,31.0 52.0,29.6 58.9,31.4 65.7,31.4 72.6,37.2 79.4,38.0 86.3,44.0 93.1,41.9 100.0,26.8 106.9,25.7 113.7,32.9 120.6,19.4 127.4,25.2 134.3,30.4 141.1,10.6 148.0,10.4 154.9,20.8 161.7,21.6 168.6,21.5 175.4,20.2 182.3,27.2 189.1,28.5 196.0,31.8" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$30.20</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$13.70</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$16.88</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div>
+      <div class="sym">IONQ</div>
+      <div class="co-name">IonQ Inc</div>
+      <div class="sector-tag" style="color:#a855f7">⚛ Quantum</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$39.01</div>
+      <div class="day-chg" style="color:#ef4444">-8.98% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -13.1%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg35001" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,22.2 L 10.9,21.2 L 17.7,23.7 L 24.6,26.2 L 31.4,36.5 L 38.3,38.2 L 45.1,38.5 L 52.0,38.3 L 58.9,34.8 L 65.7,37.6 L 72.6,39.5 L 79.4,39.9 L 86.3,44.0 L 93.1,42.8 L 100.0,28.7 L 106.9,24.6 L 113.7,29.8 L 120.6,19.5 L 127.4,16.8 L 134.3,19.6 L 141.1,6.8 L 148.0,4.0 L 154.9,15.5 L 161.7,17.4 L 168.6,18.5 L 175.4,20.6 L 182.3,26.9 L 189.1,29.1 L 196.0,32.9 L 196.0,44 Z" fill="url(#sg35001)"/>
+  <polyline points="4.0,22.2 10.9,21.2 17.7,23.7 24.6,26.2 31.4,36.5 38.3,38.2 45.1,38.5 52.0,38.3 58.9,34.8 65.7,37.6 72.6,39.5 79.4,39.9 86.3,44.0 93.1,42.8 100.0,28.7 106.9,24.6 113.7,29.8 120.6,19.5 127.4,16.8 134.3,19.6 141.1,6.8 148.0,4.0 154.9,15.5 161.7,17.4 168.6,18.5 175.4,20.6 182.3,26.9 189.1,29.1 196.0,32.9" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$68.23</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$27.79</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$35.11</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div>
+      <div class="sym">QUBT</div>
+      <div class="co-name">Quantum Computing</div>
+      <div class="sector-tag" style="color:#a855f7">⚛ Quantum</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$8.02</div>
+      <div class="day-chg" style="color:#ef4444">-7.45% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -21.8%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg44374" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,9.9 L 10.9,4.0 L 17.7,9.9 L 24.6,13.4 L 31.4,27.0 L 38.3,31.1 L 45.1,33.3 L 52.0,30.1 L 58.9,33.7 L 65.7,37.3 L 72.6,39.8 L 79.4,39.4 L 86.3,44.0 L 93.1,42.0 L 100.0,25.2 L 106.9,22.1 L 113.7,32.8 L 120.6,18.0 L 127.4,14.1 L 134.3,24.1 L 141.1,11.4 L 148.0,12.9 L 154.9,24.3 L 161.7,22.7 L 168.6,23.1 L 175.4,25.0 L 182.3,29.6 L 189.1,30.2 L 196.0,34.6 L 196.0,44 Z" fill="url(#sg44374)"/>
+  <polyline points="4.0,9.9 10.9,4.0 17.7,9.9 24.6,13.4 31.4,27.0 38.3,31.1 45.1,33.3 52.0,30.1 58.9,33.7 65.7,37.3 72.6,39.8 79.4,39.4 86.3,44.0 93.1,42.0 100.0,25.2 106.9,22.1 113.7,32.8 120.6,18.0 127.4,14.1 134.3,24.1 141.1,11.4 148.0,12.9 154.9,24.3 161.7,22.7 168.6,23.1 175.4,25.0 182.3,29.6 189.1,30.2 196.0,34.6" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$12.51</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$6.64</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$7.22</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div>
+      <div class="sym">SNDK</div>
+      <div class="co-name">SanDisk Corp</div>
+      <div class="sector-tag" style="color:#3b82f6">⬡ Semiconductors</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$1,668.90</div>
+      <div class="day-chg" style="color:#ef4444">-12.89% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +603.0%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg63643" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,43.2 L 17.7,40.5 L 24.6,39.9 L 31.4,38.5 L 38.3,38.1 L 45.1,38.1 L 52.0,37.4 L 58.9,38.2 L 65.7,36.8 L 72.6,34.5 L 79.4,36.3 L 86.3,35.9 L 93.1,33.8 L 100.0,31.2 L 106.9,29.1 L 113.7,27.1 L 120.6,18.8 L 127.4,17.9 L 134.3,19.2 L 141.1,14.5 L 148.0,8.8 L 154.9,13.3 L 161.7,5.7 L 168.6,6.8 L 175.4,4.0 L 182.3,11.3 L 189.1,6.8 L 196.0,12.7 L 196.0,44 Z" fill="url(#sg63643)"/>
+  <polyline points="4.0,44.0 10.9,43.2 17.7,40.5 24.6,39.9 31.4,38.5 38.3,38.1 45.1,38.1 52.0,37.4 58.9,38.2 65.7,36.8 72.6,34.5 79.4,36.3 86.3,35.9 93.1,33.8 100.0,31.2 106.9,29.1 113.7,27.1 120.6,18.8 127.4,17.9 134.3,19.2 141.1,14.5 148.0,8.8 154.9,13.3 161.7,5.7 168.6,6.8 175.4,4.0 182.3,11.3 189.1,6.8 196.0,12.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$2,032.22</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$353.56</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$1,502.01</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div>
+      <div class="sym">MU</div>
+      <div class="co-name">Micron Technology</div>
+      <div class="sector-tag" style="color:#3b82f6">⬡ Semiconductors</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$932.45</div>
+      <div class="day-chg" style="color:#ef4444">-4.78% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +226.7%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg40628" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,43.7 L 10.9,44.0 L 17.7,41.0 L 24.6,38.5 L 31.4,41.5 L 38.3,39.9 L 45.1,39.3 L 52.0,38.9 L 58.9,40.4 L 65.7,39.4 L 72.6,37.1 L 79.4,41.4 L 86.3,42.2 L 93.1,40.1 L 100.0,37.4 L 106.9,35.7 L 113.7,34.1 L 120.6,26.1 L 127.4,18.8 L 134.3,22.6 L 141.1,12.1 L 148.0,4.0 L 154.9,14.1 L 161.7,6.0 L 168.6,5.7 L 175.4,6.5 L 182.3,11.0 L 189.1,9.4 L 196.0,11.9 L 196.0,44 Z" fill="url(#sg40628)"/>
+  <polyline points="4.0,43.7 10.9,44.0 17.7,41.0 24.6,38.5 31.4,41.5 38.3,39.9 45.1,39.3 52.0,38.9 58.9,40.4 65.7,39.4 72.6,37.1 79.4,41.4 86.3,42.2 93.1,40.1 100.0,37.4 106.9,35.7 113.7,34.1 120.6,26.1 127.4,18.8 134.3,22.6 141.1,12.1 148.0,4.0 154.9,14.1 161.7,6.0 168.6,5.7 175.4,6.5 182.3,11.0 189.1,9.4 196.0,11.9" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$1,079.57</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$333.35</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$839.21</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div>
+      <div class="sym">WDC</div>
+      <div class="co-name">Western Digital</div>
+      <div class="sector-tag" style="color:#3b82f6">⬡ Semiconductors</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$550.00</div>
+      <div class="day-chg" style="color:#ef4444">-5.59% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +219.3%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg49808" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,42.8 L 17.7,40.7 L 24.6,37.8 L 31.4,38.6 L 38.3,38.2 L 45.1,36.5 L 52.0,36.9 L 58.9,39.2 L 65.7,38.6 L 72.6,35.8 L 79.4,36.5 L 86.3,36.4 L 93.1,33.2 L 100.0,31.1 L 106.9,29.2 L 113.7,27.4 L 120.6,21.9 L 127.4,21.0 L 134.3,23.7 L 141.1,18.2 L 148.0,13.2 L 154.9,21.3 L 161.7,4.0 L 168.6,9.3 L 175.4,12.9 L 182.3,16.6 L 189.1,14.1 L 196.0,16.7 L 196.0,44 Z" fill="url(#sg49808)"/>
+  <polyline points="4.0,44.0 10.9,42.8 17.7,40.7 24.6,37.8 31.4,38.6 38.3,38.2 45.1,36.5 52.0,36.9 58.9,39.2 65.7,38.6 72.6,35.8 79.4,36.5 86.3,36.4 93.1,33.2 100.0,31.1 106.9,29.2 113.7,27.4 120.6,21.9 127.4,21.0 134.3,23.7 141.1,18.2 148.0,13.2 154.9,21.3 161.7,4.0 168.6,9.3 175.4,12.9 182.3,16.6 189.1,14.1 196.0,16.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$712.13</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$199.88</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$495.00</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div>
+      <div class="sym">MRVL</div>
+      <div class="co-name">Marvell Technology</div>
+      <div class="sector-tag" style="color:#3b82f6">⬡ Semiconductors</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$218.40</div>
+      <div class="day-chg" style="color:#ef4444">-7.39% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +157.0%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg9130" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,42.1 L 10.9,42.7 L 17.7,42.5 L 24.6,42.3 L 31.4,44.0 L 38.3,42.7 L 45.1,43.1 L 52.0,42.7 L 58.9,43.2 L 65.7,41.1 L 72.6,41.6 L 79.4,39.7 L 86.3,38.2 L 93.1,36.9 L 100.0,33.3 L 106.9,29.3 L 113.7,29.5 L 120.6,26.7 L 127.4,25.7 L 134.3,24.2 L 141.1,22.1 L 148.0,4.0 L 154.9,12.6 L 161.7,6.1 L 168.6,8.4 L 175.4,9.2 L 182.3,16.3 L 189.1,15.6 L 196.0,18.6 L 196.0,44 Z" fill="url(#sg9130)"/>
+  <polyline points="4.0,42.1 10.9,42.7 17.7,42.5 24.6,42.3 31.4,44.0 38.3,42.7 45.1,43.1 52.0,42.7 58.9,43.2 65.7,41.1 72.6,41.6 79.4,39.7 86.3,38.2 93.1,36.9 100.0,33.3 106.9,29.3 113.7,29.5 120.6,26.7 127.4,25.7 134.3,24.2 141.1,22.1 148.0,4.0 154.9,12.6 161.7,6.1 168.6,8.4 175.4,9.2 182.3,16.3 189.1,15.6 196.0,18.6" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$301.65</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$73.73</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$196.56</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div>
+      <div class="sym">ALMU</div>
+      <div class="co-name">Aeluma Inc</div>
+      <div class="sector-tag" style="color:#3b82f6">⬡ Semiconductors</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$16.03</div>
+      <div class="day-chg" style="color:#ef4444">-8.89% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -6.6%</span>
+    <span class="status-badge" style="color:#64748b;background:#1e2535">WATCHING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg57598" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,28.3 L 10.9,24.1 L 17.7,29.7 L 24.6,32.7 L 31.4,37.5 L 38.3,33.4 L 45.1,35.1 L 52.0,34.3 L 58.9,30.3 L 65.7,34.8 L 72.6,38.4 L 79.4,41.3 L 86.3,41.3 L 93.1,44.0 L 100.0,33.7 L 106.9,24.6 L 113.7,28.6 L 120.6,10.1 L 127.4,4.0 L 134.3,25.1 L 141.1,20.6 L 148.0,13.4 L 154.9,22.4 L 161.7,17.3 L 168.6,24.9 L 175.4,26.0 L 182.3,31.5 L 189.1,31.8 L 196.0,34.9 L 196.0,44 Z" fill="url(#sg57598)"/>
+  <polyline points="4.0,28.3 10.9,24.1 17.7,29.7 24.6,32.7 31.4,37.5 38.3,33.4 45.1,35.1 52.0,34.3 58.9,30.3 65.7,34.8 72.6,38.4 79.4,41.3 86.3,41.3 93.1,44.0 100.0,33.7 106.9,24.6 113.7,28.6 120.6,10.1 127.4,4.0 134.3,25.1 141.1,20.6 148.0,13.4 154.9,22.4 161.7,17.3 168.6,24.9 175.4,26.0 182.3,31.5 189.1,31.8 196.0,34.9" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$31.49</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$11.49</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$14.43</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-top">
+    <div>
+      <div class="sym">IPGP</div>
+      <div class="co-name">IPG Photonics</div>
+      <div class="sector-tag" style="color:#06b6d4">◎ Photonics</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$104.90</div>
+      <div class="day-chg" style="color:#ef4444">-2.63% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +46.5%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg24170" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,43.4 L 17.7,38.4 L 24.6,33.9 L 31.4,29.1 L 38.3,22.0 L 45.1,4.4 L 52.0,4.0 L 58.9,10.2 L 65.7,15.8 L 72.6,18.3 L 79.4,11.6 L 86.3,19.0 L 93.1,15.9 L 100.0,15.3 L 106.9,13.2 L 113.7,20.5 L 120.6,27.7 L 127.4,24.7 L 134.3,15.5 L 141.1,18.1 L 148.0,15.1 L 154.9,26.4 L 161.7,20.2 L 168.6,24.0 L 175.4,19.7 L 182.3,27.5 L 189.1,24.0 L 196.0,25.8 L 196.0,44 Z" fill="url(#sg24170)"/>
+  <polyline points="4.0,44.0 10.9,43.4 17.7,38.4 24.6,33.9 31.4,29.1 38.3,22.0 45.1,4.4 52.0,4.0 58.9,10.2 65.7,15.8 72.6,18.3 79.4,11.6 86.3,19.0 93.1,15.9 100.0,15.3 106.9,13.2 113.7,20.5 120.6,27.7 127.4,24.7 134.3,15.5 141.1,18.1 148.0,15.1 154.9,26.4 161.7,20.2 168.6,24.0 175.4,19.7 182.3,27.5 189.1,24.0 196.0,25.8" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$138.85</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$76.67</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$94.41</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-top">
+    <div>
+      <div class="sym">POET</div>
+      <div class="co-name">POET Technologies</div>
+      <div class="sector-tag" style="color:#06b6d4">◎ Photonics</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$7.93</div>
+      <div class="day-chg" style="color:#ef4444">-4.63% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +25.3%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg15725" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,36.4 L 10.9,33.8 L 17.7,32.6 L 24.6,41.4 L 31.4,43.9 L 38.3,43.0 L 45.1,44.0 L 52.0,40.8 L 58.9,38.9 L 65.7,36.4 L 72.6,41.6 L 79.4,41.9 L 86.3,43.9 L 93.1,41.4 L 100.0,38.3 L 106.9,14.7 L 113.7,39.8 L 120.6,27.1 L 127.4,8.1 L 134.3,6.4 L 141.1,12.6 L 148.0,4.0 L 154.9,22.0 L 161.7,18.0 L 168.6,23.3 L 175.4,27.2 L 182.3,32.0 L 189.1,32.9 L 196.0,34.4 L 196.0,44 Z" fill="url(#sg15725)"/>
+  <polyline points="4.0,36.4 10.9,33.8 17.7,32.6 24.6,41.4 31.4,43.9 38.3,43.0 45.1,44.0 52.0,40.8 58.9,38.9 65.7,36.4 72.6,41.6 79.4,41.9 86.3,43.9 93.1,41.4 100.0,38.3 106.9,14.7 113.7,39.8 120.6,27.1 127.4,8.1 134.3,6.4 141.1,12.6 148.0,4.0 154.9,22.0 161.7,18.0 168.6,23.3 175.4,27.2 182.3,32.0 189.1,32.9 196.0,34.4" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$15.38</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$5.58</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$7.14</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#ef4444">
+  <div class="card-top">
+    <div>
+      <div class="sym">TSLA</div>
+      <div class="co-name">Tesla Inc</div>
+      <div class="sector-tag" style="color:#ef4444">⚡ EV</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$392.58</div>
+      <div class="day-chg" style="color:#ef4444">-3.72% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -12.7%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg29191" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,9.4 L 10.9,6.4 L 17.7,9.4 L 24.6,9.4 L 31.4,19.4 L 38.3,10.7 L 45.1,17.3 L 52.0,14.9 L 58.9,19.4 L 65.7,18.7 L 72.6,24.6 L 79.4,27.3 L 86.3,29.1 L 93.1,44.0 L 100.0,24.9 L 106.9,26.6 L 113.7,32.4 L 120.6,22.2 L 127.4,4.0 L 134.3,15.0 L 141.1,5.9 L 148.0,12.5 L 154.9,29.0 L 161.7,23.2 L 168.6,31.3 L 175.4,11.8 L 182.3,24.1 L 189.1,18.7 L 196.0,24.7 L 196.0,44 Z" fill="url(#sg29191)"/>
+  <polyline points="4.0,9.4 10.9,6.4 17.7,9.4 24.6,9.4 31.4,19.4 38.3,10.7 45.1,17.3 52.0,14.9 58.9,19.4 65.7,18.7 72.6,24.6 79.4,27.3 86.3,29.1 93.1,44.0 100.0,24.9 106.9,26.6 113.7,32.4 120.6,22.2 127.4,4.0 134.3,15.0 141.1,5.9 148.0,12.5 154.9,29.0 161.7,23.2 168.6,31.3 175.4,11.8 182.3,24.1 189.1,18.7 196.0,24.7" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$445.27</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$343.25</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$353.32</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#64748b">
+  <div class="card-top">
+    <div>
+      <div class="sym">AAPL</div>
+      <div class="co-name">Apple Inc</div>
+      <div class="sector-tag" style="color:#64748b">◈ Consumer Tech</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$317.21</div>
+      <div class="day-chg" style="color:#22c55e">+0.60% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +16.7%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg7841" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,36.7 L 10.9,36.9 L 17.7,44.0 L 24.6,38.9 L 31.4,27.4 L 38.3,28.0 L 45.1,34.4 L 52.0,28.7 L 58.9,35.4 L 65.7,36.4 L 72.6,42.7 L 79.4,41.1 L 86.3,39.4 L 93.1,37.5 L 100.0,33.2 L 106.9,29.3 L 113.7,31.1 L 120.6,21.1 L 127.4,14.5 L 134.3,12.6 L 141.1,7.7 L 148.0,8.0 L 154.9,18.7 L 161.7,16.2 L 168.6,17.9 L 175.4,17.1 L 182.3,6.2 L 189.1,5.1 L 196.0,4.0 L 196.0,44 Z" fill="url(#sg7841)"/>
+  <polyline points="4.0,36.7 10.9,36.9 17.7,44.0 24.6,38.9 31.4,27.4 38.3,28.0 45.1,34.4 52.0,28.7 58.9,35.4 65.7,36.4 72.6,42.7 79.4,41.1 86.3,39.4 93.1,37.5 100.0,33.2 106.9,29.3 113.7,31.1 120.6,21.1 127.4,14.5 134.3,12.6 141.1,7.7 148.0,8.0 154.9,18.7 161.7,16.2 168.6,17.9 175.4,17.1 182.3,6.2 189.1,5.1 196.0,4.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$317.21</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$247.65</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$285.49</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#ec4899">
+  <div class="card-top">
+    <div>
+      <div class="sym">NFLX</div>
+      <div class="co-name">Netflix Inc</div>
+      <div class="sector-tag" style="color:#ec4899">▶ Streaming</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$74.11</div>
+      <div class="day-chg" style="color:#22c55e">+1.00% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#ef4444;background:#2d0707">YTD -21.0%</span>
+    <span class="status-badge" style="color:#ef4444;background:#2d0707">NEAR STOP</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg52667" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,22.9 L 10.9,25.4 L 17.7,28.9 L 24.6,29.7 L 31.4,34.7 L 38.3,35.3 L 45.1,37.1 L 52.0,31.9 L 58.9,14.1 L 65.7,18.3 L 72.6,18.5 L 79.4,21.2 L 86.3,17.6 L 93.1,13.3 L 100.0,4.0 L 106.9,20.1 L 113.7,21.4 L 120.6,25.7 L 127.4,26.5 L 134.3,25.9 L 141.1,26.7 L 148.0,33.2 L 154.9,32.7 L 161.7,38.3 L 168.6,44.0 L 175.4,41.4 L 182.3,39.8 L 189.1,42.3 L 196.0,41.5 L 196.0,44 Z" fill="url(#sg52667)"/>
+  <polyline points="4.0,22.9 10.9,25.4 17.7,28.9 24.6,29.7 31.4,34.7 38.3,35.3 45.1,37.1 52.0,31.9 58.9,14.1 65.7,18.3 72.6,18.5 79.4,21.2 86.3,17.6 93.1,13.3 100.0,4.0 106.9,20.1 113.7,21.4 120.6,25.7 127.4,26.5 134.3,25.9 141.1,26.7 148.0,33.2 154.9,32.7 161.7,38.3 168.6,44.0 175.4,41.4 182.3,39.8 189.1,42.3 196.0,41.5" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$107.71</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$71.84</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$66.70</div>
+    </div>
+  </div>
+</div>
+<div class="card" style="--accent:#f59e0b">
+  <div class="card-top">
+    <div>
+      <div class="sym">CAT</div>
+      <div class="co-name">Caterpillar Inc</div>
+      <div class="sector-tag" style="color:#f59e0b">⚙ Industrial</div>
+    </div>
+    <div style="text-align:right">
+      <div class="price">$931.55</div>
+      <div class="day-chg" style="color:#ef4444">-2.19% today</div>
+    </div>
+  </div>
+  <div class="ytd-row">
+    <span class="ytd-badge" style="color:#22c55e;background:#052e16">YTD +62.6%</span>
+    <span class="status-badge" style="color:#22c55e;background:#052e16">TRAILING</span>
+  </div>
+  <div class="spark-wrap"><svg viewBox="0 0 200 48" preserveAspectRatio="none" style="width:100%;height:48px;display:block">
+  <defs>
+    <linearGradient id="sg46445" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M 4.0,44 L 4.0,44.0 L 10.9,39.8 L 17.7,39.1 L 24.6,39.3 L 31.4,34.4 L 38.3,26.1 L 45.1,28.4 L 52.0,26.9 L 58.9,30.4 L 65.7,32.8 L 72.6,34.2 L 79.4,31.7 L 86.3,30.6 L 93.1,26.4 L 100.0,26.5 L 106.9,22.7 L 113.7,22.5 L 120.6,10.8 L 127.4,13.3 L 134.3,16.3 L 141.1,12.5 L 148.0,10.9 L 154.9,17.9 L 161.7,7.9 L 168.6,4.0 L 175.4,4.3 L 182.3,8.7 L 189.1,8.2 L 196.0,10.3 L 196.0,44 Z" fill="url(#sg46445)"/>
+  <polyline points="4.0,44.0 10.9,39.8 17.7,39.1 24.6,39.3 31.4,34.4 38.3,26.1 45.1,28.4 52.0,26.9 58.9,30.4 65.7,32.8 72.6,34.2 79.4,31.7 86.3,30.6 93.1,26.4 100.0,26.5 106.9,22.7 113.7,22.5 120.6,10.8 127.4,13.3 134.3,16.3 141.1,12.5 148.0,10.9 154.9,17.9 161.7,7.9 168.6,4.0 175.4,4.3 182.3,8.7 189.1,8.2 196.0,10.3" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg></div>
+  <div class="card-foot">
+    <div class="foot-item">
+      <div class="foot-label">52W High</div>
+      <div class="foot-val">$994.45</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">52W Low</div>
+      <div class="foot-val">$596.52</div>
+    </div>
+    <div class="foot-item">
+      <div class="foot-label">Stop (−10%)</div>
+      <div class="foot-val" style="color:#ef4444">$838.39</div>
+    </div>
+  </div>
+</div>
+  </div>
 </div>
 </body>
 </html>
