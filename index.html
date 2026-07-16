@@ -1,342 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="3600">
-<title>DCA Portfolio Dashboard</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0a0d14;
-    --card: #111520;
-    --card2: #161b2e;
-    --border: #1e2540;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --green: #22c55e;
-    --red: #ef4444;
-    --yellow: #f59e0b;
-    --blue: #3b82f6;
-    --purple: #a855f7;
-    --cyan: #06b6d4;
-    --pink: #ec4899;
-  }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    padding: 16px;
-  }
-  header { max-width: 1400px; margin: 0 auto 24px; }
-  .header-top {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, #3b82f6, #a855f7);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px;
-  }
-  .logo h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; }
-  .logo p  { font-size: 0.75rem; color: var(--muted); }
-  .header-meta { text-align: right; }
-  .ts { font-size: 0.72rem; color: var(--muted); }
-  .refresh-btn {
-    background: var(--card2); border: 1px solid var(--border);
-    color: var(--text); padding: 6px 14px; border-radius: 6px;
-    font-size: 0.78rem; cursor: pointer; margin-top: 4px; transition: background 0.2s;
-  }
-  .refresh-btn:hover { background: #1e2540; }
-  .summary-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px;
-  }
-  .summary-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
-  }
-  .summary-card .label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .summary-card .value { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.02em; }
-  .summary-card .sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
-  .positive { color: var(--green) !important; }
-  .negative { color: var(--red)   !important; }
-  .neutral  { color: var(--text); }
-  .section-title {
-    font-size: 0.78rem; font-weight: 600; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.06em;
-    max-width: 1400px; margin: 24px auto 12px;
-  }
-  .grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-    max-width: 1400px; margin: 0 auto;
-  }
-  @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 860px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 520px)  { .grid { grid-template-columns: 1fr; } }
-  .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px; transition: transform 0.15s, border-color 0.15s;
-    position: relative; overflow: hidden;
-  }
-  .card:hover { transform: translateY(-2px); border-color: #2e3a5c; }
-  .card-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
-  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; margin-top: 4px; }
-  .card-symbol { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
-  .card-name   { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
-  .card-sector {
-    font-size: 0.6rem; color: var(--muted);
-    background: var(--card2); border: 1px solid var(--border);
-    padding: 2px 6px; border-radius: 4px; white-space: nowrap; text-align: right;
-  }
-  .price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .price { font-size: 1.05rem; font-weight: 700; }
-  .ytd-badge { font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
-  .ytd-pos { background: rgba(34,197,94,0.15); color: var(--green); }
-  .ytd-neg { background: rgba(239,68,68,0.15); color: var(--red); }
-  .ytd-neu { background: rgba(100,116,139,0.15); color: var(--muted); }
-  .sparkline-wrap { margin: 6px 0 10px; height: 42px; }
-  .sparkline-wrap svg { width: 100%; height: 42px; display: block; }
-  .pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 0.68rem; margin-bottom: 10px; }
-  .pos-row { display: flex; flex-direction: column; }
-  .pos-label { color: var(--muted); }
-  .pos-val { font-weight: 600; }
-  .status-badge {
-    display: inline-block; font-size: 0.62rem; font-weight: 700;
-    padding: 3px 8px; border-radius: 4px; letter-spacing: 0.04em; text-transform: uppercase;
-  }
-  .badge-trailing { background: rgba(168,85,247,0.2);  color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
-  .badge-nearstop { background: rgba(239,68,68,0.2);   color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
-  .badge-inprofit { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
-  .badge-watching { background: rgba(100,116,139,0.15); color: var(--muted); border: 1px solid var(--border); }
-  .no-position { color: var(--muted); font-size: 0.75rem; font-style: italic; padding: 4px 0; }
-  #loading {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 60vh; gap: 16px;
-  }
-  .spinner {
-    width: 44px; height: 44px; border: 3px solid var(--border);
-    border-top-color: var(--blue); border-radius: 50%; animation: spin 0.9s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { color: var(--muted); font-size: 0.85rem; }
-  #error-box {
-    display: none; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
-    border-radius: 10px; padding: 16px 20px; color: #f87171;
-    max-width: 640px; margin: 40px auto; font-size: 0.85rem; line-height: 1.6;
-  }
-  #dashboard { display: none; max-width: 1400px; margin: 0 auto; }
-  .footer { text-align: center; color: var(--muted); font-size: 0.7rem; margin-top: 32px; padding-bottom: 24px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="3600">
+  <title>DCA Portfolio Dashboard</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0d14;
+      --card-bg: #111520;
+      --border: #1e2433;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --pos: #22c55e;
+      --neg: #ef4444;
+      --neutral: #94a3b8;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 0 0 40px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #0d1117 0%, #111520 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 20px;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .header-title span {
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 0.9rem;
+      margin-left: 10px;
+    }
+    .stats-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .stat-val { font-size: 1.3rem; font-weight: 600; }
+    .stat-val.pos { color: var(--pos); }
+    .stat-val.neg { color: var(--neg); }
+
+    /* ── API Banner ── */
+    .api-banner {
+      max-width: 1400px;
+      margin: 16px auto 0;
+      padding: 12px 20px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #fca5a5;
+      line-height: 1.5;
+    }
+    .api-banner code {
+      background: rgba(255,255,255,0.08);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+
+    /* ── Main ── */
+    .main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px 0;
+    }
+    .section-lbl {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    }
+    @media (max-width: 340px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent, #334155);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--accent, #475569);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .sym { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
+    .company { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .sector-badge {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      font-weight: 600;
+      opacity: 0.85;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .price { font-size: 1.05rem; font-weight: 600; }
+    .ytd-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .ytd-badge.pos { background: rgba(34,197,94,0.15); color: var(--pos); }
+    .ytd-badge.neg { background: rgba(239,68,68,0.15); color: var(--neg); }
+    .ytd-badge.neutral { background: rgba(100,116,139,0.15); color: var(--muted); }
+
+    .sparkline { line-height: 0; border-radius: 4px; overflow: hidden; }
+    .sparkline svg { width: 100%; height: auto; }
+
+    .pos-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      font-size: 0.72rem;
+    }
+    .pos-item { display: flex; flex-direction: column; gap: 1px; }
+    .lbl { color: var(--muted); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .val { font-weight: 500; }
+    .val.pos { color: var(--pos); }
+    .val.neg { color: var(--neg); }
+
+    /* ── Status badge ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      align-self: flex-start;
+    }
+    .badge-trail  { background: rgba(168,85,247,0.18); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+    .badge-stop   { background: rgba(239,68,68,0.18);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+    .badge-profit { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+    .badge-watch  { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+
+    /* ── Footer ── */
+    .footer {
+      max-width: 1400px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div class="logo">
-      <div class="logo-icon">&#x1F4C8;</div>
-      <div>
-        <h1>DCA Portfolio</h1>
-        <p>Live &middot; Paper Account</p>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-title">
+      DCA Portfolio
+      <span>raynard29 · Alpaca Paper</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-lbl">Portfolio Value</div>
+        <div class="stat-val">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Cash</div>
+        <div class="stat-val">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Invested</div>
+        <div class="stat-val">—</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Unrealized P&L</div>
+        <div class="stat-val pos">—</div>
       </div>
     </div>
-    <div class="header-meta">
-      <div class="ts" id="ts-label">Loading&hellip;</div>
-      <button class="refresh-btn" onclick="loadDashboard()">&#x21BB; Refresh</button>
-    </div>
+    
+        <div class="api-banner">
+          ⚠ Live data unavailable — Alpaca API is blocked by the execution environment's egress policy.
+          Portfolio values and position data cannot be fetched. Contact your environment administrator
+          to allow <code>paper-api.alpaca.markets</code> and <code>data.alpaca.markets</code>.
+        </div>
   </div>
-  <div class="summary-grid">
-    <div class="summary-card"><div class="label">Portfolio Value</div><div class="value" id="s-total">&mdash;</div><div class="sub">Equity</div></div>
-    <div class="summary-card"><div class="label">Cash</div><div class="value" id="s-cash">&mdash;</div><div class="sub">Available</div></div>
-    <div class="summary-card"><div class="label">Invested</div><div class="value" id="s-invested">&mdash;</div><div class="sub">Market value</div></div>
-    <div class="summary-card"><div class="label">Unrealized P&amp;L</div><div class="value" id="s-pnl">&mdash;</div><div class="sub" id="s-pnlpct">&mdash;</div></div>
-    <div class="summary-card"><div class="label">Day P&amp;L</div><div class="value" id="s-daypnl">&mdash;</div><div class="sub" id="s-daypct">Today</div></div>
-  </div>
-</header>
-
-<div id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text">Fetching live portfolio data from Alpaca&hellip;</div>
-</div>
-<div id="error-box"></div>
-<div id="dashboard">
-  <div class="section-title">Holdings</div>
-  <div class="grid" id="cards-grid"></div>
-  <div class="footer">Auto-refreshes every hour &middot; Data via Alpaca Markets (Paper)</div>
 </div>
 
-<script>
-const KEY    = 'PKVSKGUO3BBBBYYOX2TL5L7RPC';
-const SECRET = '7mSg5NJN9ukq4pHrmXAgZjgJ1NSnZSsMExpECfYzG38X';
-const BASE   = 'https://paper-api.alpaca.markets/v2';
-const DATA   = 'https://data.alpaca.markets';
+<div class="main">
+  <div class="section-lbl">19 Positions · Last updated 2026-07-16 20:06 UTC</div>
+  <div class="grid">
+    
+    <div class="card" style="--accent:#f7931a">
+      <div class="card-header">
+        <div>
+          <div class="sym">STRC</div>
+          <div class="company">Strategy Inc</div>
+        </div>
+        <div class="sector-badge" style="color:#f7931a">₿ Crypto Treasury</div>
+      </div>
 
-const STOCKS = {
-  STRC: { name:'Strategy Inc',       sector:'Crypto Treasury', color:'#f7931a' },
-  MSTR: { name:'MicroStrategy',      sector:'Crypto Treasury', color:'#f7931a' },
-  GEV:  { name:'GE Vernova',         sector:'Energy',          color:'#22c55e' },
-  BE:   { name:'Bloom Energy',       sector:'Energy',          color:'#22c55e' },
-  KGS:  { name:'Kodiak Gas',         sector:'Energy',          color:'#22c55e' },
-  QBTS: { name:'D-Wave Quantum',     sector:'Quantum',         color:'#a855f7' },
-  IONQ: { name:'IonQ',               sector:'Quantum',         color:'#a855f7' },
-  QUBT: { name:'Quantum Computing',  sector:'Quantum',         color:'#a855f7' },
-  SNDK: { name:'SanDisk',            sector:'Semiconductors',  color:'#3b82f6' },
-  MU:   { name:'Micron Technology',  sector:'Semiconductors',  color:'#3b82f6' },
-  WDC:  { name:'Western Digital',    sector:'Semiconductors',  color:'#3b82f6' },
-  MRVL: { name:'Marvell Technology', sector:'Semiconductors',  color:'#3b82f6' },
-  ALMU: { name:'Aeluma Inc',         sector:'Semiconductors',  color:'#3b82f6' },
-  IPGP: { name:'IPG Photonics',      sector:'Photonics',       color:'#06b6d4' },
-  POET: { name:'POET Technologies',  sector:'Photonics',       color:'#06b6d4' },
-  TSLA: { name:'Tesla',              sector:'EV',              color:'#ef4444' },
-  AAPL: { name:'Apple',              sector:'Consumer Tech',   color:'#64748b' },
-  NFLX: { name:'Netflix',            sector:'Streaming',       color:'#ec4899' },
-  CAT:  { name:'Caterpillar',        sector:'Industrial',      color:'#f59e0b' },
-};
-const SYMS = Object.keys(STOCKS);
-const HDR  = { 'APCA-API-KEY-ID': KEY, 'APCA-API-SECRET-KEY': SECRET };
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
 
-const fc  = (n,d=2) => n==null?'—':'$'+n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const fp  = (n,d=2) => n==null?'—':(n>=0?'+':'')+n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
-const fv  = (n,d=2) => n==null?'—':n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-const cc  = (n)     => n==null?'neutral':n>0?'positive':n<0?'negative':'neutral';
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#f7931a" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
 
-function sparkSVG(closes, color) {
-  if (!closes || closes.length < 2)
-    return '<svg viewBox="0 0 200 42"><text x="100" y="24" text-anchor="middle" fill="#334155" font-size="10">No data</text></svg>';
-  const W=200,H=42,P=2;
-  const mn=Math.min(...closes), mx=Math.max(...closes), rng=mx-mn||1;
-  const pts = closes.map((v,i)=>{
-    const x=(P+(i/(closes.length-1))*(W-P*2)).toFixed(1);
-    const y=(H-P-((v-mn)/rng)*(H-P*2)).toFixed(1);
-    return x+','+y;
-  });
-  const fill=['2,'+H,...pts,(W-P)+','+H].join(' ');
-  const uid='g'+color.replace('#','');
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-    </linearGradient></defs>
-    <polygon points="${fill}" fill="url(#${uid})"/>
-    <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
 
-function badge(plpc) {
-  if (plpc==null) return '<span class="status-badge badge-watching">Watching</span>';
-  if (plpc>=10)   return '<span class="status-badge badge-trailing">&#x1F7E2; Trailing Stop</span>';
-  if (plpc<=-8)   return '<span class="status-badge badge-nearstop">&#x26A0; Near Stop</span>';
-  if (plpc>0)     return '<span class="status-badge badge-inprofit">In Profit</span>';
-  return '<span class="status-badge badge-watching">Watching</span>';
-}
-
-function buildCard(sym, pos, closes) {
-  const info = STOCKS[sym];
-  const col  = info.color;
-  const last = closes&&closes.length ? closes[closes.length-1] : null;
-  const first= closes&&closes.length ? closes[0] : null;
-  const ytd  = (last&&first&&first!==0) ? (last-first)/first*100 : null;
-  const ytdC = ytd==null?'ytd-neu':ytd>=0?'ytd-pos':'ytd-neg';
-  const sparkColor = (ytd==null||ytd>=0)?'#22c55e':'#ef4444';
-
-  const px   = pos ? parseFloat(pos.current_price) : last;
-  const qty  = pos ? parseFloat(pos.qty) : null;
-  const avg  = pos ? parseFloat(pos.avg_entry_price) : null;
-  const plpc = pos ? parseFloat(pos.unrealized_plpc)*100 : null;
-  const stop = avg ? avg*0.9 : null;
-
-  const qtyStr = qty==null?'—': (qty%1===0?qty.toFixed(0):qty.toFixed(4));
-
-  return `<div class="card">
-  <div class="card-accent" style="background:${col}"></div>
-  <div class="card-header">
-    <div>
-      <div class="card-symbol" style="color:${col}">${sym}</div>
-      <div class="card-name">${info.name}</div>
+      <div class="badge badge-watch">WATCHING</div>
     </div>
-    <div class="card-sector">${info.sector}</div>
+    <div class="card" style="--accent:#f7931a">
+      <div class="card-header">
+        <div>
+          <div class="sym">MSTR</div>
+          <div class="company">MicroStrategy</div>
+        </div>
+        <div class="sector-badge" style="color:#f7931a">₿ Crypto Treasury</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#f7931a" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#22c55e">
+      <div class="card-header">
+        <div>
+          <div class="sym">GEV</div>
+          <div class="company">GE Vernova</div>
+        </div>
+        <div class="sector-badge" style="color:#22c55e">⚡ Energy</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#22c55e">
+      <div class="card-header">
+        <div>
+          <div class="sym">BE</div>
+          <div class="company">Bloom Energy</div>
+        </div>
+        <div class="sector-badge" style="color:#22c55e">⚡ Energy</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#22c55e">
+      <div class="card-header">
+        <div>
+          <div class="sym">KGS</div>
+          <div class="company">Kodiak Gas</div>
+        </div>
+        <div class="sector-badge" style="color:#22c55e">⚡ Energy</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#a855f7">
+      <div class="card-header">
+        <div>
+          <div class="sym">QBTS</div>
+          <div class="company">D-Wave Quantum</div>
+        </div>
+        <div class="sector-badge" style="color:#a855f7">⚛ Quantum</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#a855f7">
+      <div class="card-header">
+        <div>
+          <div class="sym">IONQ</div>
+          <div class="company">IonQ</div>
+        </div>
+        <div class="sector-badge" style="color:#a855f7">⚛ Quantum</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#a855f7">
+      <div class="card-header">
+        <div>
+          <div class="sym">QUBT</div>
+          <div class="company">Quantum Computing</div>
+        </div>
+        <div class="sector-badge" style="color:#a855f7">⚛ Quantum</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#3b82f6">
+      <div class="card-header">
+        <div>
+          <div class="sym">SNDK</div>
+          <div class="company">SanDisk</div>
+        </div>
+        <div class="sector-badge" style="color:#3b82f6">🔲 Semiconductors</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#3b82f6">
+      <div class="card-header">
+        <div>
+          <div class="sym">MU</div>
+          <div class="company">Micron Technology</div>
+        </div>
+        <div class="sector-badge" style="color:#3b82f6">🔲 Semiconductors</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#3b82f6">
+      <div class="card-header">
+        <div>
+          <div class="sym">WDC</div>
+          <div class="company">Western Digital</div>
+        </div>
+        <div class="sector-badge" style="color:#3b82f6">🔲 Semiconductors</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#3b82f6">
+      <div class="card-header">
+        <div>
+          <div class="sym">MRVL</div>
+          <div class="company">Marvell Technology</div>
+        </div>
+        <div class="sector-badge" style="color:#3b82f6">🔲 Semiconductors</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#3b82f6">
+      <div class="card-header">
+        <div>
+          <div class="sym">ALMU</div>
+          <div class="company">Aeluma Inc</div>
+        </div>
+        <div class="sector-badge" style="color:#3b82f6">🔲 Semiconductors</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#06b6d4">
+      <div class="card-header">
+        <div>
+          <div class="sym">IPGP</div>
+          <div class="company">IPG Photonics</div>
+        </div>
+        <div class="sector-badge" style="color:#06b6d4">💡 Photonics</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#06b6d4">
+      <div class="card-header">
+        <div>
+          <div class="sym">POET</div>
+          <div class="company">POET Technologies</div>
+        </div>
+        <div class="sector-badge" style="color:#06b6d4">💡 Photonics</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#ef4444">
+      <div class="card-header">
+        <div>
+          <div class="sym">TSLA</div>
+          <div class="company">Tesla</div>
+        </div>
+        <div class="sector-badge" style="color:#ef4444">🚗 EV</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#64748b">
+      <div class="card-header">
+        <div>
+          <div class="sym">AAPL</div>
+          <div class="company">Apple</div>
+        </div>
+        <div class="sector-badge" style="color:#64748b">📱 Consumer Tech</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#ec4899">
+      <div class="card-header">
+        <div>
+          <div class="sym">NFLX</div>
+          <div class="company">Netflix</div>
+        </div>
+        <div class="sector-badge" style="color:#ec4899">🎬 Streaming</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
+    <div class="card" style="--accent:#f59e0b">
+      <div class="card-header">
+        <div>
+          <div class="sym">CAT</div>
+          <div class="company">Caterpillar</div>
+        </div>
+        <div class="sector-badge" style="color:#f59e0b">⚙ Industrial</div>
+      </div>
+
+      <div class="price-row">
+        <span class="price">—</span>
+        <span class="ytd-badge neutral">— YTD</span>
+      </div>
+
+      <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="20" x2="112" y2="20" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg></div>
+
+      <div class="pos-row">
+        <div class="pos-item"><span class="lbl">Shares</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">Avg Cost</span><span class="val">—</span></div>
+        <div class="pos-item"><span class="lbl">P&amp;L</span><span class="val pos">—</span></div>
+        <div class="pos-item"><span class="lbl">Stop</span><span class="val">—</span></div>
+      </div>
+
+      <div class="badge badge-watch">WATCHING</div>
+    </div>
   </div>
-  <div class="price-row">
-    <div class="price">${px!=null?fc(px):'—'}</div>
-    <div class="ytd-badge ${ytdC}">${ytd!=null?fp(ytd,1).replace('%',' YTD'):'—'}</div>
-  </div>
-  <div class="sparkline-wrap">${sparkSVG(closes, sparkColor)}</div>
-  ${pos ? `<div class="pos-grid">
-    <div class="pos-row"><span class="pos-label">Shares</span><span class="pos-val">${qtyStr}</span></div>
-    <div class="pos-row"><span class="pos-label">Avg Cost</span><span class="pos-val">${fc(avg)}</span></div>
-    <div class="pos-row"><span class="pos-label">P&amp;L %</span><span class="pos-val ${cc(plpc)}">${fp(plpc)}</span></div>
-    <div class="pos-row"><span class="pos-label">Stop (90%)</span><span class="pos-val">${fc(stop)}</span></div>
-  </div>${badge(plpc)}` : '<div class="no-position">No open position</div>'}
-</div>`;
-}
+</div>
 
-async function apiFetch(url) {
-  const r = await fetch(url, { headers: HDR });
-  if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
-  return r.json();
-}
+<div class="footer">
+  <span>DCA Dashboard · Auto-refreshes every hour</span>
+  <span>Generated 2026-07-16 20:06 UTC</span>
+</div>
 
-async function loadDashboard() {
-  document.getElementById('loading').style.display = 'flex';
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('error-box').style.display = 'none';
-  try {
-    const [account, positions] = await Promise.all([
-      apiFetch(BASE+'/account'),
-      apiFetch(BASE+'/positions'),
-    ]);
-
-    const yr   = new Date().getFullYear();
-    const bars = await apiFetch(`${DATA}/v2/stocks/bars?symbols=${SYMS.join(',')}&timeframe=1Day&start=${yr}-01-02T00:00:00Z&limit=10000&feed=iex&adjustment=raw`);
-    const bmap = bars.bars || {};
-    const pmap = {};
-    (positions||[]).forEach(p => { pmap[p.symbol]=p; });
-
-    const equity   = parseFloat(account.equity);
-    const cash     = parseFloat(account.cash);
-    const invested = equity - cash;
-    const unPnl    = (positions||[]).reduce((s,p)=>s+parseFloat(p.unrealized_pl||0),0);
-    const unPct    = invested>0 ? unPnl/invested*100 : 0;
-    const lastEq   = parseFloat(account.last_equity||equity);
-    const dayPnl   = equity - lastEq;
-    const dayPct   = lastEq>0 ? dayPnl/lastEq*100 : 0;
-
-    const setEl = (id,val,cls) => {
-      const el=document.getElementById(id);
-      el.textContent=val;
-      if(cls) el.className='value '+cls;
-    };
-    setEl('s-total',   fc(equity));
-    setEl('s-cash',    fc(cash));
-    setEl('s-invested',fc(invested));
-    setEl('s-pnl',     fc(unPnl), cc(unPnl));
-    document.getElementById('s-pnlpct').textContent = fp(unPct,2);
-    setEl('s-daypnl',  fc(dayPnl), cc(dayPnl));
-    document.getElementById('s-daypct').textContent = fp(dayPct,2)+' today';
-
-    document.getElementById('cards-grid').innerHTML =
-      SYMS.map(s => buildCard(s, pmap[s]||null, (bmap[s]||[]).map(b=>b.c))).join('');
-
-    const now = new Date();
-    document.getElementById('ts-label').textContent =
-      'Updated '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})+
-      ' · '+now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-
-    document.getElementById('loading').style.display  = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-  } catch(err) {
-    document.getElementById('loading').style.display = 'none';
-    const eb = document.getElementById('error-box');
-    eb.style.display = 'block';
-    eb.innerHTML = `<strong>&#x26A0; Could not load portfolio data</strong><br><br>
-      Error: ${err.message}<br><br>
-      This dashboard fetches live data from Alpaca directly in your browser.<br>
-      Ensure you are accessing from a browser that supports the Alpaca API CORS policy.<br><br>
-      <button class="refresh-btn" onclick="loadDashboard()">&#x21BB; Retry</button>`;
-  }
-}
-
-loadDashboard();
-</script>
 </body>
 </html>
