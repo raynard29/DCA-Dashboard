@@ -1,1114 +1,661 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="3600">
-  <title>DCA Portfolio Dashboard</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0a0d14;
-      --card-bg: #111520;
-      --border: #1e2433;
-      --text: #e2e8f0;
-      --muted: #64748b;
-      --pos: #22c55e;
-      --neg: #ef4444;
-      --neutral: #94a3b8;
-    }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      padding: 0 0 48px;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="3600">
+<title>DCA Portfolio Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0d14;
+    --card: #111520;
+    --card2: #161b2a;
+    --border: #1e2738;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --purple: #a855f7;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+  a { color: inherit; text-decoration: none; }
 
-    /* ── Header ── */
-    .header {
-      background: linear-gradient(135deg, #0d1117 0%, #111520 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 24px 20px 20px;
-      position: sticky; top: 0; z-index: 10;
-    }
-    .header-inner {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header-title {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-    .header-title h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(90deg, #e2e8f0, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .header-title .subtitle {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-    .stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 20px;
-      align-items: center;
-    }
-    .stat {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-    .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-    .stat-value { font-size: 1rem; font-weight: 700; color: var(--text); }
-    .stat-value.pos { color: var(--pos); }
-    .stat-value.neg { color: var(--neg); }
-    .api-note {
-      font-size: 0.65rem;
-      color: #f59e0b;
-      background: rgba(245,158,11,0.08);
-      border: 1px solid rgba(245,158,11,0.2);
-      border-radius: 4px;
-      padding: 3px 8px;
-    }
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #0d1120 0%, #111827 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 1.5rem 1rem;
+  }
+  .header-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .header-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
 
-    /* ── Grid ── */
-    .grid {
-      max-width: 1400px;
-      margin: 24px auto;
-      padding: 0 16px;
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    }
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px; }
-    }
-    @media (max-width: 380px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+  /* ── Summary strip ── */
+  .summary-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .sum-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    min-width: 140px;
+    flex: 1;
+  }
+  .sum-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sum-val { font-size: 1.25rem; font-weight: 700; margin-top: 0.2rem; color: #fff; }
+  .sum-val.positive { color: var(--green); }
+  .sum-val.negative { color: var(--red); }
 
-    /* ── Card ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: border-color .2s, transform .15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 2px;
-      background: var(--accent);
-      opacity: .7;
-    }
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .card-title { display: flex; flex-direction: column; gap: 2px; }
-    .symbol {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
-    .company { font-size: 0.7rem; color: var(--muted); line-height: 1.2; }
-    .sector-tag {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 2px 7px;
-      flex-shrink: 0;
-    }
-    .sector-icon { font-size: 0.8rem; }
-    .sector-name { font-size: 0.62rem; color: var(--muted); white-space: nowrap; }
+  /* ── Data banner ── */
+  .data-banner {
+    background: #1a1500;
+    border: 1px solid #f59e0b44;
+    color: var(--yellow);
+    border-radius: 0.5rem;
+    padding: 0.65rem 1rem;
+    font-size: 0.8rem;
+    margin: 1rem 1.5rem 0;
+  }
 
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .current-price { font-size: 1.35rem; font-weight: 700; color: var(--text); }
-    .day-change { font-size: 0.72rem; font-weight: 600; }
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
 
-    .ytd-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .ytd-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-    .ytd-val { font-size: 0.85rem; font-weight: 700; }
-    .perf-mini { font-size: 0.65rem; color: var(--muted); }
-    .perf-mini .pos { color: var(--pos); }
-    .perf-mini .neg { color: var(--neg); }
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 1rem 1rem;
+  }
+  @media (min-width: 640px) {
+    .grid { grid-template-columns: repeat(3, 1fr); padding: 1rem 1.25rem; }
+  }
+  @media (min-width: 1024px) {
+    .grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1.25rem 1.5rem; }
+  }
 
-    .pos { color: var(--pos); }
-    .neg { color: var(--neg); }
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 0.875rem;
+    padding: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent)22, 0 4px 20px #0006;
+  }
 
-    .sparkline-wrap {
-      border-radius: 6px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.02);
-      margin: 0 -4px;
-    }
+  .symbol-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sym {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .sector-icon { font-size: 1rem; }
+  .company { font-size: 0.72rem; color: var(--muted); line-height: 1.3; }
+  .sector-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
 
-    .position-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
-    }
-    .pos-cell { display: flex; flex-direction: column; gap: 1px; }
-    .pos-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-    .pos-val { font-size: 0.78rem; font-weight: 600; color: var(--neutral); }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .cur-price { font-size: 1rem; font-weight: 700; color: #fff; }
 
-    .card-footer {
-      display: flex;
-      justify-content: flex-end;
-    }
-    .badge {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      border-radius: 4px;
-      padding: 2px 7px;
-      text-transform: uppercase;
-    }
-    .badge.trailing   { background: rgba(34,197,94,.15);  color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
-    .badge.in-profit  { background: rgba(59,130,246,.12); color: #60a5fa; border: 1px solid rgba(59,130,246,.3); }
-    .badge.near-stop  { background: rgba(239,68,68,.13);  color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
-    .badge.watching   { background: rgba(148,163,184,.08);color: #94a3b8; border: 1px solid rgba(148,163,184,.2); }
+  .ytd-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.3rem;
+  }
+  .ytd-badge.positive { background: #166534; color: var(--green); }
+  .ytd-badge.negative { background: #7f1d1d; color: var(--red); }
+  .ytd-badge.neutral  { background: #1e293b; color: var(--muted); }
 
-    /* ── Footer ── */
-    .footer {
-      max-width: 1400px;
-      margin: 4px auto 0;
-      padding: 0 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .footer-note { font-size: 0.65rem; color: var(--muted); }
-    .footer-ts { font-size: 0.65rem; color: var(--muted); }
-  </style>
+  .spark { line-height: 0; }
+  .spark svg { width: 100%; height: 36px; }
+
+  .pos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  .pos-item { display: flex; flex-direction: column; }
+  .pos-label { color: var(--muted); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .pos-val { color: #cbd5e1; font-weight: 600; font-size: 0.75rem; }
+  .pos-val.positive { color: var(--green); }
+  .pos-val.negative { color: var(--red); }
+  .pos-val.stop { color: var(--yellow); }
+
+  .badge-row { display: flex; }
+  .badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .badge-trailing { background: #a855f722; color: var(--purple); border: 1px solid #a855f744; }
+  .badge-danger    { background: #7f1d1d44; color: var(--red);    border: 1px solid #ef444444; }
+  .badge-profit    { background: #166534;   color: var(--green);  border: 1px solid #22c55e44; }
+  .badge-watching  { background: #1e2738;   color: var(--muted);  border: 1px solid var(--border); }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.72rem;
+    padding: 1rem 1.5rem 0;
+  }
+</style>
 </head>
 <body>
-  <div class="header">
-    <div class="header-inner">
-      <div class="header-title">
-        <h1>DCA Portfolio Dashboard</h1>
-        <span class="subtitle">19 Positions · Paper Trading</span>
-      </div>
-      <div class="stats">
-        <div class="stat">
-          <span class="stat-label">Portfolio Value</span>
-          <span class="stat-value">—</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Cash</span>
-          <span class="stat-value">—</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">Unrealized P&amp;L</span>
-          <span class="stat-value">—</span>
-        </div>
-        <span class="api-note">⚠ Position data unavailable — Alpaca API blocked by network policy</span>
-      </div>
+
+<header>
+  <div class="header-title">DCA Portfolio Dashboard</div>
+  <div class="header-sub">19 positions · Paper account · Updated 2026-07-17 16:05 UTC</div>
+  <div class="summary-strip">
+    <div class="sum-card">
+      <div class="sum-label">Portfolio Value</div>
+      <div class="sum-val">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Cash</div>
+      <div class="sum-val">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Invested</div>
+      <div class="sum-val">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">Unrealized P&amp;L</div>
+      <div class="sum-val neutral">—</div>
     </div>
   </div>
+</header>
 
-  <div class="grid">
 
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">STRC</span>
-          <span class="company">Strategy Inc</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">₿</span>
-          <span class="sector-name">Crypto Treasury</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$84.85</span>
-        <span class="day-change neg">-0.67% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val neg">-0.67%</span>
-        <span class="perf-mini">1W: <span class="neg">-2.45%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-6.50%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gSTRC" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f7931a" stop-opacity="0.25"/><stop offset="100%" stop-color="#f7931a" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,37.9 24.0,9.5 48.0,0.0 72.0,18.9 96.0,32.4 120.0,40.0 120,40" fill="url(#gSTRC)"/><polyline points="0.0,37.9 24.0,9.5 48.0,0.0 72.0,18.9 96.0,32.4 120.0,40.0" fill="none" stroke="#f7931a" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge watching">WATCHING</span>
-      </div>
+<div class="data-banner">
+  ⚠️  Live market data unavailable — Alpaca API unreachable from this environment.
+  Portfolio structure shown. Prices and P&amp;L will appear once API access is restored.
+</div>
+
+<div class="legend"><span class="legend-item"><span class="dot" style="background:#f7931a"></span>Crypto Treasury</span><span class="legend-item"><span class="dot" style="background:#22c55e"></span>Energy</span><span class="legend-item"><span class="dot" style="background:#a855f7"></span>Quantum</span><span class="legend-item"><span class="dot" style="background:#3b82f6"></span>Semiconductors</span><span class="legend-item"><span class="dot" style="background:#06b6d4"></span>Photonics</span><span class="legend-item"><span class="dot" style="background:#ef4444"></span>EV</span><span class="legend-item"><span class="dot" style="background:#64748b"></span>Consumer Tech</span><span class="legend-item"><span class="dot" style="background:#ec4899"></span>Streaming</span><span class="legend-item"><span class="dot" style="background:#f59e0b"></span>Industrial</span></div>
+
+<div class="grid">
+
+<div class="card" style="--accent:#f7931a">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">STRC</span>
+      <span class="sector-icon" title="Crypto Treasury">₿</span>
     </div>
-
-    <div class="card" style="--accent:#f7931a">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">MSTR</span>
-          <span class="company">MicroStrategy</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">₿</span>
-          <span class="sector-name">Crypto Treasury</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$93.16</span>
-        <span class="day-change neg">-0.93% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+106.56%</span>
-        <span class="perf-mini">1W: <span class="neg">-1.81%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-24.33%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gMSTR" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f7931a" stop-opacity="0.25"/><stop offset="100%" stop-color="#f7931a" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,0.0 48.0,9.0 72.0,16.8 96.0,25.2 120.0,25.7 120,40" fill="url(#gMSTR)"/><polyline points="0.0,40.0 24.0,0.0 48.0,9.0 72.0,16.8 96.0,25.2 120.0,25.7" fill="none" stroke="#f7931a" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">GEV</span>
-          <span class="company">GE Vernova</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-name">Energy</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$1,036.68</span>
-        <span class="day-change pos">+0.04% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+81.88%</span>
-        <span class="perf-mini">1W: <span class="neg">-4.99%</span></span>
-        <span class="perf-mini">1M: <span class="pos">+5.57%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gGEV" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,34.3 48.0,8.7 72.0,8.4 96.0,0.0 120.0,4.2 120,40" fill="url(#gGEV)"/><polyline points="0.0,40.0 24.0,34.3 48.0,8.7 72.0,8.4 96.0,0.0 120.0,4.2" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">BE</span>
-          <span class="company">Bloom Energy</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-name">Energy</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$208.74</span>
-        <span class="day-change pos">+0.97% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+758.64%</span>
-        <span class="perf-mini">1W: <span class="neg">-14.67%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-25.69%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gBE" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,23.0 48.0,11.0 72.0,0.0 96.0,5.7 120.0,11.2 120,40" fill="url(#gBE)"/><polyline points="0.0,40.0 24.0,23.0 48.0,11.0 72.0,0.0 96.0,5.7 120.0,11.2" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#22c55e">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">KGS</span>
-          <span class="company">Kodiak Gas</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-name">Energy</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$64.24</span>
-        <span class="day-change neg">-2.59% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+102.78%</span>
-        <span class="perf-mini">1W: <span class="neg">-5.40%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-5.44%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gKGS" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/><stop offset="100%" stop-color="#22c55e" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,35.0 48.0,6.2 72.0,0.0 96.0,0.0 120.0,4.1 120,40" fill="url(#gKGS)"/><polyline points="0.0,40.0 24.0,35.0 48.0,6.2 72.0,0.0 96.0,0.0 120.0,4.1" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">QBTS</span>
-          <span class="company">D-Wave Quantum</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-name">Quantum</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$16.50</span>
-        <span class="day-change neg">-2.48% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+540.86%</span>
-        <span class="perf-mini">1W: <span class="neg">-18.02%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-31.20%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gQBTS" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a855f7" stop-opacity="0.25"/><stop offset="100%" stop-color="#a855f7" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,0.0 48.0,12.5 72.0,9.0 96.0,14.6 120.0,19.8 120,40" fill="url(#gQBTS)"/><polyline points="0.0,40.0 24.0,0.0 48.0,12.5 72.0,9.0 96.0,14.6 120.0,19.8" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">IONQ</span>
-          <span class="company">IonQ</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-name">Quantum</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$33.89</span>
-        <span class="day-change neg">-3.46% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+127.18%</span>
-        <span class="perf-mini">1W: <span class="neg">-21.02%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-39.62%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gIONQ" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a855f7" stop-opacity="0.25"/><stop offset="100%" stop-color="#a855f7" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,5.0 48.0,11.1 72.0,0.0 96.0,12.8 120.0,21.6 120,40" fill="url(#gIONQ)"/><polyline points="0.0,40.0 24.0,5.0 48.0,11.1 72.0,0.0 96.0,12.8 120.0,21.6" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#a855f7">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">QUBT</span>
-          <span class="company">Quantum Computing</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-name">Quantum</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$7.66</span>
-        <span class="day-change pos">+0.20% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+466.67%</span>
-        <span class="perf-mini">1W: <span class="neg">-11.66%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-24.41%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gQUBT" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#a855f7" stop-opacity="0.25"/><stop offset="100%" stop-color="#a855f7" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,0.0 48.0,11.0 72.0,8.6 96.0,13.8 120.0,17.4 120,40" fill="url(#gQUBT)"/><polyline points="0.0,40.0 24.0,0.0 48.0,11.0 72.0,8.6 96.0,13.8 120.0,17.4" fill="none" stroke="#a855f7" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">SNDK</span>
-          <span class="company">SanDisk</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">💾</span>
-          <span class="sector-name">Semiconductors</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$1,397.37</span>
-        <span class="day-change neg">-0.97% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+3246.60%</span>
-        <span class="perf-mini">1W: <span class="neg">-27.48%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-30.23%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gSNDK" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,32.9 48.0,22.0 72.0,0.0 96.0,1.5 120.0,12.3 120,40" fill="url(#gSNDK)"/><polyline points="0.0,40.0 24.0,32.9 48.0,22.0 72.0,0.0 96.0,1.5 120.0,12.3" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">MU</span>
-          <span class="company">Micron Technology</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">💾</span>
-          <span class="sector-name">Semiconductors</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$848.29</span>
-        <span class="day-change neg">-0.58% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+648.72%</span>
-        <span class="perf-mini">1W: <span class="neg">-13.41%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-16.93%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gMU" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,30.3 48.0,24.8 72.0,0.0 96.0,1.8 120.0,7.6 120,40" fill="url(#gMU)"/><polyline points="0.0,40.0 24.0,30.3 48.0,24.8 72.0,0.0 96.0,1.8 120.0,7.6" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">WDC</span>
-          <span class="company">Western Digital</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">💾</span>
-          <span class="sector-name">Semiconductors</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$457.05</span>
-        <span class="day-change neg">-2.09% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+580.19%</span>
-        <span class="perf-mini">1W: <span class="neg">-21.75%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-33.07%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gWDC" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,30.4 48.0,20.8 72.0,0.0 96.0,6.4 120.0,14.7 120,40" fill="url(#gWDC)"/><polyline points="0.0,40.0 24.0,30.4 48.0,20.8 72.0,0.0 96.0,6.4 120.0,14.7" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">MRVL</span>
-          <span class="company">Marvell Technology</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">💾</span>
-          <span class="sector-name">Semiconductors</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$183.87</span>
-        <span class="day-change neg">-2.35% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+155.28%</span>
-        <span class="perf-mini">1W: <span class="neg">-22.04%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-34.03%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gMRVL" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,38.2 48.0,28.1 72.0,0.0 96.0,8.3 120.0,18.4 120,40" fill="url(#gMRVL)"/><polyline points="0.0,40.0 24.0,38.2 48.0,28.1 72.0,0.0 96.0,8.3 120.0,18.4" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#3b82f6">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">ALMU</span>
-          <span class="company">Aeluma Inc</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">💾</span>
-          <span class="sector-name">Semiconductors</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$14.59</span>
-        <span class="day-change neg">-3.61% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+386.47%</span>
-        <span class="perf-mini">1W: <span class="neg">-17.08%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-38.21%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gALMU" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,4.2 48.0,12.2 72.0,0.0 96.0,11.7 120.0,17.5 120,40" fill="url(#gALMU)"/><polyline points="0.0,40.0 24.0,4.2 48.0,12.2 72.0,0.0 96.0,11.7 120.0,17.5" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">IPGP</span>
-          <span class="company">IPG Photonics</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-name">Photonics</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$102.44</span>
-        <span class="day-change neg">-0.89% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+37.48%</span>
-        <span class="perf-mini">1W: <span class="neg">-5.00%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-11.22%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gIPGP" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.25"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,37.3 48.0,0.0 72.0,4.7 96.0,11.2 120.0,15.9 120,40" fill="url(#gIPGP)"/><polyline points="0.0,40.0 24.0,37.3 48.0,0.0 72.0,4.7 96.0,11.2 120.0,15.9" fill="none" stroke="#06b6d4" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#06b6d4">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">POET</span>
-          <span class="company">POET Technologies</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-name">Photonics</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$7.34</span>
-        <span class="day-change neg">-4.37% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+13.59%</span>
-        <span class="perf-mini">1W: <span class="neg">-11.97%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-42.15%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gPOET" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#06b6d4" stop-opacity="0.25"/><stop offset="100%" stop-color="#06b6d4" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,29.4 48.0,34.2 72.0,0.0 96.0,27.9 120.0,34.4 120,40" fill="url(#gPOET)"/><polyline points="0.0,40.0 24.0,29.4 48.0,34.2 72.0,0.0 96.0,27.9 120.0,34.4" fill="none" stroke="#06b6d4" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#ef4444">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">TSLA</span>
-          <span class="company">Tesla</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">🚗</span>
-          <span class="sector-name">EV</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$380.08</span>
-        <span class="day-change neg">-2.81% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+30.85%</span>
-        <span class="perf-mini">1W: <span class="neg">-6.82%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-6.10%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gTSLA" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/><stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,0.0 48.0,13.5 72.0,9.3 96.0,8.4 120.0,15.9 120,40" fill="url(#gTSLA)"/><polyline points="0.0,40.0 24.0,0.0 48.0,13.5 72.0,9.3 96.0,8.4 120.0,15.9" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#64748b">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">AAPL</span>
-          <span class="company">Apple</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">📱</span>
-          <span class="sector-name">Consumer Tech</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$333.23</span>
-        <span class="day-change neg">-0.01% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+71.78%</span>
-        <span class="perf-mini">1W: <span class="pos">+5.68%</span></span>
-        <span class="perf-mini">1M: <span class="pos">+11.36%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gAAPL" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#64748b" stop-opacity="0.25"/><stop offset="100%" stop-color="#64748b" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,21.1 48.0,20.1 72.0,9.8 96.0,5.1 120.0,0.0 120,40" fill="url(#gAAPL)"/><polyline points="0.0,40.0 24.0,21.1 48.0,20.1 72.0,9.8 96.0,5.1 120.0,0.0" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#ec4899">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">NFLX</span>
-          <span class="company">Netflix</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">🎬</span>
-          <span class="sector-name">Streaming</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$68.23</span>
-        <span class="day-change neg">-8.23% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+51.55%</span>
-        <span class="perf-mini">1W: <span class="neg">-7.04%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-13.36%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gNFLX" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ec4899" stop-opacity="0.25"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,12.3 48.0,0.0 72.0,18.5 96.0,21.9 120.0,25.2 120,40" fill="url(#gNFLX)"/><polyline points="0.0,40.0 24.0,12.3 48.0,0.0 72.0,18.5 96.0,21.9 120.0,25.2" fill="none" stroke="#ec4899" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
-
-    <div class="card" style="--accent:#f59e0b">
-      <div class="card-header">
-        <div class="card-title">
-          <span class="symbol">CAT</span>
-          <span class="company">Caterpillar</span>
-        </div>
-        <div class="sector-tag">
-          <span class="sector-icon">🏗</span>
-          <span class="sector-name">Industrial</span>
-        </div>
-      </div>
-      <div class="price-row">
-        <span class="current-price">$875.59</span>
-        <span class="day-change neg">-0.18% today</span>
-      </div>
-      <div class="ytd-row">
-        <span class="ytd-label">YTD</span>
-        <span class="ytd-val pos">+109.27%</span>
-        <span class="perf-mini">1W: <span class="neg">-8.14%</span></span>
-        <span class="perf-mini">1M: <span class="neg">-7.47%</span></span>
-      </div>
-      <div class="sparkline-wrap"><svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:40px;display:block;"><defs><linearGradient id="gCAT" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.02"/></linearGradient></defs><polygon points="0,40 0.0,40.0 24.0,23.5 48.0,13.5 72.0,0.5 96.0,0.0 120.0,5.8 120,40" fill="url(#gCAT)"/><polyline points="0.0,40.0 24.0,23.5 48.0,13.5 72.0,0.5 96.0,0.0 120.0,5.8" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
-      <div class="position-row">
-        <div class="pos-cell">
-          <span class="pos-label">Shares</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Avg Cost</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">P&amp;L</span>
-          <span class="pos-val">—</span>
-        </div>
-        <div class="pos-cell">
-          <span class="pos-label">Stop</span>
-          <span class="pos-val">—</span>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="badge trailing">TRAILING</span>
-      </div>
-    </div>
+    <div class="company">Strategy Inc</div>
+    <div class="sector-label" style="color:#f7931a">Crypto Treasury</div>
   </div>
-
-  <div class="footer">
-    <span class="footer-note">Prices via Finviz · Sparklines derived from YTD/6M/3M/1M/1W performance · Refreshes every hour</span>
-    <span class="footer-ts">Last updated: July 17, 2026 15:09 UTC</span>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
   </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#f7931a">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">MSTR</span>
+      <span class="sector-icon" title="Crypto Treasury">₿</span>
+    </div>
+    <div class="company">MicroStrategy</div>
+    <div class="sector-label" style="color:#f7931a">Crypto Treasury</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">GEV</span>
+      <span class="sector-icon" title="Energy">⚡</span>
+    </div>
+    <div class="company">GE Vernova</div>
+    <div class="sector-label" style="color:#22c55e">Energy</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">BE</span>
+      <span class="sector-icon" title="Energy">⚡</span>
+    </div>
+    <div class="company">Bloom Energy</div>
+    <div class="sector-label" style="color:#22c55e">Energy</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">KGS</span>
+      <span class="sector-icon" title="Energy">⚡</span>
+    </div>
+    <div class="company">Kodiak Gas</div>
+    <div class="sector-label" style="color:#22c55e">Energy</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">QBTS</span>
+      <span class="sector-icon" title="Quantum">⚛</span>
+    </div>
+    <div class="company">D-Wave Quantum</div>
+    <div class="sector-label" style="color:#a855f7">Quantum</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">IONQ</span>
+      <span class="sector-icon" title="Quantum">⚛</span>
+    </div>
+    <div class="company">IonQ</div>
+    <div class="sector-label" style="color:#a855f7">Quantum</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">QUBT</span>
+      <span class="sector-icon" title="Quantum">⚛</span>
+    </div>
+    <div class="company">Quantum Computing</div>
+    <div class="sector-label" style="color:#a855f7">Quantum</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">SNDK</span>
+      <span class="sector-icon" title="Semiconductors">💾</span>
+    </div>
+    <div class="company">SanDisk</div>
+    <div class="sector-label" style="color:#3b82f6">Semiconductors</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">MU</span>
+      <span class="sector-icon" title="Semiconductors">💾</span>
+    </div>
+    <div class="company">Micron Technology</div>
+    <div class="sector-label" style="color:#3b82f6">Semiconductors</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">WDC</span>
+      <span class="sector-icon" title="Semiconductors">💾</span>
+    </div>
+    <div class="company">Western Digital</div>
+    <div class="sector-label" style="color:#3b82f6">Semiconductors</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">MRVL</span>
+      <span class="sector-icon" title="Semiconductors">💾</span>
+    </div>
+    <div class="company">Marvell Technology</div>
+    <div class="sector-label" style="color:#3b82f6">Semiconductors</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">ALMU</span>
+      <span class="sector-icon" title="Semiconductors">💾</span>
+    </div>
+    <div class="company">Aeluma Inc</div>
+    <div class="sector-label" style="color:#3b82f6">Semiconductors</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">IPGP</span>
+      <span class="sector-icon" title="Photonics">🔬</span>
+    </div>
+    <div class="company">IPG Photonics</div>
+    <div class="sector-label" style="color:#06b6d4">Photonics</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">POET</span>
+      <span class="sector-icon" title="Photonics">🔬</span>
+    </div>
+    <div class="company">POET Technologies</div>
+    <div class="sector-label" style="color:#06b6d4">Photonics</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#ef4444">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">TSLA</span>
+      <span class="sector-icon" title="EV">🚗</span>
+    </div>
+    <div class="company">Tesla</div>
+    <div class="sector-label" style="color:#ef4444">EV</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#64748b">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">AAPL</span>
+      <span class="sector-icon" title="Consumer Tech">📱</span>
+    </div>
+    <div class="company">Apple</div>
+    <div class="sector-label" style="color:#64748b">Consumer Tech</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#ec4899">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">NFLX</span>
+      <span class="sector-icon" title="Streaming">🎬</span>
+    </div>
+    <div class="company">Netflix</div>
+    <div class="sector-label" style="color:#ec4899">Streaming</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+<div class="card" style="--accent:#f59e0b">
+  <div class="card-top">
+    <div class="symbol-row">
+      <span class="sym">CAT</span>
+      <span class="sector-icon" title="Industrial">🏗</span>
+    </div>
+    <div class="company">Caterpillar</div>
+    <div class="sector-label" style="color:#f59e0b">Industrial</div>
+  </div>
+  <div class="price-row">
+    <span class="cur-price">—</span>
+    <span class="ytd-badge neutral">N/A YTD</span>
+  </div>
+  <div class="spark"><svg width="120" height="36"><text x="50%" y="50%" fill="#444" text-anchor="middle" font-size="10">No data</text></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">None</span></div>
+    <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
+    <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val neutral">—</span></div>
+    <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val stop">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge badge-watching">WATCHING</span></div>
+</div>
+</div>
+
+<footer>
+  Auto-refreshes every hour &nbsp;·&nbsp; Data source: Alpaca Paper Trading &nbsp;·&nbsp; 2026-07-17 16:05 UTC
+</footer>
+
 </body>
 </html>
