@@ -100,169 +100,133 @@
     font-weight: 700;
   }
   .stat-sub {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .notice-bar {
-    background: #1c1207;
-    border: 1px solid #f59e0b33;
-    border-radius: 8px;
-    padding: 10px 16px;
     font-size: 12px;
-    color: #d97706;
-    max-width: 1400px;
-    margin: 16px auto 0;
+    color: var(--muted);
+    margin-top: 2px;
   }
-  .grid-container {
+  .main {
     max-width: 1400px;
-    margin: 24px auto;
-    padding: 0 16px;
+    margin: 0 auto;
+    padding: 32px 24px 0;
   }
   .section-label {
     font-size: 11px;
-    color: var(--muted);
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin: 24px 0 12px;
-    padding-left: 4px;
-    border-left: 3px solid var(--border);
-    padding-left: 10px;
+    color: var(--muted);
+    margin: 32px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
   }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    transition: border-color 0.2s, transform 0.15s;
+    border-radius: 16px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s;
   }
   .card:hover {
-    border-color: #2d3a52;
-    transform: translateY(-1px);
+    border-color: #2e3a50;
+    transform: translateY(-2px);
   }
   .card-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    gap: 6px;
+    justify-content: space-between;
+    margin-bottom: 16px;
   }
   .sector-badge {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 3px 7px;
-    border-radius: 20px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 130px;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
   }
   .status-badge {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    flex-shrink: 0;
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
   }
   .symbol-row {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
   .symbol {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1;
+    letter-spacing: -1px;
   }
   .price-block {
     text-align: right;
   }
   .price {
-    font-size: 16px;
-    font-weight: 600;
     display: block;
-    line-height: 1;
+    font-size: 18px;
+    font-weight: 700;
   }
   .day-chg {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
-    display: block;
-    margin-top: 2px;
   }
   .company-name {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--muted);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
   .ytd-badge {
     font-size: 13px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
   .sparkline {
-    margin: 0 -4px 12px;
-    line-height: 0;
+    margin-bottom: 14px;
+    width: 100%;
     overflow: hidden;
-    border-radius: 6px;
   }
   .sparkline svg {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 40px;
   }
   .metrics {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 10px;
   }
   .metric {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 9px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   .metric-label {
-    font-size: 9px;
+    font-size: 10px;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    display: block;
-    margin-bottom: 3px;
+    letter-spacing: 0.05em;
   }
   .metric-value {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    display: block;
-    font-variant-numeric: tabular-nums;
   }
   footer {
     text-align: center;
-    font-size: 11px;
+    padding: 48px 24px 24px;
+    font-size: 12px;
     color: var(--muted);
-    padding: 24px 16px 0;
-    max-width: 1400px;
-    margin: 0 auto;
-    border-top: 1px solid var(--border);
-  }
-  @media (max-width: 600px) {
-    .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .symbol { font-size: 20px; }
-    .price { font-size: 14px; }
-    .header { padding: 20px 16px; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .stat-value { font-size: 18px; }
   }
 </style>
 </head>
@@ -272,47 +236,36 @@
   <div class="header-inner">
     <div class="header-top">
       <div class="logo">⚡ DCA Portfolio</div>
-      <div class="live-dot">Live · July 24, 2026 18:11 UTC</div>
+      <div class="live-dot">Prices via Yahoo Finance · Updated July 24, 2026 20:09 UTC</div>
     </div>
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Stocks Tracked</div>
         <div class="stat-value">19</div>
-        <div class="stat-sub">19 positions</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Avg YTD Return</div>
-        <div class="stat-value" style="color:#22c55e">+53.1%</div>
-        <div class="stat-sub">portfolio average</div>
+        <div class="stat-value" style="color:#22c55e">+50.6%</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Best Performer</div>
         <div class="stat-value" style="color:#22c55e">SNDK</div>
-        <div class="stat-sub">+436.2% YTD</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Worst Performer</div>
         <div class="stat-value" style="color:#ef4444">QBTS</div>
-        <div class="stat-sub">-41.2% YTD</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Gainers / Losers</div>
         <div class="stat-value"><span style="color:#22c55e">10</span> / <span style="color:#ef4444">9</span></div>
-        <div class="stat-sub">of 19 positions</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="grid-container">
-  <div class="notice-bar">
-    ⚠️ Alpaca Markets API is blocked by the network policy in this environment — position data (shares, avg cost, unrealized P&L) is unavailable.
-    Prices &amp; YTD data sourced live from Yahoo Finance. Auto-refreshes every 60 minutes.
-  </div>
-
+<div class="main">
   <div class="section-label">Crypto Treasury</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#f7931a22;color:#f7931a">
@@ -325,13 +278,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#f7931a">STRC</span>
         <div class="price-block">
-          <span class="price">$87.00</span>
-          <span class="day-chg" style="color:#22c55e">++2.43%</span>
+          <span class="price">$86.89</span>
+          <span class="day-chg" style="color:#22c55e">+2.29%</span>
         </div>
       </div>
       <div class="company-name">Strategy Inc</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 12.7% YTD
+        ▼ 12.8% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -353,7 +306,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$78.30</span>
+          <span class="metric-value" style="color:#ef4444">$78.20</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -365,7 +318,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#f7931a22;color:#f7931a">
@@ -378,13 +330,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#f7931a">MSTR</span>
         <div class="price-block">
-          <span class="price">$92.76</span>
-          <span class="day-chg" style="color:#ef4444">-0.99%</span>
+          <span class="price">$91.67</span>
+          <span class="day-chg" style="color:#ef4444">-2.09%</span>
         </div>
       </div>
       <div class="company-name">MicroStrategy</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 41.0% YTD
+        ▼ 41.7% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -406,7 +358,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$83.48</span>
+          <span class="metric-value" style="color:#ef4444">$82.50</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -422,7 +374,6 @@
 
   <div class="section-label">Energy</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#22c55e22;color:#22c55e">
@@ -435,13 +386,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#22c55e">GEV</span>
         <div class="price-block">
-          <span class="price">$1,017.18</span>
-          <span class="day-chg" style="color:#ef4444">-1.35%</span>
+          <span class="price">$1,014.60</span>
+          <span class="day-chg" style="color:#ef4444">-1.61%</span>
         </div>
       </div>
       <div class="company-name">GE Vernova</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 49.7% YTD
+        ▲ 49.3% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -463,7 +414,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$915.46</span>
+          <span class="metric-value" style="color:#ef4444">$913.14</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -475,7 +426,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#22c55e22;color:#22c55e">
@@ -488,13 +438,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#22c55e">BE</span>
         <div class="price-block">
-          <span class="price">$196.24</span>
-          <span class="day-chg" style="color:#ef4444">-9.52%</span>
+          <span class="price">$185.08</span>
+          <span class="day-chg" style="color:#ef4444">-14.83%</span>
         </div>
       </div>
       <div class="company-name">Bloom Energy</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 98.8% YTD
+        ▲ 87.5% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -516,7 +466,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$176.62</span>
+          <span class="metric-value" style="color:#ef4444">$166.57</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -528,7 +478,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#22c55e22;color:#22c55e">
@@ -541,13 +490,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#22c55e">KGS</span>
         <div class="price-block">
-          <span class="price">$61.10</span>
-          <span class="day-chg" style="color:#ef4444">-6.56%</span>
+          <span class="price">$59.04</span>
+          <span class="day-chg" style="color:#ef4444">-9.56%</span>
         </div>
       </div>
       <div class="company-name">Kodiak Gas</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 62.3% YTD
+        ▲ 56.9% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -569,7 +518,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$54.99</span>
+          <span class="metric-value" style="color:#ef4444">$53.14</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -583,9 +532,8 @@
     </div>
   </div>
 
-  <div class="section-label">Quantum Computing</div>
+  <div class="section-label">Quantum</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#a855f722;color:#a855f7">
@@ -598,13 +546,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#a855f7">QBTS</span>
         <div class="price-block">
-          <span class="price">$16.54</span>
-          <span class="day-chg" style="color:#ef4444">-3.39%</span>
+          <span class="price">$16.23</span>
+          <span class="day-chg" style="color:#ef4444">-5.12%</span>
         </div>
       </div>
       <div class="company-name">D-Wave Quantum</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 41.2% YTD
+        ▼ 42.3% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -626,7 +574,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$14.89</span>
+          <span class="metric-value" style="color:#ef4444">$14.61</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -638,7 +586,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#a855f722;color:#a855f7">
@@ -651,13 +598,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#a855f7">IONQ</span>
         <div class="price-block">
-          <span class="price">$33.41</span>
-          <span class="day-chg" style="color:#ef4444">-2.03%</span>
+          <span class="price">$32.83</span>
+          <span class="day-chg" style="color:#ef4444">-3.64%</span>
         </div>
       </div>
       <div class="company-name">IonQ</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 28.6% YTD
+        ▼ 29.8% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -679,7 +626,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$30.07</span>
+          <span class="metric-value" style="color:#ef4444">$29.55</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -691,7 +638,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#a855f722;color:#a855f7">
@@ -704,13 +650,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#a855f7">QUBT</span>
         <div class="price-block">
-          <span class="price">$7.58</span>
-          <span class="day-chg" style="color:#ef4444">-3.63%</span>
+          <span class="price">$7.43</span>
+          <span class="day-chg" style="color:#ef4444">-5.47%</span>
         </div>
       </div>
       <div class="company-name">Quantum Computing</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 31.2% YTD
+        ▼ 32.5% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -732,7 +678,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$6.82</span>
+          <span class="metric-value" style="color:#ef4444">$6.69</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -748,7 +694,6 @@
 
   <div class="section-label">Semiconductors</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#3b82f622;color:#3b82f6">
@@ -761,13 +706,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#3b82f6">SNDK</span>
         <div class="price-block">
-          <span class="price">$1,475.87</span>
-          <span class="day-chg" style="color:#ef4444">-8.39%</span>
+          <span class="price">$1,436.56</span>
+          <span class="day-chg" style="color:#ef4444">-10.79%</span>
         </div>
       </div>
       <div class="company-name">SanDisk</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 436.2% YTD
+        ▲ 421.9% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -789,7 +734,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$1,328.28</span>
+          <span class="metric-value" style="color:#ef4444">$1,292.90</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -801,7 +746,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#3b82f622;color:#3b82f6">
@@ -814,13 +758,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#3b82f6">MU</span>
         <div class="price-block">
-          <span class="price">$929.19</span>
-          <span class="day-chg" style="color:#ef4444">-6.13%</span>
+          <span class="price">$920.95</span>
+          <span class="day-chg" style="color:#ef4444">-6.99%</span>
         </div>
       </div>
       <div class="company-name">Micron Technology</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 194.6% YTD
+        ▲ 192.0% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -842,7 +786,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$836.27</span>
+          <span class="metric-value" style="color:#ef4444">$828.86</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -854,7 +798,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#3b82f622;color:#3b82f6">
@@ -867,13 +810,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#3b82f6">WDC</span>
         <div class="price-block">
-          <span class="price">$528.26</span>
-          <span class="day-chg" style="color:#ef4444">-5.44%</span>
+          <span class="price">$519.80</span>
+          <span class="day-chg" style="color:#ef4444">-6.90%</span>
         </div>
       </div>
       <div class="company-name">Western Digital</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 181.4% YTD
+        ▲ 176.9% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -895,7 +838,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$475.43</span>
+          <span class="metric-value" style="color:#ef4444">$467.82</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -907,7 +850,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#3b82f622;color:#3b82f6">
@@ -920,13 +862,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#3b82f6">MRVL</span>
         <div class="price-block">
-          <span class="price">$196.64</span>
-          <span class="day-chg" style="color:#ef4444">-5.96%</span>
+          <span class="price">$194.23</span>
+          <span class="day-chg" style="color:#ef4444">-7.21%</span>
         </div>
       </div>
       <div class="company-name">Marvell Technology</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 120.0% YTD
+        ▲ 117.3% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -948,7 +890,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$176.98</span>
+          <span class="metric-value" style="color:#ef4444">$174.81</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -960,7 +902,6 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#3b82f622;color:#3b82f6">
@@ -973,13 +914,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#3b82f6">ALMU</span>
         <div class="price-block">
-          <span class="price">$14.30</span>
-          <span class="day-chg" style="color:#ef4444">-10.47%</span>
+          <span class="price">$14.22</span>
+          <span class="day-chg" style="color:#ef4444">-10.88%</span>
         </div>
       </div>
       <div class="company-name">Aeluma Inc</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 19.7% YTD
+        ▼ 20.1% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1001,7 +942,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$12.87</span>
+          <span class="metric-value" style="color:#ef4444">$12.80</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1017,7 +958,6 @@
 
   <div class="section-label">Photonics</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#06b6d422;color:#06b6d4">
@@ -1030,13 +970,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#06b6d4">IPGP</span>
         <div class="price-block">
-          <span class="price">$92.60</span>
-          <span class="day-chg" style="color:#ef4444">-4.00%</span>
+          <span class="price">$91.70</span>
+          <span class="day-chg" style="color:#ef4444">-4.93%</span>
         </div>
       </div>
       <div class="company-name">IPG Photonics</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 23.7% YTD
+        ▲ 22.5% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1058,7 +998,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$83.34</span>
+          <span class="metric-value" style="color:#ef4444">$82.53</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1070,26 +1010,25 @@
         </div>
       </div>
     </div>
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#06b6d422;color:#06b6d4">
           <span>🔬</span> Photonics
         </div>
-        <div class="status-badge" style="background:#111827;color:#6b7280;border:1px solid #6b728044">
+        <div class="status-badge" style="background:#111520;color:#64748b;border:1px solid #64748b44">
           WATCHING
         </div>
       </div>
       <div class="symbol-row">
         <span class="symbol" style="color:#06b6d4">POET</span>
         <div class="price-block">
-          <span class="price">$6.97</span>
-          <span class="day-chg" style="color:#ef4444">-8.29%</span>
+          <span class="price">$6.89</span>
+          <span class="day-chg" style="color:#ef4444">-9.34%</span>
         </div>
       </div>
       <div class="company-name">POET Technologies</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 2.7% YTD
+        ▼ 3.8% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1111,7 +1050,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$6.27</span>
+          <span class="metric-value" style="color:#ef4444">$6.20</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1125,9 +1064,8 @@
     </div>
   </div>
 
-  <div class="section-label">Other</div>
+  <div class="section-label">EV</div>
   <div class="grid">
-    
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#ef444422;color:#ef4444">
@@ -1140,13 +1078,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#ef4444">TSLA</span>
         <div class="price-block">
-          <span class="price">$309.09</span>
-          <span class="day-chg" style="color:#ef4444">-3.32%</span>
+          <span class="price">$313.03</span>
+          <span class="day-chg" style="color:#ef4444">-2.08%</span>
         </div>
       </div>
       <div class="company-name">Tesla</div>
       <div class="ytd-badge" style="color:#ef4444">
-        ▼ 29.5% YTD
+        ▼ 28.5% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1168,7 +1106,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$278.06</span>
+          <span class="metric-value" style="color:#ef4444">$281.73</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1180,11 +1118,14 @@
         </div>
       </div>
     </div>
-    
+  </div>
+
+  <div class="section-label">Consumer Tech</div>
+  <div class="grid">
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#64748b22;color:#64748b">
-          <span>📱</span> Consumer Tech
+          <span>🍎</span> Consumer Tech
         </div>
         <div class="status-badge" style="background:#052e16;color:#22c55e;border:1px solid #22c55e44">
           TRAILING
@@ -1193,13 +1134,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#64748b">AAPL</span>
         <div class="price-block">
-          <span class="price">$332.68</span>
-          <span class="day-chg" style="color:#22c55e">++3.44%</span>
+          <span class="price">$333.02</span>
+          <span class="day-chg" style="color:#22c55e">+3.53%</span>
         </div>
       </div>
       <div class="company-name">Apple</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 22.8% YTD
+        ▲ 22.9% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1221,7 +1162,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$299.41</span>
+          <span class="metric-value" style="color:#ef4444">$299.72</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1233,7 +1174,10 @@
         </div>
       </div>
     </div>
-    
+  </div>
+
+  <div class="section-label">Streaming</div>
+  <div class="grid">
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#ec489922;color:#ec4899">
@@ -1246,8 +1190,8 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#ec4899">NFLX</span>
         <div class="price-block">
-          <span class="price">$70.06</span>
-          <span class="day-chg" style="color:#22c55e">++1.69%</span>
+          <span class="price">$70.09</span>
+          <span class="day-chg" style="color:#22c55e">+1.74%</span>
         </div>
       </div>
       <div class="company-name">Netflix</div>
@@ -1274,7 +1218,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$63.05</span>
+          <span class="metric-value" style="color:#ef4444">$63.08</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1286,7 +1230,10 @@
         </div>
       </div>
     </div>
-    
+  </div>
+
+  <div class="section-label">Industrial</div>
+  <div class="grid">
     <div class="card">
       <div class="card-header">
         <div class="sector-badge" style="background:#f59e0b22;color:#f59e0b">
@@ -1299,13 +1246,13 @@
       <div class="symbol-row">
         <span class="symbol" style="color:#f59e0b">CAT</span>
         <div class="price-block">
-          <span class="price">$893.46</span>
-          <span class="day-chg" style="color:#ef4444">-0.13%</span>
+          <span class="price">$888.90</span>
+          <span class="day-chg" style="color:#ef4444">-0.63%</span>
         </div>
       </div>
       <div class="company-name">Caterpillar</div>
       <div class="ytd-badge" style="color:#22c55e">
-        ▲ 49.3% YTD
+        ▲ 48.5% YTD
       </div>
       <div class="sparkline">
         <svg viewBox="0 0 120 40" width="120" height="40" xmlns="http://www.w3.org/2000/svg">
@@ -1327,7 +1274,7 @@
         </div>
         <div class="metric">
           <span class="metric-label">Stop Price</span>
-          <span class="metric-value" style="color:#ef4444">$804.11</span>
+          <span class="metric-value" style="color:#ef4444">$800.01</span>
         </div>
         <div class="metric">
           <span class="metric-label">52w High</span>
@@ -1340,12 +1287,13 @@
       </div>
     </div>
   </div>
+
+
 </div>
 
 <footer>
-  DCA Dashboard · Prices via Yahoo Finance · Updated July 24, 2026 18:11 UTC ·
-  Alpaca position data unavailable (network policy) ·
-  Auto-refresh: 60 min
+  DCA Dashboard &middot; Prices via Yahoo Finance &middot; Updated July 24, 2026 20:09 UTC &middot;
+  <span style="color:#22c55e">Auto-refreshes every hour</span>
 </footer>
 
 </body>
