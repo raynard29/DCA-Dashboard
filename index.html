@@ -28,776 +28,750 @@
 
     /* ── Header ── */
     .header {
-      background: linear-gradient(180deg, #0d1220 0%, var(--bg) 100%);
-      border-bottom: 1px solid var(--card-border);
-      padding: 28px 24px 20px;
+      background: #0d1117;
+      border-bottom: 1px solid #1e2535;
+      padding: 20px 24px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    .header-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 4px;
-    }
-    .header-sub {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .stats-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 20px;
-    }
-    .stat-tile {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 14px 20px;
-      min-width: 140px;
-      flex: 1;
-    }
-    .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-    .stat-val { font-size: 1.25rem; font-weight: 700; }
-    .stat-val.na { color: var(--text-muted); }
-
-    /* ── Alert banner ── */
-    .alert {
-      background: #1a1000;
-      border: 1px solid #f59e0b44;
-      border-radius: 8px;
-      color: #f59e0b;
-      font-size: 0.8rem;
-      margin: 20px 24px 0;
-      padding: 10px 16px;
+    .header-top {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      margin-bottom: 4px;
     }
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      color: var(--text);
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 6px #ef4444aa;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+    .header-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .stat-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-label { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+    .stat-value { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+    .stat-value.green { color: var(--green); }
+    .stat-value.red { color: var(--red); }
+
+    /* ── Error Banner ── */
+    .error-banner {
+      background: #1a0f0f;
+      border: 1px solid #7f1d1d;
+      border-radius: 8px;
+      margin: 16px 20px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .85rem;
+      color: #fca5a5;
+    }
+    .error-icon { font-size: 1.1rem; }
+    .error-text b { color: #f87171; }
 
     /* ── Grid ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 14px;
-      padding: 20px 24px 0;
+      padding: 0 20px;
+      margin-top: 8px;
     }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 760px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px)  { .grid { grid-template-columns: 1fr; } }
 
     /* ── Card ── */
-    .card {
+    .stock-card {
       background: var(--card);
       border: 1px solid var(--card-border);
-      border-top: 3px solid var(--accent);
+      border-top: 2px solid var(--accent, #3b82f6);
       border-radius: 10px;
-      padding: 16px;
+      padding: 14px 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: box-shadow 0.2s;
+      gap: 10px;
+      transition: border-color .2s;
     }
-    .card:hover { box-shadow: 0 4px 24px #0006; }
+    .stock-card:hover { border-color: var(--accent, #3b82f6); }
+
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 8px;
     }
-    .card-sym { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.5px; }
-    .card-name { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
-    .card-sector {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
+    .symbol {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--text);
     }
-    .sector-icon { font-size: 1.1rem; }
-    .sector-label { font-size: 0.6rem; color: var(--text-muted); text-align: right; }
-
-    .card-price-row {
+    .company {
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .sector-badge {
+      font-size: .65rem;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .sector-icon { font-size: .8rem; }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
     }
     .price-value { font-size: 1.3rem; font-weight: 700; }
-
-    /* Badges */
-    .badge {
-      font-size: 0.65rem;
+    .ytd-badge {
+      font-size: .72rem;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 20px;
-      letter-spacing: 0.03em;
+      padding: 2px 7px;
+      border-radius: 4px;
     }
-    .badge-green  { background: #14532d55; color: var(--green); border: 1px solid #22c55e44; }
-    .badge-red    { background: #450a0a55; color: var(--red);   border: 1px solid #ef444444; }
-    .badge-yellow { background: #451a0055; color: var(--yellow);border: 1px solid #f59e0b44; }
-    .badge-neutral{ background: #1e293b;   color: var(--text-muted); border: 1px solid #334155; }
+    .ytd-badge.positive { background: #14532d; color: #4ade80; }
+    .ytd-badge.negative { background: #450a0a; color: #f87171; }
+    .ytd-badge.neutral  { background: #1e2535; color: #64748b; }
 
-    /* Sparkline */
     .sparkline-wrap {
-      background: #0a0d1a;
+      position: relative;
+      background: #0a0d14;
       border-radius: 6px;
       overflow: hidden;
-      height: 50px;
     }
-    .sparkline { width: 100%; height: 50px; }
-    .spark-na { fill: #334155; font-size: 10px; font-family: inherit; }
+    .sparkline-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      color: #475569;
+      pointer-events: none;
+    }
 
-    /* Position row */
-    .pos-row {
+    .position-row {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 6px;
+      gap: 4px;
     }
     .pos-item {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
-    .pos-label { font-size: 0.58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-    .pos-val { font-size: 0.78rem; font-weight: 600; }
+    .pos-label { font-size: .62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+    .pos-val { font-size: .8rem; font-weight: 600; color: var(--text-dim); }
 
-    .status-row { display: flex; gap: 6px; }
+    .status-badge {
+      align-self: flex-start;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .trailing    { background: #14532d; color: #4ade80; }
+    .in-profit   { background: #1e3a5f; color: #60a5fa; }
+    .near-stop   { background: #450a0a; color: #f87171; }
+    .watching    { background: #1e2535; color: #64748b; }
 
-    /* Footer */
+    /* ── Footer ── */
     .footer {
       text-align: center;
+      font-size: .72rem;
       color: var(--text-muted);
-      font-size: 0.72rem;
       margin-top: 32px;
-      padding: 0 24px;
+      padding: 0 20px;
+      line-height: 1.6;
     }
-
-    @media (max-width: 480px) {
-      .grid { grid-template-columns: 1fr; }
-      .stats-row { gap: 8px; }
-      .stat-tile { min-width: unset; }
-    }
+    .footer a { color: #3b82f6; text-decoration: none; }
   </style>
 </head>
 <body>
+  <header class="header">
+    <div class="header-top">
+      <div class="live-dot"></div>
+      <span class="header-title">DCA Portfolio Dashboard</span>
+    </div>
+    <div class="header-stats">
+      <div class="stat-group">
+        <span class="stat-label">Portfolio Value</span>
+        <span class="stat-value">—</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Cash</span>
+        <span class="stat-value">—</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Invested</span>
+        <span class="stat-value">—</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Unrealized P&amp;L</span>
+        <span class="stat-value">—</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Day P&amp;L</span>
+        <span class="stat-value">—</span>
+      </div>
+    </div>
+  </header>
 
-<div class="header">
-  <div class="header-title">📈 DCA Portfolio Dashboard</div>
-  <div class="header-sub">19 positions · Auto-refreshes every hour</div>
-  <div class="stats-row">
-    <div class="stat-tile">
-      <div class="stat-label">Portfolio Value</div>
-      <div class="stat-val na">Unavailable</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-label">Cash</div>
-      <div class="stat-val na">—</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-label">Invested</div>
-      <div class="stat-val na">—</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-label">Unrealized P&amp;L</div>
-      <div class="stat-val na">—</div>
+  <div class="error-banner">
+    <span class="error-icon">⚠</span>
+    <div class="error-text">
+      <b>Live data unavailable</b> — Alpaca API endpoints (<code>paper-api.alpaca.markets</code>, <code>data.alpaca.markets</code>)
+      are blocked by the session egress policy. Portfolio values cannot be fetched.
+      Data will refresh automatically when the policy allows access.
     </div>
   </div>
-</div>
 
-<div class="alert">
-  ⚠ Live market data could not be fetched at 2026-07-30 18:05 UTC — Alpaca API was unreachable from this session's network.
-  The dashboard will retry on next scheduled run. Page auto-refreshes hourly.
-</div>
+  <div class="grid">
 
-<div class="grid">
-
-    <div class="card" style="--accent:#f7931a">
+    <div class="stock-card" style="--accent:#f7931a">
       <div class="card-header">
         <div>
-          <div class="card-sym">STRC</div>
-          <div class="card-name">Strategy Inc</div>
+          <div class="symbol">STRC</div>
+          <div class="company">Strategy Inc</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">₿</span>
-          <span class="sector-label">Crypto Treasury</span>
+        <div class="sector-badge" style="color:#f7931a;background:#f7931a18">
+          <span class="sector-icon">₿</span> Crypto Treasury
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#f7931a" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#f7931a">
+    <div class="stock-card" style="--accent:#f7931a">
       <div class="card-header">
         <div>
-          <div class="card-sym">MSTR</div>
-          <div class="card-name">MicroStrategy</div>
+          <div class="symbol">MSTR</div>
+          <div class="company">MicroStrategy</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">₿</span>
-          <span class="sector-label">Crypto Treasury</span>
+        <div class="sector-badge" style="color:#f7931a;background:#f7931a18">
+          <span class="sector-icon">₿</span> Crypto Treasury
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#f7931a" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#22c55e">
+    <div class="stock-card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
-          <div class="card-sym">GEV</div>
-          <div class="card-name">GE Vernova</div>
+          <div class="symbol">GEV</div>
+          <div class="company">GE Vernova</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-label">Energy</span>
+        <div class="sector-badge" style="color:#22c55e;background:#22c55e18">
+          <span class="sector-icon">⚡</span> Energy
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#22c55e">
+    <div class="stock-card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
-          <div class="card-sym">BE</div>
-          <div class="card-name">Bloom Energy</div>
+          <div class="symbol">BE</div>
+          <div class="company">Bloom Energy</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-label">Energy</span>
+        <div class="sector-badge" style="color:#22c55e;background:#22c55e18">
+          <span class="sector-icon">⚡</span> Energy
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#22c55e">
+    <div class="stock-card" style="--accent:#22c55e">
       <div class="card-header">
         <div>
-          <div class="card-sym">KGS</div>
-          <div class="card-name">Kodiak Gas</div>
+          <div class="symbol">KGS</div>
+          <div class="company">Kodiak Gas</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-label">Energy</span>
+        <div class="sector-badge" style="color:#22c55e;background:#22c55e18">
+          <span class="sector-icon">⚡</span> Energy
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#a855f7">
+    <div class="stock-card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
-          <div class="card-sym">QBTS</div>
-          <div class="card-name">D-Wave Quantum</div>
+          <div class="symbol">QBTS</div>
+          <div class="company">D-Wave Quantum</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-label">Quantum</span>
+        <div class="sector-badge" style="color:#a855f7;background:#a855f718">
+          <span class="sector-icon">⚛</span> Quantum
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#a855f7">
+    <div class="stock-card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
-          <div class="card-sym">IONQ</div>
-          <div class="card-name">IonQ</div>
+          <div class="symbol">IONQ</div>
+          <div class="company">IonQ</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-label">Quantum</span>
+        <div class="sector-badge" style="color:#a855f7;background:#a855f718">
+          <span class="sector-icon">⚛</span> Quantum
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#a855f7">
+    <div class="stock-card" style="--accent:#a855f7">
       <div class="card-header">
         <div>
-          <div class="card-sym">QUBT</div>
-          <div class="card-name">Quantum Computing</div>
+          <div class="symbol">QUBT</div>
+          <div class="company">Quantum Computing</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚛</span>
-          <span class="sector-label">Quantum</span>
+        <div class="sector-badge" style="color:#a855f7;background:#a855f718">
+          <span class="sector-icon">⚛</span> Quantum
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#3b82f6">
+    <div class="stock-card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
-          <div class="card-sym">SNDK</div>
-          <div class="card-name">SanDisk</div>
+          <div class="symbol">SNDK</div>
+          <div class="company">SanDisk</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-label">Semiconductors</span>
+        <div class="sector-badge" style="color:#3b82f6;background:#3b82f618">
+          <span class="sector-icon">💾</span> Semiconductors
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#3b82f6">
+    <div class="stock-card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
-          <div class="card-sym">MU</div>
-          <div class="card-name">Micron Technology</div>
+          <div class="symbol">MU</div>
+          <div class="company">Micron Technology</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-label">Semiconductors</span>
+        <div class="sector-badge" style="color:#3b82f6;background:#3b82f618">
+          <span class="sector-icon">💾</span> Semiconductors
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#3b82f6">
+    <div class="stock-card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
-          <div class="card-sym">WDC</div>
-          <div class="card-name">Western Digital</div>
+          <div class="symbol">WDC</div>
+          <div class="company">Western Digital</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-label">Semiconductors</span>
+        <div class="sector-badge" style="color:#3b82f6;background:#3b82f618">
+          <span class="sector-icon">💾</span> Semiconductors
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#3b82f6">
+    <div class="stock-card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
-          <div class="card-sym">MRVL</div>
-          <div class="card-name">Marvell Technology</div>
+          <div class="symbol">MRVL</div>
+          <div class="company">Marvell Technology</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-label">Semiconductors</span>
+        <div class="sector-badge" style="color:#3b82f6;background:#3b82f618">
+          <span class="sector-icon">💾</span> Semiconductors
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#3b82f6">
+    <div class="stock-card" style="--accent:#3b82f6">
       <div class="card-header">
         <div>
-          <div class="card-sym">ALMU</div>
-          <div class="card-name">Aeluma Inc</div>
+          <div class="symbol">ALMU</div>
+          <div class="company">Aeluma Inc</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🔬</span>
-          <span class="sector-label">Semiconductors</span>
+        <div class="sector-badge" style="color:#3b82f6;background:#3b82f618">
+          <span class="sector-icon">💾</span> Semiconductors
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#06b6d4">
+    <div class="stock-card" style="--accent:#06b6d4">
       <div class="card-header">
         <div>
-          <div class="card-sym">IPGP</div>
-          <div class="card-name">IPG Photonics</div>
+          <div class="symbol">IPGP</div>
+          <div class="company">IPG Photonics</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">💡</span>
-          <span class="sector-label">Photonics</span>
+        <div class="sector-badge" style="color:#06b6d4;background:#06b6d418">
+          <span class="sector-icon">💡</span> Photonics
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#06b6d4">
+    <div class="stock-card" style="--accent:#06b6d4">
       <div class="card-header">
         <div>
-          <div class="card-sym">POET</div>
-          <div class="card-name">POET Technologies</div>
+          <div class="symbol">POET</div>
+          <div class="company">POET Technologies</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">💡</span>
-          <span class="sector-label">Photonics</span>
+        <div class="sector-badge" style="color:#06b6d4;background:#06b6d418">
+          <span class="sector-icon">💡</span> Photonics
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#ef4444">
+    <div class="stock-card" style="--accent:#ef4444">
       <div class="card-header">
         <div>
-          <div class="card-sym">TSLA</div>
-          <div class="card-name">Tesla</div>
+          <div class="symbol">TSLA</div>
+          <div class="company">Tesla</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">⚡</span>
-          <span class="sector-label">EV</span>
+        <div class="sector-badge" style="color:#ef4444;background:#ef444418">
+          <span class="sector-icon">🚗</span> EV
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#64748b">
+    <div class="stock-card" style="--accent:#64748b">
       <div class="card-header">
         <div>
-          <div class="card-sym">AAPL</div>
-          <div class="card-name">Apple</div>
+          <div class="symbol">AAPL</div>
+          <div class="company">Apple</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">📱</span>
-          <span class="sector-label">Consumer Tech</span>
+        <div class="sector-badge" style="color:#64748b;background:#64748b18">
+          <span class="sector-icon">🍎</span> Consumer Tech
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#ec4899">
+    <div class="stock-card" style="--accent:#ec4899">
       <div class="card-header">
         <div>
-          <div class="card-sym">NFLX</div>
-          <div class="card-name">Netflix</div>
+          <div class="symbol">NFLX</div>
+          <div class="company">Netflix</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🎬</span>
-          <span class="sector-label">Streaming</span>
+        <div class="sector-badge" style="color:#ec4899;background:#ec489918">
+          <span class="sector-icon">▶</span> Streaming
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
 
-    <div class="card" style="--accent:#f59e0b">
+    <div class="stock-card" style="--accent:#f59e0b">
       <div class="card-header">
         <div>
-          <div class="card-sym">CAT</div>
-          <div class="card-name">Caterpillar</div>
+          <div class="symbol">CAT</div>
+          <div class="company">Caterpillar</div>
         </div>
-        <div class="card-sector">
-          <span class="sector-icon">🏗</span>
-          <span class="sector-label">Industrial</span>
+        <div class="sector-badge" style="color:#f59e0b;background:#f59e0b18">
+          <span class="sector-icon">🏗</span> Industrial
         </div>
       </div>
-      <div class="card-price-row">
+      <div class="price-row">
         <span class="price-value">—</span>
-        <span class="badge badge-neutral">YTD: N/A</span>
+        <span class="ytd-badge neutral">YTD —</span>
       </div>
       <div class="sparkline-wrap">
-        <svg class="sparkline" viewBox="0 0 200 50" preserveAspectRatio="none">
-          <text x="100" y="28" text-anchor="middle" class="spark-na">Data Unavailable</text>
-        </svg>
+        <svg viewBox="0 0 220 50" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:50px;display:block;"><polyline points="0,25 22,25 44,25 66,25 88,25 110,25 132,25 154,25 176,25 198,25 220,25" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/></svg>
+        <div class="sparkline-overlay">No data</div>
       </div>
-      <div class="pos-row">
+      <div class="position-row">
         <div class="pos-item"><span class="pos-label">Shares</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Avg Cost</span><span class="pos-val">—</span></div>
-        <div class="pos-item"><span class="pos-label">P&amp;L %</span><span class="pos-val">—</span></div>
+        <div class="pos-item"><span class="pos-label">P&amp;L</span><span class="pos-val">—</span></div>
         <div class="pos-item"><span class="pos-label">Stop</span><span class="pos-val">—</span></div>
       </div>
-      <div class="status-row">
-        <span class="badge badge-neutral">WATCHING</span>
-      </div>
+      <div class="status-badge watching">WATCHING</div>
     </div>
-</div>
+  </div>
 
-<div class="footer">
-  Last update attempt: 2026-07-30 18:05 UTC &nbsp;·&nbsp; raynard29/DCA-Dashboard &nbsp;·&nbsp; Auto-refreshes every 60 min
-</div>
-
+  <div class="footer">
+    Last update attempt: 2026-07-30 19:04 UTC &nbsp;·&nbsp; raynard29/DCA-Dashboard &nbsp;·&nbsp; Auto-refreshes every 60 min
+  </div>
 </body>
 </html>
