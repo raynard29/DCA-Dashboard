@@ -1,560 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="3600">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta http-equiv="refresh" content="3600"/>
 <title>DCA Portfolio Dashboard</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0d14;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:20px 16px;min-height:100vh}
-a{color:inherit}
+  :root {
+    --bg:      #0a0d14;
+    --card-bg: #111520;
+    --border:  #1e2535;
+    --text:    #e2e8f0;
+    --muted:   #64748b;
+    --pos:     #22c55e;
+    --neg:     #ef4444;
+    --na:      #94a3b8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 1rem;
+  }
 
-.header{text-align:center;margin-bottom:24px}
-.header h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#e2e8f0,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.header p{font-size:0.78rem;color:#475569}
+  /* Header */
+  .header {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+  .title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+  .subtitle { color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 
-.notice{max-width:860px;margin:0 auto 20px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:8px;padding:9px 14px;font-size:0.76rem;color:#fbbf24;text-align:center}
+  /* Stats bar */
+  .stats {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .stat-value { font-size: 1.35rem; font-weight: 700; margin-top: 4px; }
 
-.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:900px;margin:0 auto 28px}
-.stat{background:#111520;border:1px solid #1e2433;border-radius:20px;padding:7px 16px;font-size:0.78rem;color:#64748b;white-space:nowrap}
-.stat strong{margin-left:3px;font-size:0.88rem}
+  /* Offline banner */
+  .offline-banner {
+    max-width: 1400px;
+    margin: 0 auto 1rem;
+    background: #1c1208;
+    border: 1px solid #92400e;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    color: #fbbf24;
+    font-size: 0.82rem;
+  }
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1380px;margin:0 auto}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:440px){.grid{grid-template-columns:1fr}}
+  /* Cards grid */
+  .grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px)  { .grid { grid-template-columns: 1fr; } }
 
-.card{background:#111520;border:1px solid #1e2433;border-top:3px solid var(--accent);border-radius:12px;padding:14px;transition:transform .15s,border-color .15s;position:relative;overflow:hidden;cursor:pointer}
-.card:hover{transform:translateY(-2px);border-color:#2d3a50}
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
 
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
-.card-top-left{display:flex;flex-direction:column;gap:3px}
-.symbol{font-size:1.15rem;font-weight:800;letter-spacing:-0.3px;color:#f1f5f9}
-.sector-pill{font-size:0.62rem;color:#475569;letter-spacing:0.3px}
-.company{font-size:0.72rem;color:#64748b;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+  .sym { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.02em; color: var(--accent); }
+  .company { font-size: 0.7rem; color: var(--muted); margin-top: 2px; max-width: 130px; }
+  .sector-icon { font-size: 1.4rem; opacity: 0.6; }
 
-.badge{font-size:0.6rem;font-weight:700;letter-spacing:0.5px;padding:3px 7px;border-radius:20px;white-space:nowrap}
-.badge.trailing{background:rgba(168,85,247,0.15);color:#a855f7;border:1px solid rgba(168,85,247,0.3)}
-.badge.near-stop{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3)}
-.badge.in-profit{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25)}
-.badge.watching{background:rgba(100,116,139,0.12);color:#94a3b8;border:1px solid rgba(100,116,139,0.2)}
+  .price-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .price { font-size: 1.1rem; font-weight: 700; }
 
-.price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:2px}
-.price{font-size:1.3rem;font-weight:700;color:#f1f5f9}
-.ytd-chip{font-size:0.65rem;font-weight:600;padding:2px 7px;border-radius:10px}
-.day-chg{font-size:0.72rem;font-weight:600;margin-bottom:8px}
+  .ytd-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .ytd-badge.pos { background: rgba(34,197,94,0.15); color: var(--pos); }
+  .ytd-badge.neg { background: rgba(239,68,68,0.15);  color: var(--neg); }
+  .ytd-badge.na  { background: rgba(148,163,184,0.1); color: var(--na);  }
 
-.spark{height:44px;margin:0 -2px 8px}
-.spark svg{display:block}
+  .sparkline {
+    margin: 0.4rem 0 0.75rem;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .sparkline svg { display: block; width: 100%; height: 40px; }
 
-.pos-row{display:flex;gap:10px;flex-wrap:wrap;font-size:0.66rem;color:#475569;border-top:1px solid #1e2433;padding-top:8px;margin-bottom:4px}
-.pos-row strong{color:#94a3b8}
-.plpc{font-size:0.72rem;font-weight:600}
+  .pos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .pos-item { display: flex; flex-direction: column; gap: 1px; }
+  .label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .val { font-size: 0.82rem; font-weight: 600; }
+  .val.pos { color: var(--pos); }
+  .val.neg { color: var(--neg); }
+  .val.na  { color: var(--na);  }
 
-.footer{text-align:center;margin-top:36px;font-size:0.72rem;color:#334155}
+  .badge-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .badge {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .b-trail  { background: rgba(234,179,8,0.15);    color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+  .b-stop   { background: rgba(239,68,68,0.15);    color: var(--neg); border: 1px solid rgba(239,68,68,0.3); }
+  .b-profit { background: rgba(34,197,94,0.15);    color: var(--pos); border: 1px solid rgba(34,197,94,0.3); }
+  .b-watch  { background: rgba(100,116,139,0.15);  color: var(--muted); border: 1px solid rgba(100,116,139,0.3); }
+
+  /* Footer */
+  .footer {
+    max-width: 1400px;
+    margin: 1.5rem auto 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.72rem;
+    padding-bottom: 1rem;
+  }
+
+  /* Color accents per card */
+  .pos { color: var(--pos); }
+  .neg { color: var(--neg); }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>&#128200; DCA Portfolio Dashboard</h1>
-  <p>Last updated: Aug 3, 2026 17:10 UTC &bull; Auto-refreshes every hour &bull; Prices from StockAnalysis</p>
-</div>
 
-<div class="notice">
-  &#x26A0; Alpaca API blocked by network policy &mdash; showing live prices &amp; YTD&nbsp;% from StockAnalysis.
-  Portfolio totals, shares held &amp; exact avg cost require Alpaca access.
-  Entry/Stop prices are estimated from YTD performance.
+<div class="header">
+  <div>
+    <div class="title">DCA Portfolio</div>
+    <div class="subtitle">19 positions · updated 2026-08-03 18:06 UTC</div>
+  </div>
 </div>
 
 <div class="stats">
-  <div class="stat">Stocks <strong>19</strong></div>
-  <div class="stat">Gainers today <strong style="color:#22c55e">13</strong></div>
-  <div class="stat">Losers today <strong style="color:#ef4444">6</strong></div>
-  <div class="stat">Avg day chg <strong style="color:#ef4444">-0.03%</strong></div>
-  <div class="stat">Source <strong>StockAnalysis.com</strong></div>
+  <div class="stat">
+    <div class="stat-label">Portfolio Value</div>
+    <div class="stat-value">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Cash</div>
+    <div class="stat-value">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Invested</div>
+    <div class="stat-value">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Unrealized P&L</div>
+    <div class="stat-value pos">—</div>
+  </div>
+</div>
+
+
+<div class="offline-banner">
+  ⚠ Live data unavailable — Alpaca API unreachable (egress policy block). Displaying portfolio structure only.
 </div>
 
 <div class="grid">
 
-      <a href="https://stockanalysis.com/stocks/strc/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#f7931a">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">STRC</span>
-            <span class="sector-pill">₿ Crypto Treasury</span>
-          </div>
-          <span class="badge in-profit">IN PROFIT</span>
-        </div>
-        <div class="company">Strategy Inc</div>
-        <div class="price-row">
-          <span class="price">$91.90</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-65.6% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+2.73% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 36.5 3.9 36.1 5.9 31.2 7.8 33.7 9.7 26.0 11.7 18.6 13.6 13.1 15.5 15.5 17.5 11.5 19.4 14.8 21.3 21.5 23.3 17.3 25.2 21.2 27.1 18.4 29.1 26.0 31.0 32.3 32.9 24.8 34.9 25.9 36.8 26.8 38.7 25.1 40.7 24.1 42.6 30.9 44.5 36.1 46.5 38.4 48.4 34.6 50.3 26.3 52.3 30.4 54.2 30.7 56.1 27.0 58.1 25.2 60.0 22.4 61.9 24.0 63.9 17.3 65.8 20.7 67.7 14.2 69.7 8.0 71.6 13.9 73.5 9.5 75.5 2.0 77.4 8.8 79.3 17.5 81.3 14.8 83.2 19.4 85.1 13.3 87.1 20.3 89.0 18.9 90.9 27.4 92.9 34.7 94.8 38.0 96.7 34.1 98.7 34.1 100.6 28.4 102.5 33.3 104.5 35.2 106.4 40.0 108.3 31.8 110.3 26.7 112.2 23.0 114.1 30.3 116.1 24.3 118.0 34.2 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 36.5 3.9 36.1 5.9 31.2 7.8 33.7 9.7 26.0 11.7 18.6 13.6 13.1 15.5 15.5 17.5 11.5 19.4 14.8 21.3 21.5 23.3 17.3 25.2 21.2 27.1 18.4 29.1 26.0 31.0 32.3 32.9 24.8 34.9 25.9 36.8 26.8 38.7 25.1 40.7 24.1 42.6 30.9 44.5 36.1 46.5 38.4 48.4 34.6 50.3 26.3 52.3 30.4 54.2 30.7 56.1 27.0 58.1 25.2 60.0 22.4 61.9 24.0 63.9 17.3 65.8 20.7 67.7 14.2 69.7 8.0 71.6 13.9 73.5 9.5 75.5 2.0 77.4 8.8 79.3 17.5 81.3 14.8 83.2 19.4 85.1 13.3 87.1 20.3 89.0 18.9 90.9 27.4 92.9 34.7 94.8 38.0 96.7 34.1 98.7 34.1 100.6 28.4 102.5 33.3 104.5 35.2 106.4 40.0 108.3 31.8 110.3 26.7 112.2 23.0 114.1 30.3 116.1 24.3 118.0 34.2" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$91.91</strong></span>
-          <span>Entry ≈ <strong>$91.75</strong></span>
-          <span>Stop ≈ <strong>$82.58</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +0.2%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#f7931a">
+  <div class="card-header">
+    <div>
+      <div class="sym">STRC</div>
+      <div class="company">Strategy Inc</div>
+    </div>
+    <div class="sector-icon" title="Crypto Treasury">₿</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/mstr/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#f7931a">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">MSTR</span>
-            <span class="sector-pill">₿ Crypto Treasury</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">MicroStrategy</div>
-        <div class="price-row">
-          <span class="price">$92.85</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-4.6% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-0.46% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 2.2 3.9 2.0 5.9 3.3 7.8 4.0 9.7 3.8 11.7 4.9 13.6 6.1 15.5 6.2 17.5 6.1 19.4 7.4 21.3 8.3 23.3 8.3 25.2 9.3 27.1 9.8 29.1 10.5 31.0 11.7 32.9 12.2 34.9 12.6 36.8 13.6 38.7 14.7 40.7 15.5 42.6 15.4 44.5 15.2 46.5 15.1 48.4 15.4 50.3 16.3 52.3 17.3 54.2 17.6 56.1 17.9 58.1 18.1 60.0 18.4 61.9 18.7 63.9 19.5 65.8 19.6 67.7 20.2 69.7 20.6 71.6 21.4 73.5 22.7 75.5 23.8 77.4 24.7 79.3 25.4 81.3 26.0 83.2 27.2 85.1 28.2 87.1 28.4 89.0 29.7 90.9 29.8 92.9 30.5 94.8 31.0 96.7 32.3 98.7 33.0 100.6 33.8 102.5 34.1 104.5 34.3 106.4 35.0 108.3 35.2 110.3 35.9 112.2 37.1 114.1 37.9 116.1 38.9 118.0 40.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 2.2 3.9 2.0 5.9 3.3 7.8 4.0 9.7 3.8 11.7 4.9 13.6 6.1 15.5 6.2 17.5 6.1 19.4 7.4 21.3 8.3 23.3 8.3 25.2 9.3 27.1 9.8 29.1 10.5 31.0 11.7 32.9 12.2 34.9 12.6 36.8 13.6 38.7 14.7 40.7 15.5 42.6 15.4 44.5 15.2 46.5 15.1 48.4 15.4 50.3 16.3 52.3 17.3 54.2 17.6 56.1 17.9 58.1 18.1 60.0 18.4 61.9 18.7 63.9 19.5 65.8 19.6 67.7 20.2 69.7 20.6 71.6 21.4 73.5 22.7 75.5 23.8 77.4 24.7 79.3 25.4 81.3 26.0 83.2 27.2 85.1 28.2 87.1 28.4 89.0 29.7 90.9 29.8 92.9 30.5 94.8 31.0 96.7 32.3 98.7 33.0 100.6 33.8 102.5 34.1 104.5 34.3 106.4 35.0 108.3 35.2 110.3 35.9 112.2 37.1 114.1 37.9 116.1 38.9 118.0 40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$94.97</strong></span>
-          <span>Entry ≈ <strong>$152.19</strong></span>
-          <span>Stop ≈ <strong>$136.97</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -39.0%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#f7931a">
+  <div class="card-header">
+    <div>
+      <div class="sym">MSTR</div>
+      <div class="company">MicroStrategy</div>
+    </div>
+    <div class="sector-icon" title="Crypto Treasury">₿</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/gev/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#22c55e">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">GEV</span>
-            <span class="sector-pill">⚡ Energy</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">GE Vernova</div>
-        <div class="price-row">
-          <span class="price">$990.29</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+52.6% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+0.85% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.3 5.9 38.8 7.8 38.5 9.7 38.1 11.7 36.8 13.6 35.7 15.5 34.8 17.5 34.4 19.4 34.2 21.3 33.3 23.3 32.7 25.2 32.3 27.1 31.2 29.1 30.1 31.0 29.5 32.9 28.8 34.9 27.8 36.8 26.9 38.7 25.9 40.7 24.5 42.6 24.7 44.5 24.0 46.5 24.1 48.4 23.1 50.3 23.3 52.3 23.2 54.2 22.8 56.1 21.5 58.1 20.6 60.0 20.3 61.9 19.7 63.9 19.9 65.8 18.9 67.7 17.8 69.7 16.9 71.6 15.6 73.5 15.6 75.5 14.4 77.4 13.4 79.3 13.2 81.3 12.0 83.2 12.2 85.1 11.9 87.1 11.0 89.0 10.1 90.9 9.2 92.9 9.0 94.8 8.2 96.7 7.0 98.7 6.6 100.6 5.5 102.5 4.4 104.5 3.7 106.4 2.7 108.3 2.8 110.3 2.0 112.2 3.0 114.1 2.0 116.1 2.5 118.0 2.5 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.3 5.9 38.8 7.8 38.5 9.7 38.1 11.7 36.8 13.6 35.7 15.5 34.8 17.5 34.4 19.4 34.2 21.3 33.3 23.3 32.7 25.2 32.3 27.1 31.2 29.1 30.1 31.0 29.5 32.9 28.8 34.9 27.8 36.8 26.9 38.7 25.9 40.7 24.5 42.6 24.7 44.5 24.0 46.5 24.1 48.4 23.1 50.3 23.3 52.3 23.2 54.2 22.8 56.1 21.5 58.1 20.6 60.0 20.3 61.9 19.7 63.9 19.9 65.8 18.9 67.7 17.8 69.7 16.9 71.6 15.6 73.5 15.6 75.5 14.4 77.4 13.4 79.3 13.2 81.3 12.0 83.2 12.2 85.1 11.9 87.1 11.0 89.0 10.1 90.9 9.2 92.9 9.0 94.8 8.2 96.7 7.0 98.7 6.6 100.6 5.5 102.5 4.4 104.5 3.7 106.4 2.7 108.3 2.8 110.3 2.0 112.2 3.0 114.1 2.0 116.1 2.5 118.0 2.5" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$997.48</strong></span>
-          <span>Entry ≈ <strong>$654.28</strong></span>
-          <span>Stop ≈ <strong>$588.85</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +51.4%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-header">
+    <div>
+      <div class="sym">GEV</div>
+      <div class="company">GE Vernova</div>
+    </div>
+    <div class="sector-icon" title="Energy">⚡</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/be/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#22c55e">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">BE</span>
-            <span class="sector-pill">⚡ Energy</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Bloom Energy</div>
-        <div class="price-row">
-          <span class="price">$205.81</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-2.1% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-0.63% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.3 5.9 38.8 7.8 38.0 9.7 37.4 11.7 37.0 13.6 36.2 15.5 35.4 17.5 34.9 19.4 34.1 21.3 33.3 23.3 32.6 25.2 31.8 27.1 31.4 29.1 30.6 31.0 30.1 32.9 29.7 34.9 29.0 36.8 28.2 38.7 27.7 40.7 27.1 42.6 26.5 44.5 25.7 46.5 24.8 48.4 23.9 50.3 23.5 52.3 22.5 54.2 21.6 56.1 20.8 58.1 20.5 60.0 19.6 61.9 19.3 63.9 18.3 65.8 18.0 67.7 17.3 69.7 16.6 71.6 15.7 73.5 15.0 75.5 14.1 77.4 13.9 79.3 13.6 81.3 13.3 83.2 12.7 85.1 12.3 87.1 11.8 89.0 10.9 90.9 10.4 92.9 9.9 94.8 9.7 96.7 8.9 98.7 8.6 100.6 8.1 102.5 7.4 104.5 6.8 106.4 6.5 108.3 5.8 110.3 5.6 112.2 5.0 114.1 4.3 116.1 3.1 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.3 5.9 38.8 7.8 38.0 9.7 37.4 11.7 37.0 13.6 36.2 15.5 35.4 17.5 34.9 19.4 34.1 21.3 33.3 23.3 32.6 25.2 31.8 27.1 31.4 29.1 30.6 31.0 30.1 32.9 29.7 34.9 29.0 36.8 28.2 38.7 27.7 40.7 27.1 42.6 26.5 44.5 25.7 46.5 24.8 48.4 23.9 50.3 23.5 52.3 22.5 54.2 21.6 56.1 20.8 58.1 20.5 60.0 19.6 61.9 19.3 63.9 18.3 65.8 18.0 67.7 17.3 69.7 16.6 71.6 15.7 73.5 15.0 75.5 14.1 77.4 13.9 79.3 13.6 81.3 13.3 83.2 12.7 85.1 12.3 87.1 11.8 89.0 10.9 90.9 10.4 92.9 9.9 94.8 9.7 96.7 8.9 98.7 8.6 100.6 8.1 102.5 7.4 104.5 6.8 106.4 6.5 108.3 5.8 110.3 5.6 112.2 5.0 114.1 4.3 116.1 3.1 118.0 2.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$218.42</strong></span>
-          <span>Entry ≈ <strong>$86.59</strong></span>
-          <span>Stop ≈ <strong>$77.93</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +137.7%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-header">
+    <div>
+      <div class="sym">BE</div>
+      <div class="company">Bloom Energy</div>
+    </div>
+    <div class="sector-icon" title="Energy">⚡</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/kgs/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#22c55e">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">KGS</span>
-            <span class="sector-pill">⚡ Energy</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Kodiak Gas</div>
-        <div class="price-row">
-          <span class="price">$57.98</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+105.9% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-1.24% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.7 5.9 38.6 7.8 38.0 9.7 37.4 11.7 37.2 13.6 36.1 15.5 36.0 17.5 35.7 19.4 35.5 21.3 34.7 23.3 34.0 25.2 32.8 27.1 32.3 29.1 31.1 31.0 30.5 32.9 29.6 34.9 28.6 36.8 28.1 38.7 27.0 40.7 25.8 42.6 24.5 44.5 23.5 46.5 22.8 48.4 22.6 50.3 22.5 52.3 21.2 54.2 20.4 56.1 19.2 58.1 18.6 60.0 17.5 61.9 16.2 63.9 16.2 65.8 15.6 67.7 14.9 69.7 14.3 71.6 13.1 73.5 13.2 75.5 12.7 77.4 12.9 79.3 13.1 81.3 12.2 83.2 12.4 85.1 11.1 87.1 10.1 89.0 10.1 90.9 10.3 92.9 10.6 94.8 10.3 96.7 10.3 98.7 9.4 100.6 8.2 102.5 7.8 104.5 6.8 106.4 5.7 108.3 5.8 110.3 5.2 112.2 3.6 114.1 3.8 116.1 3.5 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.7 5.9 38.6 7.8 38.0 9.7 37.4 11.7 37.2 13.6 36.1 15.5 36.0 17.5 35.7 19.4 35.5 21.3 34.7 23.3 34.0 25.2 32.8 27.1 32.3 29.1 31.1 31.0 30.5 32.9 29.6 34.9 28.6 36.8 28.1 38.7 27.0 40.7 25.8 42.6 24.5 44.5 23.5 46.5 22.8 48.4 22.6 50.3 22.5 52.3 21.2 54.2 20.4 56.1 19.2 58.1 18.6 60.0 17.5 61.9 16.2 63.9 16.2 65.8 15.6 67.7 14.9 69.7 14.3 71.6 13.1 73.5 13.2 75.5 12.7 77.4 12.9 79.3 13.1 81.3 12.2 83.2 12.4 85.1 11.1 87.1 10.1 89.0 10.1 90.9 10.3 92.9 10.6 94.8 10.3 96.7 10.3 98.7 9.4 100.6 8.2 102.5 7.8 104.5 6.8 106.4 5.7 108.3 5.8 110.3 5.2 112.2 3.6 114.1 3.8 116.1 3.5 118.0 2.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$57.67</strong></span>
-          <span>Entry ≈ <strong>$37.37</strong></span>
-          <span>Stop ≈ <strong>$33.63</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +55.2%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#22c55e">
+  <div class="card-header">
+    <div>
+      <div class="sym">KGS</div>
+      <div class="company">Kodiak Gas</div>
+    </div>
+    <div class="sector-icon" title="Energy">⚡</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/qbts/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#a855f7">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">QBTS</span>
-            <span class="sector-pill">⚛ Quantum</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">D-Wave Quantum</div>
-        <div class="price-row">
-          <span class="price">$18.08</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-23.7% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+0.56% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 2.0 3.9 4.0 5.9 3.2 7.8 4.9 9.7 4.2 11.7 5.8 13.6 5.3 15.5 7.1 17.5 7.6 19.4 8.8 21.3 8.1 23.3 9.3 25.2 10.9 27.1 10.4 29.1 11.9 31.0 13.5 32.9 12.7 34.9 13.6 36.8 14.3 38.7 14.8 40.7 14.8 42.6 15.7 44.5 15.8 46.5 16.4 48.4 17.2 50.3 18.1 52.3 18.0 54.2 19.1 56.1 20.0 58.1 20.9 60.0 22.5 61.9 22.8 63.9 23.0 65.8 22.3 67.7 22.4 69.7 22.4 71.6 24.2 73.5 25.2 75.5 25.6 77.4 26.1 79.3 26.6 81.3 28.3 83.2 27.9 85.1 29.2 87.1 30.0 89.0 31.1 90.9 31.0 92.9 32.4 94.8 32.6 96.7 33.5 98.7 34.6 100.6 34.1 102.5 34.6 104.5 35.0 106.4 35.6 108.3 35.9 110.3 35.6 112.2 35.8 114.1 36.9 116.1 38.9 118.0 40.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 2.0 3.9 4.0 5.9 3.2 7.8 4.9 9.7 4.2 11.7 5.8 13.6 5.3 15.5 7.1 17.5 7.6 19.4 8.8 21.3 8.1 23.3 9.3 25.2 10.9 27.1 10.4 29.1 11.9 31.0 13.5 32.9 12.7 34.9 13.6 36.8 14.3 38.7 14.8 40.7 14.8 42.6 15.7 44.5 15.8 46.5 16.4 48.4 17.2 50.3 18.1 52.3 18.0 54.2 19.1 56.1 20.0 58.1 20.9 60.0 22.5 61.9 22.8 63.9 23.0 65.8 22.3 67.7 22.4 69.7 22.4 71.6 24.2 73.5 25.2 75.5 25.6 77.4 26.1 79.3 26.6 81.3 28.3 83.2 27.9 85.1 29.2 87.1 30.0 89.0 31.1 90.9 31.0 92.9 32.4 94.8 32.6 96.7 33.5 98.7 34.6 100.6 34.1 102.5 34.6 104.5 35.0 106.4 35.6 108.3 35.9 110.3 35.6 112.2 35.8 114.1 36.9 116.1 38.9 118.0 40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$19.95</strong></span>
-          <span>Entry ≈ <strong>$26.20</strong></span>
-          <span>Stop ≈ <strong>$23.58</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -31.0%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-header">
+    <div>
+      <div class="sym">QBTS</div>
+      <div class="company">D-Wave Quantum</div>
+    </div>
+    <div class="sector-icon" title="Quantum">⚛</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/ionq/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#a855f7">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">IONQ</span>
-            <span class="sector-pill">⚛ Quantum</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">IonQ</div>
-        <div class="price-row">
-          <span class="price">$36.44</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+20.4% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+1.87% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 6.2 3.9 4.4 5.9 3.2 7.8 3.0 9.7 2.0 11.7 3.1 13.6 5.3 15.5 3.9 17.5 4.5 19.4 3.4 21.3 3.6 23.3 3.8 25.2 5.5 27.1 7.6 29.1 7.8 31.0 10.7 32.9 10.9 34.9 9.3 36.8 7.7 38.7 6.3 40.7 7.1 42.6 5.4 44.5 5.9 46.5 6.7 48.4 8.2 50.3 10.7 52.3 13.5 54.2 13.8 56.1 13.4 58.1 15.2 60.0 15.5 61.9 16.0 63.9 17.2 65.8 17.0 67.7 17.5 69.7 19.5 71.6 17.7 73.5 18.1 75.5 21.2 77.4 23.3 79.3 25.4 81.3 24.9 83.2 23.8 85.1 26.3 87.1 28.3 89.0 26.7 90.9 27.1 92.9 28.2 94.8 30.7 96.7 29.5 98.7 32.1 100.6 34.5 102.5 35.4 104.5 36.3 106.4 37.7 108.3 38.2 110.3 38.2 112.2 39.6 114.1 40.0 116.1 37.8 118.0 37.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 6.2 3.9 4.4 5.9 3.2 7.8 3.0 9.7 2.0 11.7 3.1 13.6 5.3 15.5 3.9 17.5 4.5 19.4 3.4 21.3 3.6 23.3 3.8 25.2 5.5 27.1 7.6 29.1 7.8 31.0 10.7 32.9 10.9 34.9 9.3 36.8 7.7 38.7 6.3 40.7 7.1 42.6 5.4 44.5 5.9 46.5 6.7 48.4 8.2 50.3 10.7 52.3 13.5 54.2 13.8 56.1 13.4 58.1 15.2 60.0 15.5 61.9 16.0 63.9 17.2 65.8 17.0 67.7 17.5 69.7 19.5 71.6 17.7 73.5 18.1 75.5 21.2 77.4 23.3 79.3 25.4 81.3 24.9 83.2 23.8 85.1 26.3 87.1 28.3 89.0 26.7 90.9 27.1 92.9 28.2 94.8 30.7 96.7 29.5 98.7 32.1 100.6 34.5 102.5 35.4 104.5 36.3 106.4 37.7 108.3 38.2 110.3 38.2 112.2 39.6 114.1 40.0 116.1 37.8 118.0 37.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$39.90</strong></span>
-          <span>Entry ≈ <strong>$44.94</strong></span>
-          <span>Stop ≈ <strong>$40.45</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -18.9%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-header">
+    <div>
+      <div class="sym">IONQ</div>
+      <div class="company">IonQ</div>
+    </div>
+    <div class="sector-icon" title="Quantum">⚛</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/qubt/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#a855f7">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">QUBT</span>
-            <span class="sector-pill">⚛ Quantum</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">Quantum Computing</div>
-        <div class="price-row">
-          <span class="price">$8.100</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-16.3% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+1.00% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 2.0 3.9 3.9 5.9 4.1 7.8 6.1 9.7 6.3 11.7 5.3 13.6 5.5 15.5 6.5 17.5 9.0 19.4 11.1 21.3 11.4 23.3 11.8 25.2 10.9 27.1 12.2 29.1 12.8 31.0 13.5 32.9 14.7 34.9 14.7 36.8 13.3 38.7 13.6 40.7 14.5 42.6 14.5 44.5 14.4 46.5 13.3 48.4 14.4 50.3 16.2 52.3 18.0 54.2 18.4 56.1 18.6 58.1 18.2 60.0 17.1 61.9 17.5 63.9 19.0 65.8 17.9 67.7 19.9 69.7 22.0 71.6 24.5 73.5 23.2 75.5 24.8 77.4 27.0 79.3 26.5 81.3 28.1 83.2 29.0 85.1 28.0 87.1 30.2 89.0 31.1 90.9 32.0 92.9 33.2 94.8 34.5 96.7 36.0 98.7 35.7 100.6 36.4 102.5 36.3 104.5 37.6 106.4 37.4 108.3 36.4 110.3 37.0 112.2 37.3 114.1 36.9 116.1 38.7 118.0 40.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 2.0 3.9 3.9 5.9 4.1 7.8 6.1 9.7 6.3 11.7 5.3 13.6 5.5 15.5 6.5 17.5 9.0 19.4 11.1 21.3 11.4 23.3 11.8 25.2 10.9 27.1 12.2 29.1 12.8 31.0 13.5 32.9 14.7 34.9 14.7 36.8 13.3 38.7 13.6 40.7 14.5 42.6 14.5 44.5 14.4 46.5 13.3 48.4 14.4 50.3 16.2 52.3 18.0 54.2 18.4 56.1 18.6 58.1 18.2 60.0 17.1 61.9 17.5 63.9 19.0 65.8 17.9 67.7 19.9 69.7 22.0 71.6 24.5 73.5 23.2 75.5 24.8 77.4 27.0 79.3 26.5 81.3 28.1 83.2 29.0 85.1 28.0 87.1 30.2 89.0 31.1 90.9 32.0 92.9 33.2 94.8 34.5 96.7 36.0 98.7 35.7 100.6 36.4 102.5 36.3 104.5 37.6 106.4 37.4 108.3 36.4 110.3 37.0 112.2 37.3 114.1 36.9 116.1 38.7 118.0 40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$8.590</strong></span>
-          <span>Entry ≈ <strong>$10.30</strong></span>
-          <span>Stop ≈ <strong>$9.270</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -21.4%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#a855f7">
+  <div class="card-header">
+    <div>
+      <div class="sym">QUBT</div>
+      <div class="company">Quantum Computing</div>
+    </div>
+    <div class="sector-icon" title="Quantum">⚛</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/sndk/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#3b82f6">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">SNDK</span>
-            <span class="sector-pill">💾 Semiconductors</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">SanDisk</div>
-        <div class="price-row">
-          <span class="price">$1,157.00</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-5.1% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-4.76% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.4 5.9 38.8 7.8 38.1 9.7 37.5 11.7 37.0 13.6 36.4 15.5 35.6 17.5 35.0 19.4 34.3 21.3 33.6 23.3 32.9 25.2 32.1 27.1 31.6 29.1 31.0 31.0 30.3 32.9 29.5 34.9 28.9 36.8 28.4 38.7 27.8 40.7 27.0 42.6 26.5 44.5 26.0 46.5 25.5 48.4 25.0 50.3 24.3 52.3 23.7 54.2 23.1 56.1 22.3 58.1 21.7 60.0 21.1 61.9 20.5 63.9 19.8 65.8 19.2 67.7 18.5 69.7 17.6 71.6 16.9 73.5 16.1 75.5 15.4 77.4 14.6 79.3 13.9 81.3 13.5 83.2 13.1 85.1 12.6 87.1 11.7 89.0 11.2 90.9 10.6 92.9 9.8 94.8 9.1 96.7 8.5 98.7 7.7 100.6 6.9 102.5 6.7 104.5 6.1 106.4 5.2 108.3 4.5 110.3 3.9 112.2 3.1 114.1 2.3 116.1 2.3 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.4 5.9 38.8 7.8 38.1 9.7 37.5 11.7 37.0 13.6 36.4 15.5 35.6 17.5 35.0 19.4 34.3 21.3 33.6 23.3 32.9 25.2 32.1 27.1 31.6 29.1 31.0 31.0 30.3 32.9 29.5 34.9 28.9 36.8 28.4 38.7 27.8 40.7 27.0 42.6 26.5 44.5 26.0 46.5 25.5 48.4 25.0 50.3 24.3 52.3 23.7 54.2 23.1 56.1 22.3 58.1 21.7 60.0 21.1 61.9 20.5 63.9 19.8 65.8 19.2 67.7 18.5 69.7 17.6 71.6 16.9 73.5 16.1 75.5 15.4 77.4 14.6 79.3 13.9 81.3 13.5 83.2 13.1 85.1 12.6 87.1 11.7 89.0 11.2 90.9 10.6 92.9 9.8 94.8 9.1 96.7 8.5 98.7 7.7 100.6 6.9 102.5 6.7 104.5 6.1 106.4 5.2 108.3 4.5 110.3 3.9 112.2 3.1 114.1 2.3 116.1 2.3 118.0 2.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$1,256.74</strong></span>
-          <span>Entry ≈ <strong>$237.75</strong></span>
-          <span>Stop ≈ <strong>$213.97</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +386.6%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-header">
+    <div>
+      <div class="sym">SNDK</div>
+      <div class="company">SanDisk</div>
+    </div>
+    <div class="sector-icon" title="Semiconductors">💾</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/mu/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#3b82f6">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">MU</span>
-            <span class="sector-pill">💾 Semiconductors</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Micron Technology</div>
-        <div class="price-row">
-          <span class="price">$787.00</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-5.9% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-4.38% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.5 5.9 38.9 7.8 38.4 9.7 37.8 11.7 37.1 13.6 36.4 15.5 35.9 17.5 35.4 19.4 34.6 21.3 34.0 23.3 33.5 25.2 32.9 27.1 32.4 29.1 31.6 31.0 31.1 32.9 30.7 34.9 30.1 36.8 29.4 38.7 29.0 40.7 28.3 42.6 27.5 44.5 27.0 46.5 26.2 48.4 25.4 50.3 24.5 52.3 23.7 54.2 22.9 56.1 22.0 58.1 21.1 60.0 20.7 61.9 20.2 63.9 19.9 65.8 19.2 67.7 18.7 69.7 18.0 71.6 17.6 73.5 17.3 75.5 16.5 77.4 15.7 79.3 15.4 81.3 14.5 83.2 14.1 85.1 13.4 87.1 12.6 89.0 12.2 90.9 11.7 92.9 11.4 94.8 10.4 96.7 9.9 98.7 8.9 100.6 8.6 102.5 8.0 104.5 7.0 106.4 5.9 108.3 5.1 110.3 4.2 112.2 3.3 114.1 2.5 116.1 2.0 118.0 2.4 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.5 5.9 38.9 7.8 38.4 9.7 37.8 11.7 37.1 13.6 36.4 15.5 35.9 17.5 35.4 19.4 34.6 21.3 34.0 23.3 33.5 25.2 32.9 27.1 32.4 29.1 31.6 31.0 31.1 32.9 30.7 34.9 30.1 36.8 29.4 38.7 29.0 40.7 28.3 42.6 27.5 44.5 27.0 46.5 26.2 48.4 25.4 50.3 24.5 52.3 23.7 54.2 22.9 56.1 22.0 58.1 21.1 60.0 20.7 61.9 20.2 63.9 19.9 65.8 19.2 67.7 18.7 69.7 18.0 71.6 17.6 73.5 17.3 75.5 16.5 77.4 15.7 79.3 15.4 81.3 14.5 83.2 14.1 85.1 13.4 87.1 12.6 89.0 12.2 90.9 11.7 92.9 11.4 94.8 10.4 96.7 9.9 98.7 8.9 100.6 8.6 102.5 8.0 104.5 7.0 106.4 5.9 108.3 5.1 110.3 4.2 112.2 3.3 114.1 2.5 116.1 2.0 118.0 2.4" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$821.11</strong></span>
-          <span>Entry ≈ <strong>$286.39</strong></span>
-          <span>Stop ≈ <strong>$257.75</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +174.8%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-header">
+    <div>
+      <div class="sym">MU</div>
+      <div class="company">Micron Technology</div>
+    </div>
+    <div class="sector-icon" title="Semiconductors">💾</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/wdc/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#3b82f6">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">WDC</span>
-            <span class="sector-pill">💾 Semiconductors</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Western Digital</div>
-        <div class="price-row">
-          <span class="price">$544.84</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+200.0% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+2.21% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.5 5.9 38.8 7.8 38.0 9.7 37.5 11.7 36.9 13.6 36.2 15.5 35.5 17.5 34.9 19.4 34.3 21.3 33.9 23.3 33.0 25.2 32.2 27.1 31.4 29.1 31.0 31.0 30.3 32.9 29.8 34.9 29.2 36.8 28.3 38.7 27.9 40.7 27.4 42.6 26.9 44.5 26.4 46.5 25.7 48.4 25.3 50.3 24.9 52.3 24.5 54.2 24.0 56.1 23.6 58.1 22.9 60.0 22.3 61.9 21.7 63.9 20.9 65.8 20.0 67.7 19.3 69.7 18.7 71.6 18.0 73.5 17.0 75.5 16.0 77.4 15.0 79.3 14.3 81.3 13.7 83.2 12.9 85.1 12.4 87.1 11.7 89.0 10.7 90.9 10.1 92.9 9.4 94.8 8.8 96.7 8.0 98.7 7.4 100.6 6.7 102.5 6.1 104.5 5.4 106.4 4.9 108.3 4.5 110.3 4.1 112.2 4.0 114.1 3.7 116.1 3.0 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.5 5.9 38.8 7.8 38.0 9.7 37.5 11.7 36.9 13.6 36.2 15.5 35.5 17.5 34.9 19.4 34.3 21.3 33.9 23.3 33.0 25.2 32.2 27.1 31.4 29.1 31.0 31.0 30.3 32.9 29.8 34.9 29.2 36.8 28.3 38.7 27.9 40.7 27.4 42.6 26.9 44.5 26.4 46.5 25.7 48.4 25.3 50.3 24.9 52.3 24.5 54.2 24.0 56.1 23.6 58.1 22.9 60.0 22.3 61.9 21.7 63.9 20.9 65.8 20.0 67.7 19.3 69.7 18.7 71.6 18.0 73.5 17.0 75.5 16.0 77.4 15.0 79.3 14.3 81.3 13.7 83.2 12.9 85.1 12.4 87.1 11.7 89.0 10.7 90.9 10.1 92.9 9.4 94.8 8.8 96.7 8.0 98.7 7.4 100.6 6.7 102.5 6.1 104.5 5.4 106.4 4.9 108.3 4.5 110.3 4.1 112.2 4.0 114.1 3.7 116.1 3.0 118.0 2.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$525.21</strong></span>
-          <span>Entry ≈ <strong>$172.51</strong></span>
-          <span>Stop ≈ <strong>$155.26</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +215.8%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-header">
+    <div>
+      <div class="sym">WDC</div>
+      <div class="company">Western Digital</div>
+    </div>
+    <div class="sector-icon" title="Semiconductors">💾</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/mrvl/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#3b82f6">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">MRVL</span>
-            <span class="sector-pill">💾 Semiconductors</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Marvell Technology</div>
-        <div class="price-row">
-          <span class="price">$187.92</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+132.7% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+0.19% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.4 5.9 38.8 7.8 38.2 9.7 37.4 11.7 36.8 13.6 36.1 15.5 35.6 17.5 34.8 19.4 34.2 21.3 33.2 23.3 32.4 25.2 31.7 27.1 31.1 29.1 30.2 31.0 29.5 32.9 29.2 34.9 28.6 36.8 27.8 38.7 27.3 40.7 26.4 42.6 25.6 44.5 25.3 46.5 24.7 48.4 23.8 50.3 23.5 52.3 22.8 54.2 22.5 56.1 22.3 58.1 21.5 60.0 21.0 61.9 20.5 63.9 19.9 65.8 19.3 67.7 19.0 69.7 18.7 71.6 17.9 73.5 17.0 75.5 16.6 77.4 15.9 79.3 15.3 81.3 14.9 83.2 14.0 85.1 13.4 87.1 12.7 89.0 12.1 90.9 11.7 92.9 10.7 94.8 9.7 96.7 9.5 98.7 8.5 100.6 7.7 102.5 6.8 104.5 6.5 106.4 5.4 108.3 5.1 110.3 4.4 112.2 4.3 114.1 3.4 116.1 2.1 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.4 5.9 38.8 7.8 38.2 9.7 37.4 11.7 36.8 13.6 36.1 15.5 35.6 17.5 34.8 19.4 34.2 21.3 33.2 23.3 32.4 25.2 31.7 27.1 31.1 29.1 30.2 31.0 29.5 32.9 29.2 34.9 28.6 36.8 27.8 38.7 27.3 40.7 26.4 42.6 25.6 44.5 25.3 46.5 24.7 48.4 23.8 50.3 23.5 52.3 22.8 54.2 22.5 56.1 22.3 58.1 21.5 60.0 21.0 61.9 20.5 63.9 19.9 65.8 19.3 67.7 19.0 69.7 18.7 71.6 17.9 73.5 17.0 75.5 16.6 77.4 15.9 79.3 15.3 81.3 14.9 83.2 14.0 85.1 13.4 87.1 12.7 89.0 12.1 90.9 11.7 92.9 10.7 94.8 9.7 96.7 9.5 98.7 8.5 100.6 7.7 102.5 6.8 104.5 6.5 106.4 5.4 108.3 5.1 110.3 4.4 112.2 4.3 114.1 3.4 116.1 2.1 118.0 2.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$190.65</strong></span>
-          <span>Entry ≈ <strong>$85.19</strong></span>
-          <span>Stop ≈ <strong>$76.67</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +120.6%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-header">
+    <div>
+      <div class="sym">MRVL</div>
+      <div class="company">Marvell Technology</div>
+    </div>
+    <div class="sector-icon" title="Semiconductors">💾</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/almu/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#3b82f6">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">ALMU</span>
-            <span class="sector-pill">💾 Semiconductors</span>
-          </div>
-          <span class="badge watching">WATCHING</span>
-        </div>
-        <div class="company">Aeluma Inc</div>
-        <div class="price-row">
-          <span class="price">$16.56</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+0.1% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+2.22% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 14.4 3.9 16.6 5.9 21.5 7.8 21.7 9.7 21.8 11.7 18.4 13.6 23.5 15.5 24.5 17.5 20.2 19.4 13.6 21.3 17.7 23.3 21.3 25.2 14.7 27.1 10.9 29.1 15.1 31.0 9.3 32.9 2.0 34.9 6.3 36.8 12.0 38.7 5.6 40.7 10.5 42.6 14.6 44.5 20.3 46.5 26.4 48.4 32.5 50.3 32.8 52.3 30.8 54.2 33.3 56.1 27.7 58.1 26.6 60.0 29.4 61.9 35.3 63.9 40.0 65.8 38.0 67.7 31.4 69.7 23.7 71.6 23.2 73.5 19.6 75.5 19.6 77.4 24.4 79.3 26.7 81.3 31.6 83.2 30.1 85.1 26.4 87.1 32.4 89.0 35.1 90.9 29.4 92.9 27.8 94.8 32.9 96.7 30.8 98.7 24.3 100.6 17.8 102.5 12.9 104.5 11.0 106.4 12.2 108.3 17.0 110.3 23.2 112.2 17.9 114.1 11.9 116.1 15.3 118.0 14.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 14.4 3.9 16.6 5.9 21.5 7.8 21.7 9.7 21.8 11.7 18.4 13.6 23.5 15.5 24.5 17.5 20.2 19.4 13.6 21.3 17.7 23.3 21.3 25.2 14.7 27.1 10.9 29.1 15.1 31.0 9.3 32.9 2.0 34.9 6.3 36.8 12.0 38.7 5.6 40.7 10.5 42.6 14.6 44.5 20.3 46.5 26.4 48.4 32.5 50.3 32.8 52.3 30.8 54.2 33.3 56.1 27.7 58.1 26.6 60.0 29.4 61.9 35.3 63.9 40.0 65.8 38.0 67.7 31.4 69.7 23.7 71.6 23.2 73.5 19.6 75.5 19.6 77.4 24.4 79.3 26.7 81.3 31.6 83.2 30.1 85.1 26.4 87.1 32.4 89.0 35.1 90.9 29.4 92.9 27.8 94.8 32.9 96.7 30.8 98.7 24.3 100.6 17.8 102.5 12.9 104.5 11.0 106.4 12.2 108.3 17.0 110.3 23.2 112.2 17.9 114.1 11.9 116.1 15.3 118.0 14.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$17.18</strong></span>
-          <span>Entry ≈ <strong>$17.36</strong></span>
-          <span>Stop ≈ <strong>$15.62</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -4.6%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#3b82f6">
+  <div class="card-header">
+    <div>
+      <div class="sym">ALMU</div>
+      <div class="company">Aeluma Inc</div>
+    </div>
+    <div class="sector-icon" title="Semiconductors">💾</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/ipgp/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#06b6d4">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">IPGP</span>
-            <span class="sector-pill">🔦 Photonics</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">IPG Photonics</div>
-        <div class="price-row">
-          <span class="price">$86.74</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+22.7% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+1.98% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.1 5.9 37.8 7.8 36.6 9.7 35.7 11.7 33.9 13.6 32.0 15.5 32.7 17.5 30.8 19.4 31.5 21.3 31.7 23.3 31.0 25.2 29.0 27.1 30.0 29.1 28.5 31.0 27.2 32.9 28.0 34.9 26.1 36.8 25.9 38.7 24.6 40.7 24.1 42.6 22.0 44.5 23.1 46.5 21.7 48.4 19.9 50.3 20.9 52.3 19.2 54.2 17.2 56.1 16.5 58.1 15.3 60.0 16.1 61.9 16.5 63.9 15.7 65.8 16.8 67.7 15.8 69.7 15.0 71.6 15.1 73.5 14.4 75.5 15.1 77.4 14.0 79.3 12.7 81.3 11.6 83.2 9.8 85.1 9.5 87.1 10.3 89.0 11.0 90.9 11.0 92.9 9.0 94.8 10.1 96.7 8.4 98.7 9.5 100.6 8.4 102.5 7.7 104.5 8.3 106.4 6.7 108.3 6.4 110.3 5.6 112.2 3.0 114.1 2.0 116.1 3.8 118.0 2.3 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.1 5.9 37.8 7.8 36.6 9.7 35.7 11.7 33.9 13.6 32.0 15.5 32.7 17.5 30.8 19.4 31.5 21.3 31.7 23.3 31.0 25.2 29.0 27.1 30.0 29.1 28.5 31.0 27.2 32.9 28.0 34.9 26.1 36.8 25.9 38.7 24.6 40.7 24.1 42.6 22.0 44.5 23.1 46.5 21.7 48.4 19.9 50.3 20.9 52.3 19.2 54.2 17.2 56.1 16.5 58.1 15.3 60.0 16.1 61.9 16.5 63.9 15.7 65.8 16.8 67.7 15.8 69.7 15.0 71.6 15.1 73.5 14.4 75.5 15.1 77.4 14.0 79.3 12.7 81.3 11.6 83.2 9.8 85.1 9.5 87.1 10.3 89.0 11.0 90.9 11.0 92.9 9.0 94.8 10.1 96.7 8.4 98.7 9.5 100.6 8.4 102.5 7.7 104.5 8.3 106.4 6.7 108.3 6.4 110.3 5.6 112.2 3.0 114.1 2.0 116.1 3.8 118.0 2.3" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$87.87</strong></span>
-          <span>Entry ≈ <strong>$72.12</strong></span>
-          <span>Stop ≈ <strong>$64.91</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +20.3%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-header">
+    <div>
+      <div class="sym">IPGP</div>
+      <div class="company">IPG Photonics</div>
+    </div>
+    <div class="sector-icon" title="Photonics">🔬</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/poet/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#06b6d4">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">POET</span>
-            <span class="sector-pill">🔦 Photonics</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">POET Technologies</div>
-        <div class="price-row">
-          <span class="price">$7.130</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+137.7% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+2.00% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 38.5 3.9 37.6 5.9 38.1 7.8 39.4 9.7 40.0 11.7 38.7 13.6 38.2 15.5 35.4 17.5 35.6 19.4 33.0 21.3 30.9 23.3 29.7 25.2 30.8 27.1 28.5 29.1 27.6 31.0 27.2 32.9 27.4 34.9 24.6 36.8 22.9 38.7 21.7 40.7 23.1 42.6 24.8 44.5 24.1 46.5 22.8 48.4 23.7 50.3 24.5 52.3 26.0 54.2 27.2 56.1 27.5 58.1 27.7 60.0 25.4 61.9 23.6 63.9 23.6 65.8 25.1 67.7 25.2 69.7 24.0 71.6 25.3 73.5 24.1 75.5 21.3 77.4 18.4 79.3 19.3 81.3 17.2 83.2 16.9 85.1 15.4 87.1 13.2 89.0 10.3 90.9 7.7 92.9 5.5 94.8 4.4 96.7 4.4 98.7 2.0 100.6 2.7 102.5 4.6 104.5 3.5 106.4 2.4 108.3 3.4 110.3 4.2 112.2 4.1 114.1 6.5 116.1 5.5 118.0 5.7 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 38.5 3.9 37.6 5.9 38.1 7.8 39.4 9.7 40.0 11.7 38.7 13.6 38.2 15.5 35.4 17.5 35.6 19.4 33.0 21.3 30.9 23.3 29.7 25.2 30.8 27.1 28.5 29.1 27.6 31.0 27.2 32.9 27.4 34.9 24.6 36.8 22.9 38.7 21.7 40.7 23.1 42.6 24.8 44.5 24.1 46.5 22.8 48.4 23.7 50.3 24.5 52.3 26.0 54.2 27.2 56.1 27.5 58.1 27.7 60.0 25.4 61.9 23.6 63.9 23.6 65.8 25.1 67.7 25.2 69.7 24.0 71.6 25.3 73.5 24.1 75.5 21.3 77.4 18.4 79.3 19.3 81.3 17.2 83.2 16.9 85.1 15.4 87.1 13.2 89.0 10.3 90.9 7.7 92.9 5.5 94.8 4.4 96.7 4.4 98.7 2.0 100.6 2.7 102.5 4.6 104.5 3.5 106.4 2.4 108.3 3.4 110.3 4.2 112.2 4.1 114.1 6.5 116.1 5.5 118.0 5.7" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$7.200</strong></span>
-          <span>Entry ≈ <strong>$6.360</strong></span>
-          <span>Stop ≈ <strong>$5.724</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +12.1%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#06b6d4">
+  <div class="card-header">
+    <div>
+      <div class="sym">POET</div>
+      <div class="company">POET Technologies</div>
+    </div>
+    <div class="sector-icon" title="Photonics">🔬</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/tsla/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#ef4444">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">TSLA</span>
-            <span class="sector-pill">🚗 EV</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">Tesla</div>
-        <div class="price-row">
-          <span class="price">$311.21</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-28.4% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+0.76% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 2.0 3.9 2.8 5.9 2.9 7.8 4.6 9.7 4.4 11.7 5.0 13.6 6.6 15.5 6.2 17.5 6.8 19.4 8.5 21.3 9.5 23.3 10.7 25.2 12.0 27.1 12.7 29.1 12.9 31.0 13.7 32.9 13.4 34.9 14.8 36.8 15.6 38.7 17.0 40.7 18.1 42.6 18.3 44.5 18.2 46.5 18.1 48.4 19.5 50.3 20.3 52.3 20.3 54.2 20.1 56.1 21.0 58.1 21.2 60.0 21.4 61.9 22.3 63.9 23.5 65.8 23.6 67.7 24.5 69.7 24.7 71.6 26.3 73.5 27.4 75.5 27.0 77.4 28.2 79.3 28.4 81.3 28.2 83.2 28.8 85.1 29.9 87.1 30.6 89.0 31.5 90.9 32.5 92.9 33.5 94.8 34.5 96.7 34.1 98.7 34.7 100.6 36.0 102.5 36.8 104.5 37.1 106.4 37.2 108.3 38.2 110.3 38.5 112.2 38.1 114.1 38.5 116.1 39.8 118.0 40.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 2.0 3.9 2.8 5.9 2.9 7.8 4.6 9.7 4.4 11.7 5.0 13.6 6.6 15.5 6.2 17.5 6.8 19.4 8.5 21.3 9.5 23.3 10.7 25.2 12.0 27.1 12.7 29.1 12.9 31.0 13.7 32.9 13.4 34.9 14.8 36.8 15.6 38.7 17.0 40.7 18.1 42.6 18.3 44.5 18.2 46.5 18.1 48.4 19.5 50.3 20.3 52.3 20.3 54.2 20.1 56.1 21.0 58.1 21.2 60.0 21.4 61.9 22.3 63.9 23.5 65.8 23.6 67.7 24.5 69.7 24.7 71.6 26.3 73.5 27.4 75.5 27.0 77.4 28.2 79.3 28.4 81.3 28.2 83.2 28.8 85.1 29.9 87.1 30.6 89.0 31.5 90.9 32.5 92.9 33.5 94.8 34.5 96.7 34.1 98.7 34.7 100.6 36.0 102.5 36.8 104.5 37.1 106.4 37.2 108.3 38.2 110.3 38.5 112.2 38.1 114.1 38.5 116.1 39.8 118.0 40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$321.93</strong></span>
-          <span>Entry ≈ <strong>$450.13</strong></span>
-          <span>Stop ≈ <strong>$405.12</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -30.9%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#ef4444">
+  <div class="card-header">
+    <div>
+      <div class="sym">TSLA</div>
+      <div class="company">Tesla</div>
+    </div>
+    <div class="sector-icon" title="EV">🚗</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/aapl/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#64748b">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">AAPL</span>
-            <span class="sector-pill">📱 Consumer Tech</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Apple</div>
-        <div class="price-row">
-          <span class="price">$308.91</span>
-          <span class="ytd-chip" style="background:rgba(34,197,94,0.12);color:#22c55e">+4.7% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#ef4444">-7.35% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 38.6 3.9 40.0 5.9 37.0 7.8 37.3 9.7 35.2 11.7 36.9 13.6 36.7 15.5 34.5 17.5 32.1 19.4 33.2 21.3 29.9 23.3 28.5 25.2 27.7 27.1 25.9 29.1 27.5 31.0 27.8 32.9 26.6 34.9 25.1 36.8 25.0 38.7 24.5 40.7 24.1 42.6 22.1 44.5 21.5 46.5 18.6 48.4 20.9 50.3 22.0 52.3 23.4 54.2 24.9 56.1 25.1 58.1 24.9 60.0 26.4 61.9 25.3 63.9 23.5 65.8 24.5 67.7 23.2 69.7 19.7 71.6 20.1 73.5 19.1 75.5 18.0 77.4 16.9 79.3 16.1 81.3 15.2 83.2 14.8 85.1 14.7 87.1 15.4 89.0 14.9 90.9 12.8 92.9 10.9 94.8 10.1 96.7 12.2 98.7 12.9 100.6 12.7 102.5 8.8 104.5 10.4 106.4 11.1 108.3 11.9 110.3 12.5 112.2 7.4 114.1 7.9 116.1 6.9 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 38.6 3.9 40.0 5.9 37.0 7.8 37.3 9.7 35.2 11.7 36.9 13.6 36.7 15.5 34.5 17.5 32.1 19.4 33.2 21.3 29.9 23.3 28.5 25.2 27.7 27.1 25.9 29.1 27.5 31.0 27.8 32.9 26.6 34.9 25.1 36.8 25.0 38.7 24.5 40.7 24.1 42.6 22.1 44.5 21.5 46.5 18.6 48.4 20.9 50.3 22.0 52.3 23.4 54.2 24.9 56.1 25.1 58.1 24.9 60.0 26.4 61.9 25.3 63.9 23.5 65.8 24.5 67.7 23.2 69.7 19.7 71.6 20.1 73.5 19.1 75.5 18.0 77.4 16.9 79.3 16.1 81.3 15.2 83.2 14.8 85.1 14.7 87.1 15.4 89.0 14.9 90.9 12.8 92.9 10.9 94.8 10.1 96.7 12.2 98.7 12.9 100.6 12.7 102.5 8.8 104.5 10.4 106.4 11.1 108.3 11.9 110.3 12.5 112.2 7.4 114.1 7.9 116.1 6.9 118.0 2.0" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$304.72</strong></span>
-          <span>Entry ≈ <strong>$272.04</strong></span>
-          <span>Stop ≈ <strong>$244.84</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +13.6%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#64748b">
+  <div class="card-header">
+    <div>
+      <div class="sym">AAPL</div>
+      <div class="company">Apple</div>
+    </div>
+    <div class="sector-icon" title="Consumer Tech">📱</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/nflx/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#ec4899">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">NFLX</span>
-            <span class="sector-pill">🎬 Streaming</span>
-          </div>
-          <span class="badge near-stop">NEAR STOP</span>
-        </div>
-        <div class="company">Netflix</div>
-        <div class="price-row">
-          <span class="price">$72.61</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-2.0% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+1.26% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 2.0 3.9 2.9 5.9 2.9 7.8 4.8 9.7 4.3 11.7 4.9 13.6 6.8 15.5 6.1 17.5 6.7 19.4 8.7 21.3 9.8 23.3 11.1 25.2 12.6 27.1 13.3 29.1 13.4 31.0 14.3 32.9 13.7 34.9 15.4 36.8 16.2 38.7 17.9 40.7 19.0 42.6 19.1 44.5 18.8 46.5 18.6 48.4 20.1 50.3 21.0 52.3 20.8 54.2 20.4 56.1 21.4 58.1 21.4 60.0 21.5 61.9 22.5 63.9 23.9 65.8 23.7 67.7 24.8 69.7 24.9 71.6 26.7 73.5 27.9 75.5 27.3 77.4 28.7 79.3 28.7 81.3 28.2 83.2 28.8 85.1 30.1 87.1 30.8 89.0 31.8 90.9 32.9 92.9 34.1 94.8 35.1 96.7 34.4 98.7 35.0 100.6 36.5 102.5 37.4 104.5 37.7 106.4 37.5 108.3 38.6 110.3 38.8 112.2 38.1 114.1 38.4 116.1 40.0 118.0 40.0 118.0 42" fill="rgba(239,68,68,0.08)"/><polyline points="2.0 2.0 3.9 2.9 5.9 2.9 7.8 4.8 9.7 4.3 11.7 4.9 13.6 6.8 15.5 6.1 17.5 6.7 19.4 8.7 21.3 9.8 23.3 11.1 25.2 12.6 27.1 13.3 29.1 13.4 31.0 14.3 32.9 13.7 34.9 15.4 36.8 16.2 38.7 17.9 40.7 19.0 42.6 19.1 44.5 18.8 46.5 18.6 48.4 20.1 50.3 21.0 52.3 20.8 54.2 20.4 56.1 21.4 58.1 21.4 60.0 21.5 61.9 22.5 63.9 23.9 65.8 23.7 67.7 24.8 69.7 24.9 71.6 26.7 73.5 27.9 75.5 27.3 77.4 28.7 79.3 28.7 81.3 28.2 83.2 28.8 85.1 30.1 87.1 30.8 89.0 31.8 90.9 32.9 92.9 34.1 94.8 35.1 96.7 34.4 98.7 35.0 100.6 36.5 102.5 37.4 104.5 37.7 106.4 37.5 108.3 38.6 110.3 38.8 112.2 38.1 114.1 38.4 116.1 40.0 118.0 40.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$72.63</strong></span>
-          <span>Entry ≈ <strong>$93.82</strong></span>
-          <span>Stop ≈ <strong>$84.44</strong></span>
-        </div>
-        <div class="plpc" style="color:#ef4444">P&amp;L vs Entry: -22.6%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#ec4899">
+  <div class="card-header">
+    <div>
+      <div class="sym">NFLX</div>
+      <div class="company">Netflix</div>
+    </div>
+    <div class="sector-icon" title="Streaming">🎬</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 
-      <a href="https://stockanalysis.com/stocks/cat/" target="_blank" style="text-decoration:none">
-      <div class="card" style="--accent:#f59e0b">
-        <div class="card-top">
-          <div class="card-top-left">
-            <span class="symbol">CAT</span>
-            <span class="sector-pill">🏗 Industrial</span>
-          </div>
-          <span class="badge trailing">TRAILING</span>
-        </div>
-        <div class="company">Caterpillar</div>
-        <div class="price-row">
-          <span class="price">$820.28</span>
-          <span class="ytd-chip" style="background:rgba(239,68,68,0.12);color:#ef4444">-24.6% YTD</span>
-        </div>
-        <div class="day-chg" style="color:#22c55e">+0.67% today</div>
-        <div class="spark"><svg viewBox="0 0 120 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><polygon points="2.0 42 2.0 40.0 3.9 39.8 5.9 39.8 7.8 39.0 9.7 37.8 11.7 36.4 13.6 35.4 15.5 33.9 17.5 33.2 19.4 32.6 21.3 31.6 23.3 31.1 25.2 29.9 27.1 29.2 29.1 27.8 31.0 27.0 32.9 26.8 34.9 25.3 36.8 24.7 38.7 24.5 40.7 24.5 42.6 24.5 44.5 24.5 46.5 23.2 48.4 23.1 50.3 22.8 52.3 21.7 54.2 21.6 56.1 21.2 58.1 21.2 60.0 19.7 61.9 18.5 63.9 17.8 65.8 17.1 67.7 16.9 69.7 15.3 71.6 14.2 73.5 13.3 75.5 13.0 77.4 11.9 79.3 11.4 81.3 10.9 83.2 10.6 85.1 9.7 87.1 10.0 89.0 10.3 90.9 9.9 92.9 9.0 94.8 9.1 96.7 7.8 98.7 6.8 100.6 6.6 102.5 6.3 104.5 6.6 106.4 6.9 108.3 6.0 110.3 4.7 112.2 4.7 114.1 3.1 116.1 3.6 118.0 2.0 118.0 42" fill="rgba(34,197,94,0.08)"/><polyline points="2.0 40.0 3.9 39.8 5.9 39.8 7.8 39.0 9.7 37.8 11.7 36.4 13.6 35.4 15.5 33.9 17.5 33.2 19.4 32.6 21.3 31.6 23.3 31.1 25.2 29.9 27.1 29.2 29.1 27.8 31.0 27.0 32.9 26.8 34.9 25.3 36.8 24.7 38.7 24.5 40.7 24.5 42.6 24.5 44.5 24.5 46.5 23.2 48.4 23.1 50.3 22.8 52.3 21.7 54.2 21.6 56.1 21.2 58.1 21.2 60.0 19.7 61.9 18.5 63.9 17.8 65.8 17.1 67.7 16.9 69.7 15.3 71.6 14.2 73.5 13.3 75.5 13.0 77.4 11.9 79.3 11.4 81.3 10.9 83.2 10.6 85.1 9.7 87.1 10.0 89.0 10.3 90.9 9.9 92.9 9.0 94.8 9.1 96.7 7.8 98.7 6.8 100.6 6.6 102.5 6.3 104.5 6.6 106.4 6.9 108.3 6.0 110.3 4.7 112.2 4.7 114.1 3.1 116.1 3.6 118.0 2.0" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="pos-row">
-          <span>52W Hi <strong>$830.00</strong></span>
-          <span>Entry ≈ <strong>$574.34</strong></span>
-          <span>Stop ≈ <strong>$516.91</strong></span>
-        </div>
-        <div class="plpc" style="color:#22c55e">P&amp;L vs Entry: +42.8%</div>
-      </div>
-      </a>
+<div class="card" style="--accent:#f59e0b">
+  <div class="card-header">
+    <div>
+      <div class="sym">CAT</div>
+      <div class="company">Caterpillar</div>
+    </div>
+    <div class="sector-icon" title="Industrial">🏗</div>
+  </div>
+  <div class="price-row">
+    <span class="price">—</span>
+    <span class="ytd-badge na">— YTD</span>
+  </div>
+  <div class="sparkline"><svg width="120" height="40" viewBox="0 0 120 40"><line x1="0" y1="20" x2="120" y2="20" stroke="#334155" stroke-width="1" stroke-dasharray="4"/></svg></div>
+  <div class="pos-grid">
+    <div class="pos-item"><span class="label">Shares</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">Avg Cost</span><span class="val">—</span></div>
+    <div class="pos-item"><span class="label">P&L</span><span class="val na">—</span></div>
+    <div class="pos-item"><span class="label">Stop</span><span class="val">—</span></div>
+  </div>
+  <div class="badge-row"><span class="badge b-watch">WATCHING</span></div>
+</div>
 </div>
 
 <div class="footer">
-  DCA Portfolio &bull; Aug 3, 2026 17:10 UTC &bull; Data: StockAnalysis.com via Firecrawl &bull; <a href="https://stockanalysis.com" target="_blank" style="color:#475569">stockanalysis.com</a>
+  Auto-refreshes every hour &nbsp;·&nbsp; DCA Dashboard &nbsp;·&nbsp; 2026-08-03 18:06 UTC
 </div>
+
 </body>
 </html>
